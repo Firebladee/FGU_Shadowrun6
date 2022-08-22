@@ -1,0 +1,1943 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="combattracker_host">
+		<frame>ctbox</frame>
+		<placement>
+			<size width="600" height="500" />
+		</placement>
+		<sizelimits>
+			<minimum width="600" height="400" />
+			<dynamic />
+		</sizelimits>
+		<softclose />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar name="title">
+				<resource>ct_window_title</resource>
+			</windowtitlebar>
+			<anchor_title_ctbox name="contentanchor" />
+
+			<anchor_ctbox_host_header />
+			<frame_ctbox_host_header_visibility />
+			<buttoncontrol name="button_global_visibility">
+				<anchored to="header_vis" position="insidetopleft" offset="10,8" width="20" height="20" />
+				<state icon="visibilityoff" tooltipres="ct_tooltip_shownpcallon" />
+				<state icon="visibilityon" tooltipres="ct_tooltip_shownpcalloff" />
+				<script>
+					function onValueChanged()
+						window.list.toggleVisibility();
+					end
+				</script>
+			</buttoncontrol>
+			<label_ct>
+				<anchored to="headeranchor" position="insidetopleft" offset="33,0">
+					<right offset="-352" />
+				</anchored>
+				<static textres="ct_label_name" />
+				<left />
+			</label_ct>
+			<label_ct name="label_init">
+				<anchored to="headeranchor" position="insidetopright" offset="352,0" width="40" />
+				<static textres="ct_label_init" />
+				<left />
+			</label_ct>
+			<label_ct name="label_inittype">
+				<anchored to="headeranchor" position="insidetopright" offset="315,0" width="40" />
+				<static textres="ct_label_inittype" />
+				<center />
+			</label_ct>
+			<label_ct name="label_pass">
+				<anchored to="headeranchor" position="insidetopright" offset="282,0" width="40" />
+				<static textres="ct_label_pass" />
+				<center />
+			</label_ct>
+			<label_ct name="label_phys">
+				<anchored to="headeranchor" position="insidetopright" offset="235,0" width="40" />
+				<static textres="ct_label_phys" />
+				<center />
+			</label_ct>
+			<label_ct name="label_stun">
+				<anchored to="headeranchor" position="insidetopright" offset="195,0" width="40" />
+				<static textres="ct_label_stun" />
+				<center />
+			</label_ct>
+			<label_ct name="label_delay">
+				<anchored to="headeranchor" position="insidetopright" offset="155,0" width="40" />
+				<static textres="ct_label_delay" />
+				<center />
+			</label_ct>
+			<frame_ctbox_host_header_toggles />
+			<buttoncontrol name="button_global_targeting">
+				<anchored to="header_toggles" position="insidetopleft" offset="10,8" width="20" height="20" />
+				<state icon="button_section_targeting" />
+				<state icon="button_section_targeting_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleTargeting();
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="button_global_active">
+				<anchored to="header_toggles" position="insidetopleft" offset="30,8" width="20" height="20" />
+				<state icon="button_section_active" />
+				<state icon="button_section_active_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleActive();
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="button_global_defensive">
+				<anchored to="header_toggles" position="insidetopleft" offset="50,8" width="20" height="20" />
+				<state icon="button_section_defensive" />
+				<state icon="button_section_defensive_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleDefensive();
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="button_global_spacing">
+				<anchored to="header_toggles" position="insidetopleft" offset="70,8" width="20" height="20" />
+				<state icon="button_space" />
+				<state icon="button_space_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleSpacing();
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="button_global_effects">
+				<anchored to="header_toggles" position="insidetopleft" offset="90,8" width="20" height="20" />
+				<state icon="button_effect" />
+				<state icon="button_effect_down" />
+				<script>
+					function onValueChanged()
+						window.list.toggleEffects();
+					end
+				</script>
+			</buttoncontrol>
+
+			<list_ctbox_host />
+			<scrollbar_list />
+
+			<button_ct_setactive />
+			<button_ct_nextactor />
+
+			<button_ct_faction_friend />
+			<button_ct_faction_neutral />
+			<button_ct_faction_foe />
+
+			<buttoncontrol name="button_menu">
+				<bounds>20,4,40,20</bounds>
+				<icon normal="button_menu" pressed="button_menu_down" />
+				<tooltip textres="ct_tooltip_menu" />
+				<script file="ct/scripts/ct_menu.lua" />
+			</buttoncontrol>
+
+			<label_ct_host_rounds_pass />
+			<number_ct_host_passes />
+			<number_ct_host_rounds merge="join">
+				<anchored width="40" height="25">
+					<bottom offset="-20" />
+					<right parent="contentanchor" offset="-75" />
+				</anchored>
+			</number_ct_host_rounds>
+			<button_ct_nextround />
+
+			<resize_ctbox />
+			<close_ctbox />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ct_entry">
+		<margins control="0,0,0,2" />
+		<frame>ctentrybox</frame>
+		<sizelimits>
+			<minimum height="40" />
+		</sizelimits>
+		<script file="ct/scripts/ct_entry.lua" />
+		<sheetdata>
+			<hs name="type">
+				<default>npc</default>
+				<script>
+					function onValueChanged()
+						window.onTypeChanged();
+					end
+				</script>
+			</hs>
+			<hs name="tokenrefid" />
+			<hs name="tokenrefnode" />
+
+			<spacer_ctentry_active_top name="active_spacer_top" />
+			
+			<button_ctentry_active name="active" />
+			<token_ctentry name="token" />
+			<button_ctentry_tokenvis name="tokenvis" />
+			<button_ctentry_isidentified name="isidentified" />
+
+			<anchor_ctentry_right name="rightanchor" />
+			<button_ctentry_idelete name="idelete" />
+			<link_ctentry name="link" />
+
+			<button_ctentry_activateeffects name="activateeffects" />
+			<button_ctentry_activatespacing name="activatespacing" />
+			<button_ctentry_activatedefensive name="activatedefensive" />
+			<button_ctentry_activateactive name="activateactive" />
+			<button_ctentry_activatetargeting name="activatetargeting" />
+			<button_ctentry_friendfoe name="friendfoe" />
+
+			<checkbox name="ctdelaycheckbox">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<parameters>
+					<tooltips>Delay</tooltips>
+					<defaulttooltip>Activate for active Delay</defaulttooltip>
+				</parameters>
+			</checkbox>
+
+			<number_ct_crosslink name="ctstundamage">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="ctphysicaldamage" next="init" />
+				<script>
+				</script>
+			</number_ct_crosslink>
+			<number_ct_crosslink name="ctstundamagemax">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="nonlethal" next="init" />
+				<script>
+				</script>
+				<invisible />
+			</number_ct_crosslink>
+			<number_ct_crosslink name="ctphysicaldamage">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="ctpassleft" next="ctstundamage" />
+				<script>
+				</script>
+			</number_ct_crosslink>
+			<number_ct_crosslink name="ctphysicaldamagemax">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="nonlethal" next="init" />
+				<script>
+				</script>
+				<invisible />
+			</number_ct_crosslink>
+			<number_ct_crosslink name="ctpassleft">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-15" />
+				</anchored>
+				<color>#FF0000AA</color>
+				<hideonvalue>0</hideonvalue>
+				<tabtarget prev="name" next="ctphysicaldamage" />
+				<script>
+				</script>
+			</number_ct_crosslink>
+
+
+			<button_iconcycler name="ctinitype">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<icons>indicator_sword|indicator_heal|indicator_effect</icons>
+					<labels>Astral|Matrix|Mtx.Hot|</labels>
+					<values>1|2|3</values>
+					<defaulticon>indicator_question</defaulticon>
+					<defaultlabel>Normal</defaultlabel>
+					<defaultvalue>0</defaultvalue>
+				</parameters>
+				<script>
+					function onInit()
+						super.onInit();
+
+					end
+				</script>
+			</button_iconcycler>
+
+
+			<string_ct name="ctinitypelink" source="ctinitype">
+					<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-15" />
+				</anchored>
+
+				<invisible />
+				<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+							if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						local msg = ""
+						if self.getValue() == "" or self.getValue() == "0" then
+							window.getDatabaseNode().getChild("initbase").setValue(window.getDatabaseNode().getChild("ctbaseini").getValue());
+							window.getDatabaseNode().getChild("passbase").setValue(window.getDatabaseNode().getChild("ctbaseinipass").getValue());
+						elseif self.getValue() == "1" then
+							window.getDatabaseNode().getChild("initbase").setValue(window.getDatabaseNode().getChild("ctbaseastini").getValue());
+							window.getDatabaseNode().getChild("passbase").setValue(window.getDatabaseNode().getChild("ctbaseastinipass").getValue());
+						elseif self.getValue() == "2" then
+							window.getDatabaseNode().getChild("initbase").setValue(window.getDatabaseNode().getChild("ctbasematini").getValue());
+							window.getDatabaseNode().getChild("passbase").setValue(window.getDatabaseNode().getChild("ctbasematinipass").getValue());
+						elseif self.getValue() == "3" then
+							window.getDatabaseNode().getChild("initbase").setValue(window.getDatabaseNode().getChild("ctbasehotmatini").getValue());
+							window.getDatabaseNode().getChild("passbase").setValue(window.getDatabaseNode().getChild("ctbasehotmatinipass").getValue());
+						end
+					end
+				</script>
+			</string_ct>
+
+			<number_ct name="initresult" source="ctinitresult">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue>0</hideonvalue>
+				<tabtarget prev="name" />
+				<script>
+				<script>
+					function onInit()
+						if super.onInit then
+							super.onInit();
+						end
+
+						if self.update then
+							self.update();
+						end
+						local result = window.getDatabaseNode().getChild("initbase").getValue() + window.getDatabaseNode().getChild("initroll").getValue() + window.getDatabaseNode().getChild("initmod").getValue();
+						if result then
+							self.setValue(result);
+						end
+					end
+
+					function update()
+						window.windowlist.applySort();
+					end
+				</script>				</script>
+			</number_ct>
+
+			<string_ctname name="name" />
+			<string_ctname_nonid name="nonid_name" />
+						
+			<!-- Targeting subsection -->
+			<icon_ctsection_targeting name="targetingicon" />
+			<sub_ctsection_targeting name="sub_targeting" />
+			<frame_ctsection_targeting name="frame_targeting" />
+
+			<!-- Spacing subsection -->
+			<icon_ctsection_spacing name="spacingicon" />
+			<number_ctentry_space name="space" />
+			<label_ctentry_space name="spacelabel" />
+			<number_ctentry_reach name="reach" />
+			<label_ctentry_reach name="reachlabel" />
+			<frame_ctsection_spacing name="frame_spacing" />
+
+			<!-- Active -->
+			<icon_ctsection_active name="activeicon" />
+			<number_ctentry_initbase name="initbase" />
+			<label_ctentry_initbase name="label_initbase" />
+
+			<label_ct_sm name="initlabel">
+				<anchored to="initbase" position="lefthigh" offset="5,4"/>
+				<static>Init</static>
+			</label_ct_sm>
+
+			<number_ctentry_initroll name="initroll" />
+			<label_ctentry_initroll name="label_initroll" />
+			<number_ctentry_initmod name="initmod" />
+			<label_ctentry_initmod name="label_initmod" />
+
+			<number_ct name="passbase">
+				<anchored>
+					<left>
+						<parent>initmod</parent>
+						<anchor>right</anchor>
+						<offset>48</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+			</number_ct>
+
+			<label_ct_sm name="passlabel">
+				<anchored to="passbase" position="lefthigh" offset="5,4"/>
+				<static>Passes</static>
+			</label_ct_sm>
+
+			<stringcontrol name="label_passbase">
+				<anchored>
+				 	<to>passbase</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Base</static>
+			</stringcontrol>
+
+			<number_ct name="passbonus">
+				<anchored>
+					<left>
+						<parent>passbase</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+			</number_ct>
+
+			<stringcontrol name="label_passbonus">
+				<anchored>
+				 	<to>passbonus</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Bonus</static>
+			</stringcontrol>
+
+			<checkbox name="ctinitrolled">
+				<anchored>
+					<left>
+						<parent>passbonus</parent>
+						<anchor>right</anchor>
+						<offset>20</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>Initiative already rolled in this Round</tooltips>
+					<defaulttooltip>Activate if Initiative is rolled in active Round</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<stringcontrol name="label_ctinitrolled">
+				<anchored>
+				 	<to>ctinitrolled</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>I-Rld.</static>
+			</stringcontrol>
+<!-- 
+			<checkbox name="ctaction1">
+				<anchored>
+					<left>
+						<parent>ctinitrolled</parent>
+						<anchor>right</anchor>
+						<offset>30</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>Simple Action 1 resolved</tooltips>
+					<defaulttooltip>Activate when simple Action 1 is resolved</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<stringcontrol name="label_ctaction1">
+				<anchored>
+				 	<to>ctaction1</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Act.1</static>
+			</stringcontrol>
+
+			<checkbox name="ctaction2">
+				<anchored>
+					<left>
+						<parent>ctaction1</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+						if window.getDatabaseNode().getChild("ctaction2") then
+							if window.getDatabaseNode().getChild("ctaction2").getValue() == 1 then
+								window.getDatabaseNode().getChild("ctaction1").setValue(1);
+							end
+						end
+					end
+				</script>
+				<parameters>
+					<tooltips>Simple Action 2 resolved</tooltips>
+					<defaulttooltip>Activate when simple Action 2 is resolved</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<stringcontrol name="label_ctaction2">
+				<anchored>
+				 	<to>ctaction2</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Act.2</static>
+			</stringcontrol>
+
+			<checkbox name="ctactionfree">
+				<anchored>
+					<left>
+						<parent>ctaction2</parent>
+						<anchor>right</anchor>
+						<offset>20</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>Free Action resolved</tooltips>
+					<defaulttooltip>Activate when free Action is resolved</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<stringcontrol name="label_ctactionfree">
+				<anchored>
+				 	<to>ctactionfree</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Free</static>
+			</stringcontrol>
+-->
+
+			<number_ct_crosslink name="ctattackdamage">
+				<anchored>
+					<left>
+						<parent>ctinitrolled</parent>
+						<anchor>right</anchor>
+						<offset>40</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="passbonus" next="ctattackdamagetype" />
+				<script>
+				</script>
+			</number_ct_crosslink>			
+			
+			<label_ct_sm name="attacklabel">
+				<anchored to="ctattackdamage" position="lefthigh" offset="5,4"/>
+				<static>Attack</static>
+			</label_ct_sm>
+
+			<stringcontrol name="label_ctattackdamage">
+				<anchored>
+				 	<to>ctattackdamage</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Dam</static>
+			</stringcontrol>
+			<string_ct name="ctattackdamagetype">
+				<anchored>
+					<left>
+						<parent>ctattackdamage</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget prev="ctattackdamage" next="ctmaxpass" />
+				<script>
+				</script>
+			</string_ct>			
+			<stringcontrol name="label_ctattackdamagetype">
+				<anchored>
+				 	<to>ctattackdamagetype</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>-3</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Typ</static>
+			</stringcontrol>
+			<number_ct_crosslink name="ctattackresistmod">
+				<anchored>
+					<left>
+						<parent>ctattackdamagetype</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget prev="passbonus" next="ctattackdamagetype" />
+				<script>
+				</script>
+			</number_ct_crosslink>			
+			<stringcontrol name="label_ctattackresistmod">
+				<anchored>
+				 	<to>ctattackresistmod</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Res.</static>
+			</stringcontrol>
+			<string_ct name="ctattacktype">
+				<anchored>
+					<left>
+						<parent>ctattackresistmod</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="ctattackresistmod" next="ctattackarmormod" />
+				<script>
+				</script>
+			</string_ct>			
+			<stringcontrol name="label_ctattacktype">
+				<anchored>
+				 	<to>ctattacktype</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>-3</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Typ</static>
+			</stringcontrol>
+			<number_ct_crosslink name="ctattackarmormod">
+				<anchored>
+					<left>
+						<parent>ctattacktype</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget prev="ctattacktype" next="ctattackdamagetype" />
+				<script>
+				</script>
+			</number_ct_crosslink>			
+			<stringcontrol name="label_ctattackarmormod">
+				<anchored>
+				 	<to>ctattackarmormod</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Arm.</static>
+			</stringcontrol>
+
+			<string_ct name="ctattackarmortype">
+				<anchored>
+					<left>
+						<parent>ctattackarmormod</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="ctattackresistmod" next="ctattackarmormod" />
+				<script>
+				</script>
+			</string_ct>			
+			<stringcontrol name="label_ctattackarmortype">
+				<anchored>
+				 	<to>ctattackarmortype</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>-3</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Typ</static>
+			</stringcontrol>
+
+			<number_ct_crosslink name="ctattacksuccesses">
+				<anchored>
+					<left>
+						<parent>ctattackarmortype</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget prev="ctattackarmortype" next="ctmaxpass" />
+				<script>
+				</script>
+			</number_ct_crosslink>			
+			<stringcontrol name="label_ctattacksuccesses">
+				<anchored>
+				 	<to>ctattacksuccesses</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Hits</static>
+			</stringcontrol>
+
+
+			<number_ct name="ctmaxpass">
+				<anchored>
+					<left>
+						<parent>passbonus</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>passbonus</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+			</number_ct>
+
+
+
+			<number_ct name="ctbaseini">
+				<anchored>
+					<left>
+						<parent>passbonus</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+						if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						if window.getDatabaseNode().getChild("ctinitype").getValue()=="" or window.getDatabaseNode().getChild("ctinitype").getValue()=="0" then
+							window.getDatabaseNode().getChild("initbase").setValue(self.getValue());
+						end
+					end
+				</script>
+				<invisible />
+			</number_ct>
+			<number_ct name="ctbaseastini">
+				<anchored>
+					<left>
+						<parent>ctbaseini</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+						if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						if window.getDatabaseNode().getChild("ctinitype").getValue()=="1" then
+							window.getDatabaseNode().getChild("initbase").setValue(self.getValue());
+						end
+					end
+				</script>
+			</number_ct>
+			<number_ct name="ctbasematini">
+				<anchored>
+					<left>
+						<parent>ctbaseastini</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+						if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						if window.getDatabaseNode().getChild("ctinitype").getValue()=="2" then
+							window.getDatabaseNode().getChild("initbase").setValue(self.getValue());
+						end
+					end
+				</script>
+			</number_ct>
+			<number_ct name="ctbasehotmatini">
+				<anchored>
+					<left>
+						<parent>ctbasematini</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+						if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						if window.getDatabaseNode().getChild("ctinitype").getValue()=="3" then
+							window.getDatabaseNode().getChild("initbase").setValue(self.getValue());
+						end
+					end
+				</script>
+			</number_ct>
+
+			<number_ct name="ctbaseinimod">
+				<anchored>
+					<left>
+						<parent>passbonus</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+			</number_ct>
+			<number_ct name="ctbaseastinimod">
+				<anchored>
+					<left>
+						<parent>ctbaseinimod</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+			</number_ct>
+			<number_ct name="ctbasematinimod">
+				<anchored>
+					<left>
+						<parent>ctbaseastinimod</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+			</number_ct>
+			<number_ct name="ctbasehotmatinimod">
+				<anchored>
+					<left>
+						<parent>ctbasematinimod</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+			</number_ct>
+
+			<number_ct name="ctbaseinipass">
+				<anchored>
+					<left>
+						<parent>passbonus</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+					<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+						if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						if window.getDatabaseNode().getChild("ctinitype").getValue()=="0" then
+							window.getDatabaseNode().getChild("passbase").setValue(self.getValue());
+						end
+					end
+				</script>
+			</number_ct>
+			<number_ct name="ctbaseastinipass">
+				<anchored>
+					<left>
+						<parent>ctbaseini</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+						if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						if window.getDatabaseNode().getChild("ctinitype").getValue()=="1" then
+							window.getDatabaseNode().getChild("passbase").setValue(self.getValue());
+						end
+					end
+				</script>
+
+			</number_ct>
+			<number_ct name="ctbasematinipass">
+				<anchored>
+					<left>
+						<parent>ctbaseastini</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+						if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						if window.getDatabaseNode().getChild("ctinitype").getValue()=="2" then
+							window.getDatabaseNode().getChild("passbase").setValue(self.getValue());
+						end
+					end
+				</script>
+
+			</number_ct>
+			<number_ct name="ctbasehotmatinipass">
+				<anchored>
+					<left>
+						<parent>ctbasematini</parent>
+						<anchor>right</anchor>
+						<offset>4</offset>
+					</left>
+					<top>
+						<parent>initbase</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onValueChanged()
+						if self.update then
+							self.update();
+						end
+
+						if linknode and not isReadOnly() then
+							if not locked then
+								locked = true;
+								linknode.setValue(getValue());
+								locked = false;
+							end
+						end
+						if window.getDatabaseNode().getChild("ctinitype").getValue()=="3" then
+							window.getDatabaseNode().getChild("passbase").setValue(self.getValue());
+						end
+					end
+				</script>
+
+			</number_ct>
+
+			<frame_ctsection_active name="frame_active" />
+
+			<!-- Defensive -->
+			<icon_ctsection name="defensiveicon">
+				<icon>indicator_shield</icon>
+			</icon_ctsection>
+
+			<number_ct name="edgescore">
+				<anchored width="20" height="20">
+					<top parent="active_spacer_top" anchor="bottom" relation="relative" offset="20" />
+					<left parent="defensiveicon" anchor="left" offset="60"/>
+				</anchored>
+			</number_ct>
+
+			<label_ct_sm name="edgescorelabel">
+				<anchored to="edgescore" position="lefthigh" offset="5,4"/>
+				<static>Edge</static>
+			</label_ct_sm>
+
+			<stringcontrol name="label_edgescore">
+				<anchored>
+				 	<to>edgescore</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Base</static>
+			</stringcontrol>
+
+			<number_ct name="edgemod">
+				<anchored>
+					<left>
+						<parent>edgescore</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+			</number_ct>
+
+			<stringcontrol name="label_edgemod">
+				<anchored>
+				 	<to>edgemod</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Usd</static>
+			</stringcontrol>
+
+			<number_ct name="edgecheck">
+				<anchored>
+					<left>
+						<parent>edgemod</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+			</number_ct>
+
+			<stringcontrol name="label_edgecheck">
+				<anchored>
+				 	<to>edgecheck</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Chk</static>
+			</stringcontrol>
+
+			<number_ct name="damagepenalty">
+				<anchored>
+					<left>
+						<parent>edgecheck</parent>
+						<anchor>right</anchor>
+						<offset>48</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<readonly />
+			</number_ct>
+
+			<label_ct_sm name="damagepenaltylabel">
+				<anchored to="damagepenalty" position="lefthigh" offset="5,4"/>
+				<static>Mod.</static>
+			</label_ct_sm>
+
+			<stringcontrol name="label_damagepenalty">
+				<anchored>
+				 	<to>damagepenalty</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Dmg</static>
+			</stringcontrol>
+
+			<number_ct name="sustainedpenalty">
+				<anchored>
+					<left>
+						<parent>damagepenalty</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<readonly />
+			</number_ct>
+
+			<stringcontrol name="label_sustainedpenalty">
+				<anchored>
+				 	<to>sustainedpenalty</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Sus</static>
+			</stringcontrol>
+
+			<number_ct name="armorpenalty">
+				<anchored>
+					<left>
+						<parent>sustainedpenalty</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<readonly />
+			</number_ct>
+
+			<stringcontrol name="label_armorpenalty">
+				<anchored>
+				 	<to>armorpenalty</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Arm</static>
+			</stringcontrol>
+<!-- 
+
+ -->
+
+			<number_ct_crosslink name="ctdefensedamage">
+				<anchored>
+					<left>
+						<parent>armorpenalty</parent>
+						<anchor>right</anchor>
+						<offset>45</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="passbonus" next="ctdefensedamagetype" />
+				<script>
+				</script>
+			</number_ct_crosslink>			
+			
+			<label_ct_sm name="defenselabel">
+				<anchored to="ctdefensedamage" position="lefthigh" offset="5,4"/>
+				<static>Defend</static>
+			</label_ct_sm>
+
+			<stringcontrol name="label_ctdefensedamage">
+				<anchored>
+				 	<to>ctdefensedamage</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Dam</static>
+			</stringcontrol>
+			<string_ct name="ctdefensedamagetype">
+				<anchored>
+					<left>
+						<parent>ctdefensedamage</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget prev="ctdefensedamage" next="ctmaxpass" />
+				<script>
+				</script>
+			</string_ct>			
+			<stringcontrol name="label_ctdefensedamagetype">
+				<anchored>
+				 	<to>ctdefensedamagetype</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>-3</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Typ</static>
+			</stringcontrol>
+			<number_ct_crosslink name="ctdefenseresistmod">
+				<anchored>
+					<left>
+						<parent>ctdefensedamagetype</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget prev="passbonus" next="ctdefensedamagetype" />
+				<script>
+				</script>
+			</number_ct_crosslink>			
+			<stringcontrol name="label_ctdefenseresistmod">
+				<anchored>
+				 	<to>ctdefenseresistmod</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Res.</static>
+			</stringcontrol>
+			<string_ct name="ctdefensetype">
+				<anchored>
+					<left>
+						<parent>ctdefenseresistmod</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="ctdefenseresistmod" next="ctdefensearmormod" />
+				<script>
+				</script>
+			</string_ct>			
+			<stringcontrol name="label_ctdefensetype">
+				<anchored>
+				 	<to>ctdefensetype</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>-3</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Typ</static>
+			</stringcontrol>
+			<number_ct_crosslink name="ctdefensearmormod">
+				<anchored>
+					<left>
+						<parent>ctdefensetype</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget prev="ctdefensetype" next="ctdefensedamagetype" />
+				<script>
+				</script>
+			</number_ct_crosslink>			
+			<stringcontrol name="label_ctdefensearmormod">
+				<anchored>
+				 	<to>ctdefensearmormod</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Arm.</static>
+			</stringcontrol>
+
+			<string_ct name="ctdefensearmortype">
+				<anchored>
+					<left>
+						<parent>ctdefensearmormod</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="ctdefenseresistmod" next="ctdefensearmormod" />
+				<script>
+				</script>
+			</string_ct>			
+			<stringcontrol name="label_ctdefensearmortype">
+				<anchored>
+				 	<to>ctdefensearmortype</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>-3</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Typ</static>
+			</stringcontrol>
+
+			<number_ct_crosslink name="ctdefensesuccesses">
+				<anchored>
+					<left>
+						<parent>ctdefensearmortype</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<top>
+						<parent>edgescore</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget prev="ctdefensearmortype" next="ctmaxpass" />
+				<script>
+				</script>
+			</number_ct_crosslink>			
+			<stringcontrol name="label_ctdefensesuccesses">
+				<anchored>
+				 	<to>ctdefensesuccesses</to>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<bottom>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</bottom>
+				</anchored>
+				<color>#FF000000</color>
+				<font>ct_header</font>
+				<static>Hits</static>
+			</stringcontrol>
+
+<!-- 
+
+ -->
+			<frame_ctsection_defensive name="frame_defensive" />
+
+			<!-- Effect subsection -->
+			<icon_ctsection_effect name="effecticon" />
+			<list_ctsection_effect name="effects" />
+			<button_ctsection_effect_iadd name="effects_iadd" />
+			<frame_ctsection_effect name="frame_effects" />
+
+			<!-- Quick labels -->
+			<string_ctentry_targets name="target_summary" />
+			<string_ctentry_effects name="effect_summary" />
+
+			<spacer_ctentry_middle name="spacer" />
+			<spacer_ctentry_active_bottom name="active_spacer_bottom" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ct_effect">
+		<margins control="0,0,0,2" />
+		<script file="ct/scripts/ct_effect.lua" />
+		<sheetdata>
+			<base_ct_effect name="base" />
+			
+			<anchor_ct_effect_left name="leftanchor" />
+			<button_ct_effect_isactive name="isactive" />
+			<button_ct_effect_isgmonly name="isgmonly" />
+			
+			<anchor_ct_effect_right name="rightanchor" />
+			<button_ct_effect_idelete name="idelete" />
+			<button_ct_effect_targetadd name="targeting_add_button" />
+			<number_ct_effect_init name="init" />
+			<number_ct_effect_duration name="duration" />
+
+			<string_ct_effect name="label" />
+
+			<hs_ct_effect_source name="source_name" />
+			<string_ct_effect_source name="source" />
+			<string_ct_effect_targets name="target_summary" />
+		</sheetdata>
+	</windowclass>
+
+
+	<windowclass name="ct_targets">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<windowlist name="targets">
+				<anchored>
+					<top />
+					<left />
+					<right offset="-50" />
+				</anchored>
+				<datasource>.targets</datasource>
+				<class>ct_target</class>
+				<noscroll />
+				<columns>
+					<width>26</width>
+					<fillwidth />
+				</columns>
+			</windowlist>
+
+			<buttoncontrol name="targeting_add_button">
+				<bounds>-45,2,20,20</bounds>
+				<icon normal="button_targeting" pressed="button_targeting_down" />
+				<tooltip textres="ct_tooltip_dragtarget" />
+				<script>
+					function onInit()
+						registerMenuItem(Interface.getString("ct_menu_targeting"), "goto", 4);
+						registerMenuItem(Interface.getString("ct_menu_targetingfriend"), "turn", 4, 3);
+						registerMenuItem(Interface.getString("ct_menu_targetingnonfriend"), "mask", 4, 5);
+					end
+					
+					function onDragStart(button, x, y, draginfo)
+						local nodeWin = window.getDatabaseNode();
+						if not nodeWin then
+							return false;
+						end
+						draginfo.setType("targeting");
+						draginfo.setIcon("drag_targeting");
+						draginfo.setShortcutData(window.getClass(), nodeWin.getNodeName());
+						return true;
+					end
+
+					function onMenuSelection(selection, subselection)
+						if selection == 4 then
+							if subselection == 3 then
+								TargetingManager.setCTFactionTargets(window.getDatabaseNode());
+							elseif subselection == 5 then
+								TargetingManager.setCTFactionTargets(window.getDatabaseNode(), true);
+							end
+						end
+					end
+				</script>
+			</buttoncontrol>
+
+			<buttoncontrol name="targeting_clear_button">
+				<bounds>-20,2,20,20</bounds>
+				<icon normal="button_clear" pressed="button_clear_down" />
+				<tooltip textres="ct_tooltip_cleartarget" />
+				<script>
+					function onButtonPress()
+						TargetingManager.clearCTTargets(window.getDatabaseNode());
+					end
+				</script>
+			</buttoncontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ct_target">
+		<margins control="0,0,3,2" />
+		<script file="ct/scripts/ct_target.lua" />
+		<sheetdata>
+			<hs name="noderef">
+				<script>
+					function onValueChanged()
+						window.onRefChanged();
+					end
+				</script>
+			</hs>
+			
+			<tokencontrol name="token">
+				<bounds>3,2,20,20</bounds>
+				<empty>token_empty</empty>
+				<disable />
+				<tooltip nodelay="true" />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						window.removeTarget();
+						return true;
+					end
+				</script>
+			</tokencontrol>
+		</sheetdata>
+	</windowclass>
+</root>

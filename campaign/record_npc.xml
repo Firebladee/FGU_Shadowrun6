@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="npc">
+		<frame>charsheet</frame>
+		<placement>
+			<size width="500" height="630" />
+		</placement>
+		<sizelimits>
+			<minimum width="450" height="550" />
+			<maximum width="450" height="1024" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_npc</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<script>
+			function onInit()
+				onLockChanged();
+				DB.addHandler(DB.getPath(getDatabaseNode(), "locked"), "onUpdate", onLockChanged);
+			end
+			
+			function onClose()
+				DB.removeHandler(DB.getPath(getDatabaseNode(), "locked"), "onUpdate", onLockChanged);
+			end
+
+			function onLockChanged()
+				if header.subwindow then
+					header.subwindow.update();
+				end
+				if main.subwindow then
+					main.subwindow.update();
+				end
+
+				local bReadOnly = WindowManager.getReadOnlyState(getDatabaseNode());
+				description.setReadOnly(bReadOnly);
+			end
+		</script>
+		<sheetdata>
+			<sub_record_header name="header">
+				<class>npc_header</class>
+			</sub_record_header>
+			
+				<!-- SUBWINDOWS -->
+			<subwindow name="main">
+				<bounds> 0,88,-1,-22</bounds>
+				<class>npc_main</class>
+			</subwindow>
+			<subwindow name="items">
+				<bounds>0,88,-1,-22</bounds>
+				<class>npc_items</class>
+			</subwindow>
+			<subwindow name="critter">
+				<bounds>0,88,-1,-22</bounds>
+				<class>npc_critter</class>
+			</subwindow>
+			<subwindow name="description">
+				<bounds>0,88,-1,-22</bounds>
+				<class>npc_description</class>
+			</subwindow>
+
+			<scroller name="main_scroller">
+				<anchored>
+					<to>main</to>
+					<position>belowright</position>
+					<offset>-12,6</offset>
+				</anchored>
+				<target>main</target>
+			</scroller>
+			<scroller name="item_scroller">
+				<anchored>
+					<to>items</to>
+					<position>belowright</position>
+					<offset>-12,6</offset>
+				</anchored>
+				<target>critter</target>
+				<invisible />
+			</scroller>
+			<scroller name="critter_scroller">
+				<anchored>
+					<to>description</to>
+					<position>belowright</position>
+					<offset>-12,6</offset>
+				</anchored>
+				<target>description</target>
+				<invisible />
+			</scroller>
+			<scroller name="description_scroller">
+				<anchored>
+					<to>description</to>
+					<position>belowright</position>
+					<offset>-12,6</offset>
+				</anchored>
+				<target>description</target>
+				<invisible />
+			</scroller>
+
+			<tabcontrol name="tabs">
+				<bounds>-37,80,18,300</bounds>
+				<tab>
+					<icon>vtab_label_main</icon>
+					<subwindow>main</subwindow>
+					<scroller>main_scroller</scroller>
+				</tab>
+ 				<tab>
+					<icon>vtab_label_combat</icon>
+					<subwindow>items</subwindow>
+					<scroller>item_scroller</scroller>
+				</tab>
+ 				<tab>
+					<icon>vtab_label_critter</icon>
+					<subwindow>critter</subwindow>
+					<scroller>critter_scroller</scroller>
+				</tab>
+				<tab>
+					<icon>vtab_label_other</icon>
+					<subwindow>description</subwindow>
+					<scroller>description_scroller</scroller>
+				</tab>
+			</tabcontrol>
+			
+			<button_close_charsheetmini />
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="npc_header">
+		<margins control="20,0,0,7" />
+		<script>
+			function onInit()
+				update();
+			end
+			function update()
+				local bReadOnly = WindowManager.getReadOnlyState(getDatabaseNode());
+				name.setReadOnly(bReadOnly);
+				token.setReadOnly(bReadOnly);
+			end
+		</script>
+		<sheetdata>
+			<genericcontrol name="overviewframe">
+				<bounds>47,18,-85,50</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<link_record_header>
+				<anchored to="rightanchor" width="5" height="5">
+					<top offset="12" />
+					<right anchor="left" relation="relative" offset="-60" />
+				</anchored>
+				<class>npc</class>
+			</link_record_header>
+			
+			<anchor_record_header_right />
+			<button_activateid>
+				<anchored to="rightanchor" width="23" height="22">
+					<top offset="12" />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+			</button_activateid>
+			<tokenfield name="token">
+				<anchored to="rightanchor" width="25" height="25">
+					<top offset="12" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-3" />
+				</anchored>
+				<empty>token_empty</empty>
+				<script>
+					function onDoubleClick(x, y)
+						CombatManager.openMap(window.getDatabaseNode());
+					end
+				</script>
+			</tokenfield>
+			<icon_record_locked>
+				<anchored>
+					<top offset="12" />
+					<right offset="-7" />
+				</anchored>
+			</icon_record_locked>
+			<button_record_locked>
+				<anchored>
+					<top offset="10" />
+					<right offset="-7" />
+				</anchored>
+			</button_record_locked>
+
+			<string_labeled name="name">
+				<anchored>
+					<top offset="32" />
+					<left offset="55" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-15" />
+				</anchored>
+				<empty textres="npc_emptyname" />				
+				<height>20</height>
+				<label>Name</label>
+				<tabtarget>
+					<next>metatype</next>
+				</tabtarget>
+				<tooltip>
+					<text>Name of your Character</text>
+				</tooltip>
+			</string_labeled>
+
+		</sheetdata>
+	</windowclass>
+	
+
+</root>

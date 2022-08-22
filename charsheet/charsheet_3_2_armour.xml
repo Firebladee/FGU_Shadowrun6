@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet_3_2_armour">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<script>
+			function onActivation()
+				local a = getClass();
+			end
+		</script>
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="skillframe">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == "" then
+							return true;
+						elseif w2.skillsort.getValue() == "" then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Combat" then
+							return true;
+						end
+						return false;
+
+					end
+
+				</script>
+			</windowlist>
+<!--
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+-->
+	<!-- Armourlist-->
+			<genericcontrol name="armourframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_armour">
+				<anchored>
+					<to>armourframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.armour.armourlist</datasource>
+				<class>charsheet_armouritem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.armoursort.getValue() == "" then
+							return true;
+						elseif w2.armoursort.getValue() == "" then
+							return false;
+						end
+						return w1.armoursort.getValue() > w2.armoursort.getValue();
+					end
+					function onInit()
+						addArmourvalue();
+					end
+					function addArmourvalue()
+						local ballisticvalue = 0
+						local impactvalue = 0
+						local ballisticvalueforencumbrance = 0
+						local impactvalueforencumbrance = 0
+
+						for k, v in ipairs(getWindows()) do
+						    local dummy = v.getDatabaseNode();
+						    local armourisactive  = -1;
+						    if (v.getDatabaseNode().getChild("armourisactive")) then
+								armourisactive = v.getDatabaseNode().getChild("armourisactive").getValue();
+							end
+
+							if armourisactive == 1 then
+								ballisticvalue = ballisticvalue + v.getDatabaseNode().getChild("base.special.ballistic").getValue();
+								impactvalue = impactvalue + v.getDatabaseNode().getChild("base.special.impact").getValue();
+								local addforencumbrance = v.getDatabaseNode().getChild("armourtype").getValue();
+								if addforencumbrance == "No Encumbrance" then
+									ballisticvalueforencumbrance = ballisticvalueforencumbrance;
+									impactvalueforencumbrance = impactvalueforencumbrance;
+								elseif addforencumbrance == "Formfitting Armour" then
+									ballisticvalueforencumbrance = ballisticvalueforencumbrance + (v.getDatabaseNode().getChild("base.special.ballistic").getValue() / 2);
+									impactvalueforencumbrance = impactvalueforencumbrance + (v.getDatabaseNode().getChild("base.special.impact").getValue() / 2);
+								else
+									ballisticvalueforencumbrance = ballisticvalueforencumbrance + v.getDatabaseNode().getChild("base.special.ballistic").getValue();
+									impactvalueforencumbrance = impactvalueforencumbrance + v.getDatabaseNode().getChild("base.special.impact").getValue();
+								end
+							end
+						end
+						window.getDatabaseNode().getChild("armour.hiddenballisticvalue").setValue(ballisticvalue);
+						window.getDatabaseNode().getChild("armour.hiddenimpactvalue").setValue(impactvalue);
+						window.getDatabaseNode().getChild("armour.encumbrance.hiddenballisticvalue").setValue(ballisticvalueforencumbrance);
+						local a = window.getDatabaseNode().getChild("armour.encumbrance.hiddenballisticvalue").getValue();
+						window.getDatabaseNode().getChild("armour.encumbrance.hiddenimpactvalue").setValue(impactvalueforencumbrance);
+						local b = window.getDatabaseNode().getChild("armour.encumbrance.hiddenimpactvalue").getValue();
+						local c = window.getDatabaseNode().getChild("base.attribute.body.check").getValue();
+						local d = math.ceil((math.max(a,b)-(c+c)) /2)
+						local e = -d
+						if d > 0 then
+							window.getDatabaseNode().getChild("armour.hiddenpenalty").setValue(e);
+						else
+							window.getDatabaseNode().getChild("armour.hiddenpenalty").setValue(0);
+						end
+
+					end
+
+
+					function onDrop(x, y, draginfo)
+						local sDragType = draginfo.getType();
+						if sDragType ~= "shortcut" then
+							return false;
+						end
+						local sDropClass, sDropNodeName = draginfo.getShortcutData();
+						if not StringManager.contains({ "referencearmour"}, sDropClass) then
+							return false;
+						end
+						local nodeSource = draginfo.getDatabaseNode();
+
+						local sSourceType = DB.getValue(nodeSource, "type", "");
+
+						local sSourceName = DB.getValue(nodeSource, "name", "");
+						sSourceName = string.gsub(sSourceName, " %(" .. sSourceType .. "%)", "");
+
+						local sSourceBallistic = DB.getValue(nodeSource, "ballisticrating", "");
+						sSourceBallistic = string.gsub(sSourceBallistic, " %(" .. sSourceType .. "%)", "");
+
+						local sSourceImpact = DB.getValue(nodeSource, "impactrating", "");
+						sSourceImpact = string.gsub(sSourceImpact, " %(" .. sSourceType .. "%)", "");
+
+						local sSourceDescription = DB.getValue(nodeSource, "description", "");
+						sSourceDescription = string.gsub(sSourceDescription, " %(" .. sSourceType .. "%)", "");
+
+						local w = createWindow();
+						w.armourballistic.setValue(sSourceBallistic);
+						w.armourimpact.setValue(sSourceImpact);
+						w.armourname.setValue(sSourceName);
+						w.shortcut.setValue(draginfo.getShortcutData());
+
+						return true;
+					end
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+
+<!-- Armourmodifieritem-->
+	<windowclass name="charsheet_armourmodifieritem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_armourmodifieritem.lua" />
+		<sheetdata>
+
+			<numberfield name="order">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</numberfield>
+
+			<skilldescfieldpc name="armourmodifiername">
+				<anchored>
+					<left>
+						<parent>order</parent>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-190</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Type of Armourmodifications &#187;</empty>
+			</skilldescfieldpc>
+
+			<skillscore name="armourmodifierrating">
+				<anchored>
+					<to>armourmodifiername</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next></next>
+					<prev></prev>
+				</tabtarget>
+				<tooltip>
+					<text>Rating of the Modifier</text>
+				</tooltip>
+			</skillscore>
+
+			<checkbox name="armourmodifierinusebox">
+				<anchored>
+					<left>
+						<parent>armourmodifiername</parent>
+						<anchor>right</anchor>
+						<offset>55</offset>
+					</left>
+					<top>
+						<parent>armourmodifiername</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Armourmodification in Use</text>
+				</tooltip>
+			</checkbox>
+
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_armouritem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_armouritem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatearmourdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<button_toggle name="activatearmourmodifier">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_sword</icon>
+				<script>
+					function onInit()
+						local nodeArmourList = window.getDatabaseNode().createChild("armourmodifierlist");
+						if nodeArmourList then
+							nodeArmourList.onChildAdded = updateVisibility;
+							nodeArmourList.onChildUpdate = updateVisibility;
+							updateVisibility(nodeArmourList);
+						else
+							setVisible(false);
+						end
+					end
+
+					function updateVisibility(nodeArmourList)
+						if nodeArmourList.getChildCount() > 0 then
+							if not isVisible() then
+								setValue(1);
+							end
+							setVisible(true);
+						else
+							setVisible(false);
+							if getValue() then
+								setValue(0);
+							end
+						end
+					end
+
+					function onValueChanged()
+						window.toggleArmourModifier();
+					end
+				</script>
+			</button_toggle>
+
+
+			<powerstring name="armoursort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<powerstring name="armourname">
+				<anchored>
+					<left>
+						<parent>armoursort</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-210</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; Armour &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+				</droptypes>
+				<script>
+					function updateColor()
+							window.armourname.setColor("ffffffff");
+							window.armourname.setFrame("dailyframe", 7, 3, 9, 1)
+					end
+
+					function onInit()
+						updateColor();
+					end
+				</script>
+			</powerstring>
+
+			<button_iconcycler name="armourtype">
+				<anchored>
+					<left>
+						<parent>armourname</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>armourname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_one|button_toggle_single|button_toggle_all|button_toggle_single|button_toggle_all|button_toggle_all</icons>
+					<values>Soft|Hard|Power Assisited Armour|Powered Armour|Formfitting Armour|No Encumbrance</values>
+					<tooltips>Soft|Hard|Power Assisited Armour|Powered Armour|Formfitting Armour|No Encumbrance</tooltips>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Choose Armourtype (for encumbrance - if none is selected encumbrance counts to full)</defaulttooltip>
+				</parameters>
+			</button_iconcycler>
+
+			<skillscore name="armourballistic" source="base.special.ballistic">
+				<anchored>
+					<to>armourtype</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Ballistic Armour</text>
+				</tooltip>
+			</skillscore>
+
+
+			<skillscore name="armourimpact" source="base.special.impact">
+				<anchored>
+					<to>armourballistic</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Impact Armour</text>
+				</tooltip>
+			</skillscore>
+			<checkbox name="armourisactive" source="armour.isactive">
+				<anchored>
+					<left>
+						<parent>armourimpact</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>armourimpact</parent>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Check to activate</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						window.windowlist.addArmourvalue();
+					end
+				</script>
+			</checkbox>
+			<linkfield name="shortcut">
+				<anchored width="20" height="20">
+					<top offset="1"  parent="armourimpact" anchor="top"/>
+					<left parent="armourimpact" anchor="right" offset="24" />
+				</anchored>
+				<class>referencearmour</class>
+				<readonly />
+			</linkfield>
+
+
+			<windowlist name="list_armourmodifier">
+				<anchored>
+					<top>
+						<parent>armourname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>armourname</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<skipempty />
+				<noscroll />
+				<datasource>.armourmodifierlist</datasource>
+				<class>charsheet_armourmodifieritem</class>
+				<menutext>Armour</menutext>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.order.getValue() &gt; w2.order.getValue();
+					end
+
+					function reset()
+						for k,v in pairs(getWindows()) do
+							v.getDatabaseNode().delete();
+						end
+					end
+
+					function getOrder(node)
+						if NodeManager.get(node, "order", 0) == 0 then
+							local ordertable = {};
+							for k,v in pairs(getDatabaseNode().getChildren()) do
+								ordertable[NodeManager.get(v, "order", 0)] = true;
+							end
+
+							local i = 1;
+							while ordertable[i] do
+								i = i + 1;
+							end
+
+							NodeManager.set(node, "order", "number", i);
+						end
+					end
+
+				</script>
+			</windowlist>
+
+			<skilldescfieldpc name="armourdescription">
+				<anchored>
+					<top>
+						<parent>armourname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>armourname</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+
+		</sheetdata>
+	</windowclass>
+</root>

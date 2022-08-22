@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+		<includefile source="charsheet/charsheet_7_4_wares_sub.xml" />
+	<!-- List for all ware-->			
+	<windowclass name="charsheet_wareitem_all">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_wareitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatewaredetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+	
+			<powerstring name="warelocation" source = "location">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<tabtarget>
+					<next>warename</next>
+				</tabtarget>
+				<nodrag />
+				<empty>&#171; Location &#187;</empty>
+			</powerstring>
+			
+			<powerstring name="warename" source="warename">
+				<anchored>
+					<left>
+						<parent>warelocation</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-107</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>wareLR</next>
+					<prev>warelocation</prev>
+				</tabtarget>
+				<empty>&#171; ware item &#187;</empty>
+				<script>
+					function updateStatus()
+						window.warename.setColor("ffffffff");
+						window.warename.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+					
+					function onInit()
+						updateStatus();
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("warelocation");
+						draginfo.setCustomData(window.getDatabaseNode().getName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+				</script>
+			</powerstring>
+		
+			<numberfield name="wareessenceloss" source="essenceloss">
+				<anchored>
+					<to>warename</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next></next>
+					<prev>warename</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Essenceloss Rating</text>
+				</tooltip>
+			</numberfield>
+			
+			<numberfield name="warefilteritem" source="filteritem">
+				<anchored>
+					<to>warename</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+		
+			<skilldescfieldpc name="waredescription" source="description">
+				<anchored>
+					<top>
+						<parent>warename</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<parent>warename</parent>
+						<anchor>left</anchor>
+						<offset>-10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>wareCR</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+
+			<spacer name="spacer">
+				<anchor>waredescription</anchor>
+				<height>3</height>
+			</spacer>			
+		</sheetdata>		
+	</windowclass>
+	
+	<!-- List for subwindows ware-->			
+	<windowclass name="charsheet_wareitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_wareitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatewaredetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+		
+			<powerstring name="warename" source="warename">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-107</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>wareLR</next>
+				</tabtarget>
+				<empty>&#171; ware item &#187;</empty>
+				<script>
+					function updateStatus()
+						window.warename.setColor("ffffffff");
+						window.warename.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+					
+					function onInit()
+						updateStatus();
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("warelocation");
+						draginfo.setCustomData(window.getDatabaseNode().getName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+				</script>
+			</powerstring>
+		
+			<numberfield name="wareessenceloss" source="essenceloss">
+				<anchored>
+					<to>warename</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next></next>
+					<prev>warename</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						if window.windowlist.addEssenceloss then
+							window.windowlist.addEssenceloss();
+						end
+					end
+				</script>
+			</numberfield>
+			
+			<numberfield name="warefilteritem" source="filteritem">
+				<anchored>
+					<to>warename</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+
+			<skilldescfieldpc name="waredescription" source="description">
+				<anchored>
+					<top>
+						<parent>warename</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<parent>warename</parent>
+						<anchor>left</anchor>
+						<offset>-10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>wareCR</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+
+			<spacer name="spacer">
+				<anchor>waredescription</anchor>
+				<height>3</height>
+			</spacer>			
+		</sheetdata>		
+	</windowclass>	
+
+
+	<windowclass name="charsheet_7_4_ware">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>	
+			<subwindow name="charsheetware_all">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_4_1</class>
+			</subwindow>
+			<subwindow name="charsheetware_2">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_4_2</class>
+			</subwindow>
+			<subwindow name="charsheetware_3">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_4_3</class>
+			</subwindow>
+			<subwindow name="charsheetware_4">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_4_4</class>
+			</subwindow>
+			<subwindow name="charsheetware_5">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_4_5</class>
+			</subwindow>
+			<subwindow name="charsheetware_6">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_4_6</class>
+			</subwindow>
+			<subwindow name="charsheetware_7">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_4_7</class>
+			</subwindow>
+
+			<tabcontrol_h name="tabsware">
+				<bounds>117,123,500,25</bounds>
+				<tab>
+					<text>Overview</text>
+					<target>waretabtext1</target>
+					<subwindow>charsheetware_all</subwindow>
+				</tab>
+				<tab>
+					<text>Cyberware</text>
+					<target>waretabtext2</target>
+					<subwindow>charsheetware_2</subwindow>
+				</tab>
+				<tab>
+					<text>Bioware</text>
+					<target>waretabtext3</target>
+					<subwindow>charsheetware_3</subwindow>
+				</tab>
+				<tab>
+					<text>Genetic</text>
+					<target>waretabtext4</target>
+					<subwindow>charsheetware_4</subwindow>
+				</tab>
+				<tab>
+					<text>Adv.</text>
+					<target>waretabtext5</target>
+					<subwindow>charsheetware_5</subwindow>
+				</tab>
+				<tab>
+					<text>Disadv.</text>
+					<target>waretabtext6</target>
+					<subwindow>charsheetware_6</subwindow>
+				</tab>
+				<tab>
+					<text>Other</text>
+					<target>waretabtext7</target>
+					<subwindow>charsheetware_7</subwindow>
+				</tab>
+				<script file="charsheet/scripts/charsheet_htabs_ware.lua" />
+				<activate>1</activate>
+			</tabcontrol_h>
+			
+			<stringfield name="waretabtext1" source="waretabtext1">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="waretabtext2" source="waretabtext2">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.warelist_all.changeLocationName(a,b);
+					end				
+				</script>
+			</stringfield>
+			<stringfield name="waretabtext3" source="waretabtext3">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.warelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>
+			<stringfield name="waretabtext4" source="waretabtext4">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.warelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>		
+			<stringfield name="waretabtext5" source="waretabtext5">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.warelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>		
+			<stringfield name="waretabtext6" source="waretabtext6">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.warelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>	
+			<stringfield name="waretabtext7" source="waretabtext7">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.warelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>	
+		
+	<!-- wares warelist-->
+
+			<windowlist name="warelist_all">
+				<bounds>0,0,0,0</bounds>
+				<invisible />				
+				<datasource>.else.warelist</datasource>
+				<class>charsheet_wareitem</class>
+				<script>
+					function onInit()
+						addEssenceloss();
+					end
+					function onDelete()
+						addEssenceloss();
+					end
+					function addEssenceloss()
+						local cyberware = 0
+						local bioware = 0
+						for k, v in ipairs(getWindows()) do
+							local warefilteritem = v.getDatabaseNode().getChild("filteritem").getValue();
+							if warefilteritem == 2 then
+								cyberware = cyberware + v.getDatabaseNode().getChild("essenceloss").getValue();
+							elseif warefilteritem == 3 then
+								bioware = bioware + v.getDatabaseNode().getChild("essenceloss").getValue();
+							end
+						end
+						local a = 0
+						local b = 0
+						if cyberware > bioware then
+							a = bioware /2 
+							b = cyberware
+						elseif bioware >= cyberware then
+							a = bioware
+							b = cyberware /2
+						end
+
+						if a > 0 then
+							a = -a
+						end
+
+						if b > 0 then
+							b = -b
+						end
+						
+						window.getDatabaseNode().getChild("base.attribute.essenceloss.bio").setValue(a);
+						window.getDatabaseNode().getChild("base.attribute.essenceloss.cyber").setValue(b);
+					end
+					
+					local bActiveLock = false
+					function changeLocationName(a,b)
+						if not bActiveLock then
+							local c = string.gsub(b, "waretabtext", "");
+							c = tonumber(c);
+
+							for k, v in ipairs(getWindows()) do
+								local d = v.getDatabaseNode().getChild("filteritem").getValue();
+								if d == c then
+									local e = v.getDatabaseNode().getChild("location").setValue(a)
+								end
+							end
+
+							bActiveLock = false;
+						end
+					end
+				</script>
+			</windowlist>	
+
+		</sheetdata>		
+	</windowclass>
+
+</root>

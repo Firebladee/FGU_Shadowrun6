@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="charselect_host_entry" merge="merge">
+		<sizelimits>
+			<maximum width="250" />
+		</sizelimits>
+	</windowclass>
+
+	<windowclass name="charselect_host" merge="merge">
+		<sheetdata>
+			<windowlist name="list">
+  				<bounds>40,55,-40,-85</bounds>
+  				<anchored/>
+				<columns width="255" fillwidth="true" />
+			</windowlist>
+ 		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charselect_client" merge="merge">
+		<sheetdata>
+			<windowlist name="list">
+  				<bounds>30,90,-30,-105</bounds>
+  				<anchored/>
+			</windowlist>
+ 		</sheetdata>
+	</windowclass>
+</root>

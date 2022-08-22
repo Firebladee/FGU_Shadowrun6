@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for
+  attribution and copyright information.
+-->
+
+<root>
+	<!-- Spell table -->
+	<windowclass name="reference_spelltablelistitem">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<linkfield name="link">
+				<bounds>5,2,20,20</bounds>
+			</linkfield>
+			<string_list_link name="name">
+				<bounds>30,2,180,20</bounds>
+			</string_list_link>
+
+			<genericcontrol name="reftableanchor">
+				<bounds>200,2,0,0</bounds>
+			</genericcontrol>
+
+			<string_reftable name="category">
+				<anchored width="180" />
+			</string_reftable>
+			<string_reftable name="range">
+				<center />
+			</string_reftable>
+			<string_reftable name="damagetype">
+				<center />
+			</string_reftable>
+			<string_reftable name="duration">
+				<center />
+			</string_reftable>
+			<string_reftable name="drain">
+				<anchored width="120" />
+			</string_reftable>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_spelltablegroup">
+		<script file="ref/scripts/ref_listgroup.lua" />
+		<sheetdata>
+			<anchor_column name="topanchor" />
+
+			<frame_groupdesc name="descframe" />
+			<string_groupdesc name="description" />
+
+			<list_reftablegroupitems name="list">
+				<datasource>.spells</datasource>
+				<class>reference_spelltablelistitem</class>
+			</list_reftablegroupitems>
+
+			<ft_reftablefooter name="footer" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_spelltablelist">
+		<frame>referencelist</frame>
+		<placement>
+			<size width="750" height="650" />
+		</placement>
+		<sizelimits>
+			<minimum width="750" height="650" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="description" />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar>
+				<field>description</field>
+			</windowtitlebar>
+
+			<genericcontrol name="headeranchor">
+				<bounds>65,45,0,0</bounds>
+			</genericcontrol>
+			<label_reftable name="headername">
+				<anchored width="180" />
+				<static textres="ref_label_listname" />
+			</label_reftable>
+			<label_reftable name="headecategory">
+				<anchored width="180" />
+				<static textres="ref_label_listcategory" />
+			</label_reftable>
+			<label_reftable name="headerange">
+				<static textres="ref_label_listrange" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headerdmgtype">
+				<static textres="ref_label_listdamagetype" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headerduration">
+				<static textres="ref_label_listduration" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headerdrain">
+				<static textres="ref_label_listdrain" />
+				<anchored width="120" />
+			</label_reftable>
+
+			<windowlist name="grouplist">
+				<bounds>35,80,-40,-70</bounds>
+				<frame name="groupbox" offset="15,15,20,15" />
+				<class>reference_spelltablegroup</class>
+				<datasource>.groups</datasource>
+			</windowlist>
+			<scrollbar_reftablegroup />
+
+			<filter_reftable name="filter">
+				<bounds>125,-45,-35,20</bounds>
+			</filter_reftable>
+			<button_expand>
+				<bounds>30,-45,20,20</bounds>
+			</button_expand>
+			<button_collapse>
+				<bounds>60,-45,20,20</bounds>
+			</button_collapse>
+
+			<resize_referencelist />
+			<close_referencelist />
+		</sheetdata>
+	</windowclass>
+
+</root>

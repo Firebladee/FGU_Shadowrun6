@@ -1,0 +1,3062 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet_1_main">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>811</height>
+			</size>
+		</placement>
+		<nodelete />
+		<sheetdata>
+			<subwindow name="sub1">
+				<bounds>0,0,-1,-22</bounds>
+				<class>sub1</class>
+			</subwindow>
+			<subwindow name="sub2">
+				<bounds>0,0,-1,-22</bounds>
+				<class>sub2</class>
+			</subwindow>
+			<subwindow name="sub3">
+				<bounds>0,0,-1,-22</bounds>
+				<class>sub3</class>
+			</subwindow>
+			<!-- OVERVIEW -->
+			<genericcontrol name="overviewframe">
+				<bounds>83,53,265,170</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+      <stringcontrol>
+        <anchored>
+          <to>overviewframe</to>
+          <position>insidetop</position>
+          <offset>-10,6</offset>
+        </anchored>
+        <left />
+        <font>sheetlabel</font>
+        <static>Personal Data</static>
+      </stringcontrol>
+
+			<string_labeled name="name">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>15,30</offset>
+					<size>
+						<width>140</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<anchorto>overviewframe</anchorto>
+				<height>20</height>
+				<label>Name/Primary Alias</label>
+				<tabtarget>
+					<next>metatype</next>
+				</tabtarget>
+				<tooltip>
+					<text>Name of your Character</text>
+				</tooltip>
+			</string_labeled>
+			
+			<button_stringcycler name="infected">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>370,33</offset>
+					<size>
+						<width>50</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>Type1|Type2</labels>
+					<values>1|2</values>
+					<defaultlabel>Infect.</defaultlabel>
+				</parameters>
+				<tooltip>
+					<text>Type of Infection with HMHVV (Choose (with doubleclick) if infected)</text>
+				</tooltip>
+			</button_stringcycler>
+
+			<button_stringcycler name="magical">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>425,33</offset>
+					<size>
+						<width>60</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>Mage|Adept|T-mancer</labels>
+					<values>1|2|3</values>
+					<defaultlabel>Mag./Res.</defaultlabel>
+				</parameters>
+				<script>
+					function onValueChanged()
+						checkValue();
+					end
+					function checkValue()
+							local a = getValue();
+							if a == "Mage" or a == "Adept" then
+								window.sub1.setVisible(true);
+								window.sub2.setVisible(false);
+								window.sub3.setVisible(false);
+								drainValueUpdate();
+							elseif a == "T-mancer" then
+								window.sub1.setVisible(false);
+								window.sub2.setVisible(true);
+								window.sub3.setVisible(false);
+								drainValueUpdate();
+							else
+								window.sub1.setVisible(false);
+								window.sub2.setVisible(false);
+								window.sub3.setVisible(true);
+								drainValueUpdate();
+							end
+					end
+
+					function onInit()
+						super.onInit();
+						checkValue();
+					end
+
+					function drainValueUpdate()
+						if not window.getDatabaseNode().getChild("base.special.drainattribute") then
+							window.getDatabaseNode().createChild("base.special.drainattribute","number").setValue(0);
+						end
+						if not window.getDatabaseNode().getChild("base.special.drainspecialattribute") then
+							window.getDatabaseNode().createChild("base.special.drainspecialattribute","number").setValue(0);
+						end
+
+						local a = 0
+						local c = " "
+						if not window.getDatabaseNode().getChild("magical") then
+							window.getDatabaseNode().createChild("magical","string").setValue("0");
+							a = window.getDatabaseNode().getChild("magical").getValue();
+						else
+							a = window.getDatabaseNode().getChild("magical").getValue();
+						end
+ 						if a == "1" or a == "2" then
+							local b = "none"
+							if not window.getDatabaseNode().getChild("drainattributecycler") then
+								window.getDatabaseNode().createChild("drainattributecycler","string").setValue("none");
+							else
+								b = string.lower(window.getDatabaseNode().getChild("drainattributecycler").getValue());
+								c = "base.attribute."..b..".check"
+							end
+							if b ~= "none" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild(c).getValue());
+								local test = window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue();
+								window.getDatabaseNode().getChild("base.special.drainspecialattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+								window.getDatabaseNode().getChild("base.special.drainspecialattribute").setValue(0);
+							end
+
+							elseif a == "3" then
+							local b = "none"
+							if window.getDatabaseNode().getChild("drainattributecycler") then
+								b = string.lower(window.getDatabaseNode().getChild("drainattributecycler").getValue());
+								if b ~= "none" then
+									c = "base.attribute."..b..".check"
+								end
+							end
+						end
+					end
+
+					</script>
+				<tooltip>
+					<text>Choose (with doubleclick) if Adept, Mage or Technomancer</text>
+				</tooltip>
+			</button_stringcycler>
+
+      <string_labeled name="metatype" source="base.metatype">
+        <anchored>
+          <to>overviewframe</to>
+          <position>insidetopleft</position>
+          <offset>15,50</offset>
+          <size>
+            <width>100</width>
+            <height>20</height>
+          </size>
+        </anchored>
+        <anchorto>overviewframe</anchorto>
+        <height>20</height>
+        <label>Metatype</label>
+        <tabtarget>
+          <prev>name</prev>
+          <next>ethnicity</next>
+        </tabtarget>
+        <tooltip>
+          <text>Metatype (Race) of your Character (Basetype only)</text>
+        </tooltip>
+      </string_labeled>
+
+      <string_labeled name="ethnicity" source="base.ethenicity">
+        <anchored>
+          <to>overviewframe</to>
+          <position>insidetopleft</position>
+          <offset>120,50</offset>
+          <size>
+            <width>25</width>
+            <height>20</height>
+          </size>
+        </anchored>
+        <anchorto>overviewframe</anchorto>
+        <height>20</height>
+        <label>Ethenicity</label>
+        <tabtarget>
+          <prev>metatype</prev>
+          <next>age</next>
+        </tabtarget>
+        <tooltip>
+          <text>Ethnicity</text>
+        </tooltip>
+      </string_labeled>
+
+			<string_labeled name="age" source="base.age">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>15,70</offset>
+					<size>
+						<width>25</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<anchorto>overviewframe</anchorto>
+				<height>20</height>
+				<label>Age</label>
+				<tabtarget>
+					<prev>ethnicity</prev>
+					<next>sex</next>
+				</tabtarget>
+				<tooltip>
+					<text>Current Age. Date of Birth may be written in your Description at the end</text>
+				</tooltip>
+			</string_labeled>
+
+      <string_labeled name="sex" source="base.sex">
+        <anchored>
+          <to>overviewframe</to>
+          <position>insidetopleft</position>
+          <offset>45,70</offset>
+          <size>
+            <width>25</width>
+            <height>20</height>
+          </size>
+        </anchored>
+        <anchorto>overviewframe</anchorto>
+        <height>20</height>
+        <label>Sex</label>
+        <tabtarget>
+          <prev>age</prev>
+          <next>height</next>
+        </tabtarget>
+        <tooltip>
+          <text>Gender of your Character</text>
+        </tooltip>
+      </string_labeled>
+
+			<string_labeled name="height" source="base.height">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>75,70</offset>
+					<size>
+						<width>45</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<anchorto>overviewframe</anchorto>
+				<height>20</height>
+				<label>Height</label>
+				<tabtarget>
+					<prev>sex</prev>
+					<next>weight</next>
+				</tabtarget>
+				<tooltip>
+					<text>Height of your character</text>
+				</tooltip>
+			</string_labeled>
+
+      <string_labeled name="weight" source="base.weight">
+        <anchored>
+          <to>overviewframe</to>
+          <position>insidetopleft</position>
+          <offset>125,70</offset>
+          <size>
+            <width>45</width>
+            <height>20</height>
+          </size>
+        </anchored>
+        <anchorto>overviewframe</anchorto>
+        <height>20</height>
+        <label>Weight</label>
+        <tabtarget>
+          <prev>height</prev>
+          <next>reputation</next>
+        </tabtarget>
+        <tooltip>
+          <text>Weight of your character</text>
+        </tooltip>
+      </string_labeled>
+
+			<string_labeled name="reputation" source="base.reputation">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>15,90</offset>
+					<size>
+						<width>45</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<anchorto>overviewframe</anchorto>
+				<height>20</height>
+				<label>Reputation</label>
+				<tabtarget>
+					<prev>weight</prev>
+					<next>Heat</next>
+				</tabtarget>
+				<tooltip>
+					<text>Public Awarness about your Character</text>
+				</tooltip>
+			</string_labeled>
+
+			<string_labeled name="heat" source="base.heat">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>65,90</offset>
+					<size>
+						<width>105</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<anchorto>overviewframe</anchorto>
+				<height>20</height>
+				<label>Heat</label>
+				<tabtarget>
+					<prev>reputation</prev>
+					<next>karma</next>
+				</tabtarget>
+				<tooltip>
+					<text>General Role of your Character within the Group (Streetsam, Fixer, Singer, Doc, Bitch)</text>
+				</tooltip>
+			</string_labeled>
+
+			<string_labeled name="karma" source="base.karma">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>15,110</offset>
+					<size>
+						<width>25</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<anchorto>overviewframe</anchorto>
+				<height>20</height>
+				<label>karma</label>
+				<tabtarget>
+					<prev>heat</prev>
+					<next>total_karma</next>
+				</tabtarget>
+				<tooltip>
+					<text>Karma</text>
+				</tooltip>
+			</string_labeled>
+
+      <string_labeled name="total_karma" source="base.total_karma">
+        <anchored>
+          <to>overviewframe</to>
+          <position>insidetopleft</position>
+          <offset>45,110</offset>
+          <size>
+            <width>35</width>
+            <height>20</height>
+          </size>
+        </anchored>
+        <anchorto>overviewframe</anchorto>
+        <height>20</height>
+        <label>total_karma</label>
+        <tabtarget>
+          <prev>karma</prev>
+          <next>misc</next>
+        </tabtarget>
+        <tooltip>
+          <text>Karma total</text>
+        </tooltip>
+      </string_labeled>
+
+      <string_labeled name="misc" source="base.misc">
+        <anchored>
+          <to>overviewframe</to>
+          <position>insidetopleft</position>
+          <offset>85,110</offset>
+          <size>
+            <width>135</width>
+            <height>20</height>
+          </size>
+        </anchored>
+        <anchorto>overviewframe</anchorto>
+        <height>20</height>
+        <label>misc</label>
+        <tabtarget>
+          <prev>total_karma</prev>
+          <next>name</next>
+        </tabtarget>
+        <tooltip>
+          <text>Misc</text>
+        </tooltip>
+      </string_labeled>
+
+      <genericcontrol name="corecombatinfo">
+        <bounds>353,53,265,170</bounds>
+        <frame>
+          <name>sheetgroup</name>
+        </frame>
+      </genericcontrol>
+
+      <stringcontrol name="LabelAttributes">
+        <anchored>
+          <to>corecombatinfo</to>
+          <position>insidetop</position>
+          <offset>-10,6</offset>
+        </anchored>
+        <left />
+        <font>sheetlabel</font>
+        <static>Core Combat info</static>
+      </stringcontrol>
+
+<!-- base.attributes -->
+			<genericcontrol name="attributeframe">
+				<bounds>83,223,200,300</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+				<script>
+					function onHover(state)
+						if stat == true then
+							window.LabelAttributes.setColor(ff000000);
+						else
+							window.LabelAttributes.setColor(ffffffff);
+						end
+					end
+				</script>
+			</genericcontrol>
+
+			<stringcontrol name="LabelAttributes">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Attributes</static>
+				<script>
+					function onHover(state)
+						if stat == true then
+							setColor(ff000000);
+						else
+							setColor(ffffffff);
+						end
+					end
+				</script>
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>73,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Base</static>
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>113,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Mod</static>
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>150,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>check</static>
+			</stringcontrol>
+
+	<!-- Body -->
+
+			<attributescore name="body" source="base.attribute.body.base">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>70,39</offset>
+				</anchored>
+				<tabtarget>
+					<next>bodybonus</next>
+				</tabtarget>
+			</attributescore>
+
+			<attributebonus name="bodybonus" source="base.attribute.body.bonus">
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<tabtarget>
+					<prev>body</prev>
+					<next>agility</next>
+				</tabtarget>
+				<scorefield>base.attribute.body.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.body.bonus</modifierfield>
+			</attributebonus>
+
+			<attributecheckbonus name="bodycheck" source="base.attribute.body.check">
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<target>Body</target>
+				<attributebonusfield>base.attribute.body.bonus</attributebonusfield>
+				<attributescore>base.attribute.body.base</attributescore>
+				<script>
+					function onValueChanged()
+						calulateArmourPenalty();
+					end
+					function onInit()
+						super.onInit();
+						calulateArmourPenalty();
+					end
+
+					function calulateArmourPenalty()
+						local node = window.getDatabaseNode().getChild("armour.encumbrance.hiddenballisticvalue");
+						if node then
+							local a = window.getDatabaseNode().getChild("armour.encumbrance.hiddenballisticvalue").getValue();
+							local b = window.getDatabaseNode().getChild("armour.encumbrance.hiddenimpactvalue").getValue();
+							local c = window.getDatabaseNode().getChild("base.attribute.body.check").getValue();
+							local d = math.ceil((math.max(a,b)-(c+c)) /2)
+							local e = -d
+							if d > 0 then
+								window.getDatabaseNode().getChild("armour.hiddenpenalty").setValue(e);
+							else
+								window.getDatabaseNode().getChild("armour.hiddenpenalty").setValue(0);
+							end
+						end
+					end
+				</script>
+
+			</attributecheckbonus>
+
+			<attributehiddenbonus name="bodyhiddenbonus" source="base.attribute.body.hiddenbonus">
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+
+			<attributelabel>
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<static>Body</static>
+			</attributelabel>
+
+	<!-- agility -->
+			<attributescore name="agility" source="base.attribute.agility.base">
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<tabtarget>
+					<next>agilitybonus</next>
+					<prev>bodybonus</prev>
+				</tabtarget>
+			</attributescore>
+
+			<attributebonus name="agilitybonus" source="base.attribute.agility.bonus">
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<scorefield>base.attribute.agility.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.agility.bonus</modifierfield>
+				<tabtarget>
+					<next>reaction</next>
+					<prev>agility</prev>
+				</tabtarget>
+			</attributebonus>
+
+			<attributecheckbonus name="agilitycheck" source="base.attribute.agility.check">
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<target>Agility</target>
+				<attributebonusfield>base.attribute.agility.bonus</attributebonusfield>
+				<attributescore>base.attribute.agility.base</attributescore>
+			</attributecheckbonus>
+
+			<attributehiddenbonus name="agilityhiddenbonus" source="base.attribute.agility.hiddenbonus">
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+
+			<attributelabel>
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<static>Agility</static>
+			</attributelabel>
+
+	<!-- reaction -->
+			<attributescore name="reaction" source="base.attribute.reaction.base">
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<tabtarget>
+					<next>reactionbonus</next>
+					<prev>agilitybonus</prev>
+				</tabtarget>
+			</attributescore>
+
+			<attributebonus name="reactionbonus" source="base.attribute.reaction.bonus">
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<scorefield>base.attribute.reaction.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.reaction.bonus</modifierfield>
+				<tabtarget>
+					<next>strength</next>
+					<prev>reaction</prev>
+				</tabtarget>
+			</attributebonus>
+
+			<attributecheckbonus name="reactioncheck" source="base.attribute.reaction.check">
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<target>Reaction</target>
+				<attributebonusfield>base.attribute.reaction.bonus</attributebonusfield>
+				<attributescore>base.attribute.reaction.base</attributescore>
+			</attributecheckbonus>
+
+			<attributehiddenbonus name="reactionhiddenbonus" source="base.attribute.reaction.hiddenbonus">
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+
+			<attributelabel>
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<static>Reaction</static>
+			</attributelabel>
+
+	<!-- strength -->
+			<attributescore name="strength" source="base.attribute.strength.base">
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<tabtarget>
+					<next>strengthbonus</next>
+					<prev>reactionbonus</prev>
+				</tabtarget>
+			</attributescore>
+
+			<attributebonus name="strengthbonus" source="base.attribute.strength.bonus">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<scorefield>base.attribute.strength.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.strength.bonus</modifierfield>
+				<tabtarget>
+					<next>willpower</next>
+					<prev>strength</prev>
+				</tabtarget>
+			</attributebonus>
+
+			<attributecheckbonus name="strengthcheck" source="base.attribute.strength.check">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<target>Strength</target>
+				<attributebonusfield>base.attribute.strength.bonus</attributebonusfield>
+				<attributescore>base.attribute.strength.base</attributescore>
+			</attributecheckbonus>
+
+			<attributehiddenbonus name="strengthhiddenbonus" source="base.attribute.strength.hiddenbonus">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+
+			<attributelabel>
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<static>Strength</static>
+			</attributelabel>
+
+	<!-- charisma -->
+			<attributescore name="charisma" source="base.attribute.charisma.base">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<tabtarget>
+					<next>charismabonus</next>
+					<prev>strengthbonus</prev>
+				</tabtarget>
+			</attributescore>
+
+			<attributebonus name="charismabonus" source="base.attribute.charisma.bonus">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<scorefield>base.attribute.charisma.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.charisma.bonus</modifierfield>
+				<tabtarget>
+					<prev>charisma</prev>
+				</tabtarget>
+			</attributebonus>
+
+			<attributecheckbonus name="charismacheck" source="base.attribute.charisma.check">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<target>Charisma</target>
+				<attributebonusfield>base.attribute.charisma.bonus</attributebonusfield>
+				<attributescore>base.attribute.charisma.base</attributescore>
+			</attributecheckbonus>
+
+			<attributehiddenbonus name="charismahiddenbonus" source="base.attribute.charisma.hiddenbonus">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+
+			<attributelabel>
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<static>Charisma</static>
+			</attributelabel>
+
+	<!-- intuition -->
+			<attributescore name="intuition" source="base.attribute.intuition.base">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<tabtarget>
+					<next>intuitionbonus</next>
+					<prev>charismabonus</prev>
+				</tabtarget>
+			</attributescore>
+
+			<attributebonus name="intuitionbonus" source="base.attribute.intuition.bonus">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<scorefield>base.attribute.intuition.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.intuition.bonus</modifierfield>
+				<tabtarget>
+					<next>charisma</next>
+					<prev>intuition</prev>
+				</tabtarget>
+			</attributebonus>
+
+			<attributecheckbonus name="intuitioncheck" source="base.attribute.intuition.check">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<target>Intuition</target>
+				<attributebonusfield>base.attribute.intuition.bonus</attributebonusfield>
+				<attributescore>base.attribute.intuition.base</attributescore>
+			</attributecheckbonus>
+			<attributecheckbonus name="intuitioncheck2" source="base.attribute.intuition2.check">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<invisible />
+				<target>Intuition</target>
+				<attributebonusfield>base.attribute.intuition.bonus</attributebonusfield>
+				<attributescore>base.attribute.intuition.base</attributescore>
+			</attributecheckbonus>
+
+			<attributehiddenbonus name="intuitionhiddenbonus" source="base.attribute.intuition.hiddenbonus">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+
+			<attributelabel>
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<static>Intuition</static>
+			</attributelabel>
+
+	<!-- logic -->
+			<attributescore name="logic" source="base.attribute.logic.base">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<tabtarget>
+					<next>logicbonus</next>
+					<prev>intuitionbonus</prev>
+				</tabtarget>
+			</attributescore>
+
+			<attributebonus name="logicbonus" source="base.attribute.logic.bonus">
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<scorefield>base.attribute.logic.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.logic.bonus</modifierfield>
+				<tabtarget>
+					<next>intuition</next>
+					<prev>logic</prev>
+				</tabtarget>
+			</attributebonus>
+
+			<attributecheckbonus name="logiccheck" source="base.attribute.logic.check">
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<target>Logic</target>
+				<attributebonusfield>base.attribute.logic.bonus</attributebonusfield>
+				<attributescore>base.attribute.logic.base</attributescore>
+			</attributecheckbonus>
+
+			<attributehiddenbonus name="logichiddenbonus" source="base.attribute.logic.hiddenbonus">
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+
+			<attributelabel>
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<static>Logic</static>
+			</attributelabel>
+
+	<!-- willpower -->
+			<attributescore name="willpower" source="base.attribute.willpower.base">
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<tabtarget>
+					<next>willpowerbonus</next>
+					<prev>logicbonus</prev>
+				</tabtarget>
+			</attributescore>
+
+			<attributebonus name="willpowerbonus" source="base.attribute.willpower.bonus">
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<scorefield>base.attribute.willpower.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.willpower.bonus</modifierfield>
+				<tabtarget>
+					<next>logic</next>
+					<prev>willpower</prev>
+				</tabtarget>
+			</attributebonus>
+
+			<attributecheckbonus name="willpowercheck" source="base.attribute.willpower.check">
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<target>Willpower</target>
+				<attributebonusfield>base.attribute.willpower.bonus</attributebonusfield>
+				<attributescore>base.attribute.willpower.base</attributescore>
+			</attributecheckbonus>
+
+			<attributehiddenbonus name="willpowerhiddenbonus" source="base.attribute.willpower.hiddenbonus">
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+
+			<attributelabel>
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<static>Willpower</static>
+			</attributelabel>
+
+	<!-- buttongroup_radio -->
+			<stringcontrol name="checkmodelabel" source="attribute.checkmode.label">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>8,275</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<static></static>
+			</stringcontrol>
+			<buttongroup_radio name="checkmode">
+				<anchored>
+					<to>checkmodelabel</to>
+					<position>right</position>
+					<offset>0</offset>
+				</anchored>
+				<parameters>
+					<optionwidth>60</optionwidth>
+					<labels>normal|default|double</labels>
+					<values>1|2|3</values>
+					<defaultindex>1</defaultindex>
+					<defaultvalue>1</defaultvalue>
+				</parameters>
+				<script>
+					function onValueChanged()
+
+					end
+				</script>
+			</buttongroup_radio>
+<!-- Active Nodes -->
+
+			<stringfield name="activeweaponnode" source="node.activeweapon">
+				<anchored>
+					<to>body</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+			</stringfield>
+			<stringfield name="activespellnode" source="node.activespell">
+				<anchored>
+					<to>body</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+			</stringfield>
+			<stringfield name="activespiritnode" source="node.activespirit">
+				<anchored>
+					<to>body</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+			</stringfield>
+			<stringfield name="activecomlinknode" source="node.activecomlink">
+				<anchored>
+					<to>body</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+			</stringfield>
+			<stringfield name="activecomlinkstatus" source="node.activecomlinkstatus">
+				<anchored>
+					<to>body</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+			</stringfield>
+
+
+<!-- special Checks -->
+			<genericcontrol name="specialcheckframe">
+				<bounds>468,423,150,100</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>specialcheckframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Special Checks</static>
+			</stringcontrol>
+
+			<specialattributecheck name="composure" source="base.attribute.composure.check">
+				<anchored>
+					<to>specialcheckframe</to>
+					<position>insidetopleft</position>
+					<offset>35,35</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<target>Composure</target>
+				<description>
+					<text>Composure (WIL+CHA)</text>
+				</description>
+				<source>
+					<name>base.attribute.willpower.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.charisma.check</name>
+					<op>+</op>
+				</source>
+			</specialattributecheck>
+			<stringcontrol>
+				<anchored>
+					<to>composure</to>
+					<position>above</position>
+					<offset>5,1</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Comp.</static>
+				<center />
+			</stringcontrol>
+
+
+			<specialattributecheck name="memory" source="base.attribute.memory.check">
+				<anchored>
+					<to>specialcheckframe</to>
+					<position>insidetopleft</position>
+					<offset>85,35</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<target>Memory</target>
+				<description>
+					<text>Memory (LOG+INT)</text>
+				</description>
+				<source>
+					<name>base.attribute.logic.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.intuition.check</name>
+					<op>+</op>
+				</source>
+			</specialattributecheck>
+			<stringcontrol>
+				<anchored>
+					<to>memory</to>
+					<position>above</position>
+					<offset>5,1</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Memory</static>
+				<center />
+			</stringcontrol>
+
+			<specialattributecheck name="judge" source="base.attribute.judge.check">
+				<anchored>
+					<to>specialcheckframe</to>
+					<position>insidetopleft</position>
+					<offset>35,70</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<target>Judge</target>
+				<description>
+					<text>Judge Intensions(INT+CHA)</text>
+				</description>
+				<source>
+					<name>base.attribute.charisma.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.intuition.check</name>
+					<op>+</op>
+				</source>
+			</specialattributecheck>
+			<stringcontrol>
+				<anchored>
+					<to>judge</to>
+					<position>above</position>
+					<offset>5,1</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Judge</static>
+				<center />
+			</stringcontrol>
+
+			<specialattributecheck name="lift" source="base.attribute.lift.check">
+				<anchored>
+					<to>specialcheckframe</to>
+					<position>insidetopleft</position>
+					<offset>85,70</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<target>Lift</target>
+				<description>
+					<text>Lift and Carry (STR+BOD)</text>
+				</description>
+				<source>
+					<name>base.attribute.strength.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.body.check</name>
+					<op>+</op>
+				</source>
+			</specialattributecheck>
+			<stringcontrol>
+				<anchored>
+					<to>lift</to>
+					<position>above</position>
+					<offset>5,1</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Lift</static>
+				<center />
+			</stringcontrol>
+
+<!-- Essence -->
+			<genericcontrol name="essframe">
+				<bounds>283,423,185,100</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>essframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Essence</static>
+			</stringcontrol>
+
+			<essencescore name="essencebase" source="base.attribute.essence.base">
+				<anchored>
+					<to>essframe</to>
+					<position>insidetopleft</position>
+					<offset>71,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<script>
+				function onInit()
+					if super.onInit then
+						super.onInit();
+					end
+
+					if getValue() == 0 then
+						setValue(6);
+					end
+				end
+				</script>
+			</essencescore>
+
+			<stringcontrol>
+				<anchored>
+					<to>essencebase</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Base</static>
+				<center />
+				<tooltip>
+					<text>Base</text>
+				</tooltip>
+			</stringcontrol>
+
+			<essencemodifierscore name="essencemodifier" source="base.attribute.essence.modifier">
+				<anchored>
+					<to>essframe</to>
+					<position>insidetopleft</position>
+					<offset>107,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+			</essencemodifierscore>
+
+			<stringcontrol>
+				<anchored>
+					<to>essencemodifier</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Mod.</static>
+				<center />
+				<tooltip>
+					<text>complete Modifier</text>
+				</tooltip>
+			</stringcontrol>
+
+			<linkednumber name="essencecheck" source="base.attribute.essence.current">
+				<anchored>
+					<to>essframe</to>
+					<position>insidetopleft</position>
+					<offset>143,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<source>
+					<name>base.attribute.essence.modifier</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.essence.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.essenceloss.bio</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.essenceloss.cyber</name>
+					<op>+</op>
+				</source>
+				<script>
+					function onValueChanged()
+						local a = 6 -(math.floor(self.getValue()));
+						b = -a
+						window.getDatabaseNode().createChild("base.attribute.magic.loss", "number").setValue(b);
+						window.getDatabaseNode().createChild("base.attribute.resonance.loss", "number").setValue(b);
+					end
+				</script>
+			</linkednumber>
+			<stringcontrol>
+				<anchored>
+					<to>essencecheck</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Curr.</static>
+				<center />
+				<tooltip>
+					<text>check</text>
+				</tooltip>
+			</stringcontrol>
+
+			<attributelabel name="essencelabel">
+				<anchored>
+					<size>
+						<width>45</width>
+					</size>
+					<to>essencebase</to>
+					<offset>13</offset>
+				</anchored>
+				<static>Essence</static>
+				<tooltip>
+					<text>Essence</text>
+				</tooltip>
+			</attributelabel>
+
+			<numberfield name="essencelossbio" source="base.attribute.essenceloss.bio">
+				<anchored>
+					<to>essframe</to>
+					<position>insidetopleft</position>
+					<offset>71,74</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+			</numberfield>
+
+			<stringcontrol>
+				<anchored>
+					<to>essencelossbio</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bio</static>
+				<center />
+				<tooltip>
+					<text>Essenceloss through Bioware</text>
+				</tooltip>
+			</stringcontrol>
+
+			<numberfield name="essencelosscyber" source="base.attribute.essenceloss.cyber">
+				<anchored>
+					<to>essframe</to>
+					<position>insidetopleft</position>
+					<offset>107,74</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+			</numberfield>
+
+			<stringcontrol>
+				<anchored>
+					<to>essencelosscyber</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Cyb.</static>
+				<center />
+				<tooltip>
+					<text>Essenceloss through Cyberware</text>
+				</tooltip>
+			</stringcontrol>
+
+			<attributelabel name="losslabel">
+				<anchored>
+					<size>
+						<width>45</width>
+					</size>
+					<to>essencelossbio</to>
+					<offset>13</offset>
+				</anchored>
+				<static>Loss</static>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+			</attributelabel>
+
+<!-- ini -->
+			<genericcontrol name="iniframe">
+				<bounds>283,223,185,200</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>iniframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Initiative</static>
+			</stringcontrol>
+
+			<inicheck name="ini" source="base.attribute.ini.check">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>71,39</offset>
+				</anchored>
+				<readonly />
+				<noreset />
+				<source>
+					<name>base.attribute.reaction.check</name>
+					<op>+</op>
+				</source>
+  				<source>
+					<name>base.attribute.ini.mod</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.intuition.check</name>
+					<op>+</op>
+				</source>
+				<description>
+					<text>Real World Initiative check</text>
+				</description>
+				<target>base.attribute.ini.check</target>
+			</inicheck>
+
+			<inibonus name="inimod" source="base.attribute.ini.mod">
+				<anchored>
+					<to>ini</to>
+				</anchored>
+				<tabtarget>
+					<next>inipass</next>
+					<prev>ini</prev>
+				</tabtarget>
+			</inibonus>
+
+			<attributescore name="inipass" source="base.attribute.inipass.score">
+				<anchored>
+					<to>ini</to>
+					<top>
+						<offset>0</offset>
+					</top>
+					<left>
+						<offset>71</offset>
+					</left>
+
+				</anchored>
+				<tabtarget>
+					<next>astinimod</next>
+					<prev>inimod</prev>
+				</tabtarget>
+			</attributescore>
+
+			<attributelabel name="inilabel">
+				<anchored>
+					<to>ini</to>
+				</anchored>
+				<script>
+					function onDoubleClick(x,y)
+						window.getDatabaseNode().getChild("initype").setValue("0");
+					end
+				</script>
+				<static>Normal</static>
+			</attributelabel>
+
+			<stringcontrol>
+				<anchored>
+					<to>ini</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Check</static>
+				<center />
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>inimod</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Mod.</static>
+				<center />
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>inipass</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Pass</static>
+				<center />
+			</stringcontrol>
+
+			<inicheck name="astini" source="base.attribute.astini.check">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>71,69</offset>
+				</anchored>
+				<readonly />
+				<target>Astral Initiave</target>
+				<description>
+					<text>Astral Initiative check</text>
+				</description>
+				<readonly />
+				<source>
+					<name>base.attribute.intuition.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.intuition2.check</name>
+					<op>+</op>
+				</source>
+  				<source>
+					<name>base.attribute.astini.mod</name>
+					<op>+</op>
+				</source>
+				<target>base.attribute.astini.check</target>
+			</inicheck>
+
+			<inibonus name="astinimod" source="base.attribute.astini.mod">
+				<anchored>
+					<to>astini</to>
+				</anchored>
+				<tabtarget>
+					<next>astinipass</next>
+					<prev>inipass</prev>
+				</tabtarget>
+			</inibonus>
+
+
+			<attributescore name="astinipass" source="base.attribute.astinipass.score">
+				<anchored>
+					<to>astini</to>
+					<top>
+						<offset>0</offset>
+					</top>
+					<left>
+						<offset>71</offset>
+					</left>
+				</anchored>
+				<readonly />
+				<script>
+					function onInit()
+						setValue(3);
+					end
+				</script>
+			</attributescore>
+
+			<attributelabel name="astinilabel">
+				<anchored>
+					<to>astini</to>
+				</anchored>
+				<script>
+					function onDoubleClick(x,y)
+						window.getDatabaseNode().getChild("initype").setValue("1");
+					end
+				</script>
+				<static>Astral</static>
+			</attributelabel>
+
+			<inicheck name="matini" source="base.attribute.matini.check">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>71,99</offset>
+
+				</anchored>
+				<target>Matrix Initiative (cold)</target>
+				<description>
+					<text>Matrix Cold Initiative check</text>
+				</description>
+				<source>
+					<name>base.attribute.intuition.check</name>
+					<op>+</op>
+				</source>
+				<source>
+				<name>base.attribute.comlink.response</name>
+				<op>+</op>
+				</source>
+				<source>
+				<name>base.attribute.matini.mod</name>
+				<op>+</op>
+				</source>
+				<target>base.attribute.matini.check</target>
+			</inicheck>
+
+			<inibonus name="matinimod" source="base.attribute.matini.mod">
+				<anchored>
+					<to>matini</to>
+				</anchored>
+				<tabtarget>
+					<next>matinipass</next>
+					<prev>astinipass</prev>
+				</tabtarget>
+			</inibonus>
+
+			<attributescore name="matinipass" source="base.attribute.matinipass.score">
+				<anchored>
+					<to>matini</to>
+					<top>
+						<offset>0</offset>
+					</top>
+					<left>
+						<offset>71</offset>
+					</left>
+				</anchored>
+				<tabtarget>
+					<next>pdamact</next>
+					<prev>matinimod</prev>
+				</tabtarget>
+				<script>
+					function onInit()
+					local a = self.getValue();
+						if 2 > a then
+							setValue(2);
+						end
+					end
+				</script>
+			</attributescore>
+
+			<attributelabel name="matinilabel">
+				<anchored>
+					<to>matini</to>
+				</anchored>
+				<script>
+					function onDoubleClick(x,y)
+						window.getDatabaseNode().getChild("initype").setValue("2");
+					end
+				</script>
+				<static>Matrix</static>
+			</attributelabel>
+
+			<inicheck name="hotmatini" source="base.attribute.hotmatini.check">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>71,129</offset>
+				</anchored>
+				<target>Matrix Initiative (hot)</target>
+				<description>
+					<text>Matrix Hot Initiative check</text>
+				</description>
+				<source>
+					<name>base.attribute.intuition.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.comlink.response</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.hotmatini.mod</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.comlink.hotfixbonus</name>
+					<op>+</op>
+				</source>
+				<target>base.attribute.hotmatini.check</target>
+			</inicheck>
+
+			<inibonus name="hotmatinimod" source="base.attribute.hotmatini.mod">
+				<anchored>
+					<to>hotmatini</to>
+				</anchored>
+				<tabtarget>
+					<next>matinipass</next>
+					<prev>astinipass</prev>
+				</tabtarget>
+			</inibonus>
+
+			<attributescore name="hotmatinipass" source="base.attribute.hotmatinipass.score">
+				<anchored>
+					<to>hotmatini</to>
+					<top>
+						<offset>0</offset>
+					</top>
+					<left>
+						<offset>71</offset>
+					</left>
+				</anchored>
+				<tabtarget>
+					<next>pdamact</next>
+					<prev>matinimod</prev>
+				</tabtarget>
+				<script>
+					function onInit()
+					local a = self.getValue();
+						if 3 > a then
+							setValue(3);
+						end
+					end
+				</script>
+			</attributescore>
+
+			<attributelabel  name="hotmatinilabel">
+				<anchored>
+					<to>hotmatini</to>
+				</anchored>
+				<script>
+					function onDoubleClick(x,y)
+						window.getDatabaseNode().getChild("initype").setValue("3");
+					end
+				</script>
+				<static>Mtx. Hot </static>
+			</attributelabel>
+
+			<inibonus name="comlinkresp" source="base.attribute.comlink.response">
+				<anchored>
+					<to>matini</to>
+				</anchored>
+				<tabtarget>
+					<next>matinipass</next>
+					<prev>astinipass</prev>
+				</tabtarget>
+				<script>
+					function onInit()
+
+					end
+				</script>
+
+				<invisible />
+			</inibonus>
+
+			<inibonus name="hotfixbonus" source="base.attribute.comlink.hotfixbonus">
+				<anchored>
+					<to>matini</to>
+				</anchored>
+				<tabtarget>
+					<next>matinipass</next>
+					<prev>astinipass</prev>
+				</tabtarget>
+				<script>
+					function onInit()
+						self.setValue(2);
+					end
+				</script>
+				<invisible />
+			</inibonus>
+
+			<button_iconcycler name="initype">
+				<anchored>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>17,164</offset>
+					<size>
+						<width>30</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<icons>indicator_sword|indicator_heal|indicator_effect</icons>
+					<labels>Astral|Matrix|Mtx.Hot|</labels>
+					<values>1|2|3</values>
+					<defaulticon>indicator_question</defaulticon>
+					<defaultlabel>Normal</defaultlabel>
+					<defaultvalue>0</defaultvalue>
+				</parameters>
+				<script>
+					function onInit()
+						if not window.getDatabaseNode().getChild("initype") then
+							window.getDatabaseNode().createChild("initype","string")
+						end
+						super.onInit();
+						changeIniColor();
+					end
+
+					function onValueChanged()
+						changeIniColor();
+					end
+					function changeIniColor()
+						local a = window.getDatabaseNode().getChild("initype").getValue();
+						if a == "0" or a == "" then
+							window.inilabel.setColor("ffffae29");
+							window.astinilabel.setColor("ff000000");
+							window.matinilabel.setColor("ff000000");
+							window.hotmatinilabel.setColor("ff000000");
+						elseif a == "1" then
+							window.inilabel.setColor("ff000000");
+							window.astinilabel.setColor("ffffae29");
+							window.matinilabel.setColor("ff000000");
+							window.hotmatinilabel.setColor("ff000000");
+						elseif a == "2" then
+							window.inilabel.setColor("ff000000");
+							window.astinilabel.setColor("ff000000");
+							window.matinilabel.setColor("ffffae29");
+							window.hotmatinilabel.setColor("ff000000");
+						elseif a == "3" then
+							window.inilabel.setColor("ff000000");
+							window.astinilabel.setColor("ff000000");
+							window.matinilabel.setColor("ff000000");
+							window.hotmatinilabel.setColor("ffffae29");
+						end
+					end
+
+				</script>
+			</button_iconcycler>
+
+			<checkbox name="edgecheckbox">
+				<anchored>
+					<left>
+						<parent>initype</parent>
+						<anchor>right</anchor>
+						<offset>100</offset>
+					</left>
+					<top>
+						<parent>initype</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>Use Edge with following Dice-Roll</tooltips>
+					<defaulttooltip>Check to use Edge for following Dice-Roll</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<stringcontrol>
+				<anchored>
+					<to>edgecheckbox</to>
+					<position>left</position>
+					<offset>5</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>use Edge</static>
+				<tooltip>
+					<text>Check to use Edge for following Dice-Roll</text>
+				</tooltip>
+			</stringcontrol>
+
+<!-- Edge / Karma -->
+			<genericcontrol name="edgeframe">
+				<bounds>468,288,150,136</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Edge / Karma</static>
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>58,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Edge</static>
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>105,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Karma</static>
+			</stringcontrol>
+
+			<attributescore name="edge" source="base.attribute.edge.score">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>55,39</offset>
+				</anchored>
+				<noreset />
+				<target>Edge</target>
+				<description>
+					<text>Edge check</text>
+				</description>
+			</attributescore>
+
+			<attributescore name="edgemod" source="base.attribute.edge.mod">
+				<anchored>
+					<to>edge</to>
+				</anchored>
+				<gmonly />
+				<tabtarget>
+					<next>edge</next>
+					<prev>edge</prev>
+				</tabtarget>
+			</attributescore>
+
+			<edgecheck name="edgecheck" source="base.attribute.edge.check">
+				<anchored>
+					<to>edgemod</to>
+				</anchored>
+				<readonly />
+				<source>
+					<name>base.attribute.edge.score</name>
+					<op>+</op>
+				</source>
+  				<source>
+					<name>base.attribute.edge.mod</name>
+					<op>-</op>
+				</source>
+				<target>Edge</target>
+			</edgecheck>
+
+			<attributelabel>
+				<anchored>
+					<to>edge</to>
+					<size>
+						<width>40</width>
+					</size>
+				</anchored>
+				<static>Base</static>
+			</attributelabel>
+
+			<attributelabel>
+				<anchored>
+					<to>edgemod</to>
+					<size>
+						<width>40</width>
+					</size>
+				</anchored>
+				<static>Used</static>
+			</attributelabel>
+
+			<attributelabel>
+				<anchored>
+					<to>edgecheck</to>
+					<size>
+						<width>40</width>
+					</size>
+				</anchored>
+				<static>Check</static>
+			</attributelabel>
+
+			<attributescore name="karmatotal" source="base.karma.total">
+				<anchored>
+					<to>edge</to>
+					<top>
+						<offset>0</offset>
+					</top>
+					<left>
+						<offset>50</offset>
+					</left>
+				</anchored>
+				<noreset />
+				<target>Edge</target>
+				<description>
+					<text>Edge check</text>
+				</description>
+			</attributescore>
+
+			<attributescore name="karmaused" source="base.karma.used">
+				<anchored>
+					<to>karmatotal</to>
+				</anchored>
+				<tabtarget>
+					<next>edge</next>
+					<prev>edge</prev>
+				</tabtarget>
+			</attributescore>
+
+			<edgecheck name="karmaleft" source="base.karma.left">
+				<anchored>
+					<to>karmaused</to>
+				</anchored>
+				<source>
+					<name>base.karma.total</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.karma.used</name>
+					<op>-</op>
+				</source>
+				<readonly />
+			</edgecheck>
+
+<!-- damageframe -->
+			<genericcontrol name="damageframe">
+				<bounds>83,523,535,95</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>General Damage</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>70,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Damage</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>235,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>max. DMG Mod.</static>
+				<tooltip>
+					<text>max. Damage Modifier</text>
+				</tooltip>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>325,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Ignored</static>
+				<tooltip>
+					<text>Ignored Damge</text>
+				</tooltip>
+			</stringcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>370,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Penalty</static>
+				<tooltip>
+					<text>Damage Penealty</text>
+				</tooltip>
+			</stringcontrol>
+
+			<genericcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>412,26</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_quicklist</icon>
+				<tooltip>
+					<text>text</text>
+				</tooltip>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>440,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>DMG Penalty</static>
+				<tooltip>
+					<text>Damage Penealty</text>
+				</tooltip>
+			</stringcontrol>
+
+			<numberfield name="physicalcurrent" source="damage.physical.current">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>235,40</offset>
+				</anchored>
+				<tabtarget>
+					<next>physicalmod</next>
+					<prev>stunValue</prev>
+				</tabtarget>
+				<script>
+					function onValueChanged()
+						local a = window.physicalmax.getValue();
+						local b = getValue();
+						if a == b then
+							window.physicaldamageoverflow.setVisible(true);
+						else
+							window.physicaldamageoverflow.setVisible(false);
+						end
+					end
+				</script>
+				<invisible />
+			</numberfield>
+
+			<attributescore name="physicalcurrentred" source="damage.physical.red">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>235,40</offset>
+				</anchored>
+				<invisible />
+				<tabtarget>
+					<next>physicalmod</next>
+					<prev>stunValue</prev>
+				</tabtarget>
+				<invisible />
+			</attributescore>
+
+			<attributescore name="physicalmod" source="damage.physical.mod">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>290,40</offset>
+				</anchored>
+				<tabtarget>
+					<next>stunbase</next>
+					<prev>physicalbase</prev>
+				</tabtarget>
+				<tooltip>
+					<text>max. Damage Modifier</text>
+				</tooltip>
+			</attributescore>
+
+			<linkednumber name="physicalmax" source="damage.physical.max">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>330,40</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+				<source>
+					<name>base.attribute.body.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.physical.mod</name>
+					<op>+</op>
+				</source>
+				<script file="charsheet/scripts/charsheet_1_damage.lua" />
+			</linkednumber>
+
+			<attributescore name="physicalignore" source="damage.physical.ignore">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>330,40</offset>
+				</anchored>
+				<tooltip>
+					<text>physicalignore</text>
+				</tooltip>
+			</attributescore>
+
+			<checkbox name="physicalcheckbox" source="damage.box.physical.check">
+				<anchored>
+					<left>
+						<parent>physicalignore</parent>
+						<anchor>right</anchor>
+						<offset>50</offset>
+					</left>
+					<top>
+						<parent>physicalignore</parent>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>ACTIVE Disadvantage (every 2 Damage -1 Modifier)</tooltips>
+					<defaulttooltip>Check to activate Disadvantage</defaulttooltip>
+				</parameters>
+			</checkbox>
+
+			<linkednumber name="physicalcheckboxnumber" source="damage.box.physical.number">
+				<anchored>
+					<left>
+						<parent>physicalignore</parent>
+						<anchor>right</anchor>
+						<offset>25</offset>
+					</left>
+					<top>
+						<parent>physicalignore</parent>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<invisible />
+				<font>sheetnumbersmall</font>
+				<nodrag />
+				<nodrop />
+				<readonly />
+				<nokeyedit />
+				<source>
+					<name>physicalcheckbox</name>
+					<op>+</op>
+				</source>
+			</linkednumber>
+
+			<linkednumber name="physicalmodifier" source="damage.physical.modifier">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>370,40</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<source>
+					<name>damage.physical.ignore</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.physical.current</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>physicalcheckbox</name>
+					<op>+</op>
+				</source>
+				<script file="charsheet/scripts/charsheet_1_damagemodifier.lua" />
+				<tooltip>
+					<text>physicalmodifier</text>
+				</tooltip>
+				<readonly />
+				<nodrag />
+				<nodrop />
+				<displaysign />
+			</linkednumber>
+
+
+			<buttongroup_counter name="physicaldamage">
+				<anchored>
+					<to>damageframe</to>
+					<position>righthigh</position>
+					<offset>-450,45</offset>
+					<size>
+						<height>10</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.physical.current</current>
+					<maximum>damage.physical.max</maximum>
+				</sourcefields>
+			</buttongroup_counter>
+
+			<buttongroup_counter name="physicaldamageoverflow">
+				<anchored>
+					<to>damageframe</to>
+					<position>righthigh</position>
+					<offset>-450,55</offset>
+					<size>
+						<height>10</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.physical.red</current>
+					<maximum>base.attribute.body.check</maximum>
+				</sourcefields>
+				<invisible />
+			</buttongroup_counter>
+
+			<stringcontrol name="physicaldamagelabel">
+				<anchored>
+					<to>physicaldamage</to>
+					<position>lefthigh</position>
+					<offset>0,-2</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Physical</static>
+			</stringcontrol>
+<!-- Stun -->
+			<attributescore name="stuncurrent" source="damage.stun.current">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>235,65</offset>
+				</anchored>
+				<tabtarget>
+					<next>stunValue</next>
+					<prev>stunValue</prev>
+				</tabtarget>
+				<invisible />
+			</attributescore>
+
+			<attributescore name="stunValue" source="damage.stun.mod">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>290,65</offset>
+				</anchored>
+				<tabtarget>
+					<next>stunbase</next>
+					<prev>stunbase</prev>
+				</tabtarget>
+				<tooltip>
+					<text>max. Stun Modifier</text>
+				</tooltip>
+				<script>
+					function onInit()
+						setColor("ff000000");
+					end
+				</script>
+			</attributescore>
+
+			<linkednumber name="stunmax" source="damage.stun.max">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>315,65</offset>
+				</anchored>
+				<font>sheetnumber</font>
+				<source>
+					<name>base.attribute.willpower.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.stun.mod</name>
+					<op>+</op>
+				</source>
+				<script file="charsheet/scripts/charsheet_1_stun.lua" />
+				<tooltip>
+					<text>stunmax</text>
+				</tooltip>
+				<invisible />
+			</linkednumber>
+
+			<attributescore name="stunignore" source="damage.stun.ignore">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>330,65</offset>
+				</anchored>
+				<tooltip>
+					<text>physicalignore</text>
+				</tooltip>
+			</attributescore>
+
+			<checkbox name="stuncheckbox" source="damage.box.stun.check">
+				<anchored>
+					<left>
+						<parent>stunignore</parent>
+						<anchor>right</anchor>
+						<offset>50</offset>
+					</left>
+					<top>
+						<parent>stunignore</parent>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>ACTIVE Disadvantage (every 2 Damage -1 Modifier)</tooltips>
+					<defaulttooltip>Check to activate Disadvantage</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<linkednumber name="stuncheckboxnumber" source="damage.box.stun.number">
+				<anchored>
+					<left>
+						<parent>physicalignore</parent>
+						<anchor>right</anchor>
+						<offset>50</offset>
+					</left>
+					<top>
+						<parent>physicalignore</parent>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<invisible />
+				<font>sheetnumbersmall</font>
+				<nodrag />
+				<nodrop />
+				<readonly />
+				<nokeyedit />
+				<source>
+					<name>stuncheckbox</name>
+					<op>+</op>
+				</source>
+			</linkednumber>
+
+			<buttongroup_counter name="stundamage">
+				<anchored>
+					<to>damageframe</to>
+					<position>righthigh</position>
+					<offset>-450,65</offset>
+					<size>
+						<height>20</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.stun.current</current>
+					<maximum>damage.stun.max</maximum>
+				</sourcefields>
+			</buttongroup_counter>
+
+			<stringcontrol name="stundamagelabel">
+				<anchored>
+					<to>stundamage</to>
+					<position>lefthigh</position>
+					<offset>0,3</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Stun</static>
+			</stringcontrol>
+
+			<linkednumber name="stunModifier" source="damage.stun.modifier">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>370,65</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<source>
+					<name>damage.stun.ignore</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.stun.current</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>box.stun.number</name>
+					<op>+</op>
+				</source>
+				<script file="charsheet/scripts/charsheet_1_stunmodifier.lua" />
+				<tooltip>
+					<text>physicalmodifier</text>
+				</tooltip>
+				<readonly />
+				<nodrag />
+				<nodrop />
+				<displaysign />
+			</linkednumber>
+
+			<linkednumber name="allmodifier" source="damage.all.modifier">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>450,45</offset>
+				</anchored>
+				<font>sheetnumber</font>
+				<source>
+					<name>damage.stun.modifier</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.physical.modifier</name>
+					<op>+</op>
+				</source>
+				<tooltip>
+					<text>over all penalty</text>
+				</tooltip>
+				<readonly />
+				<nodrag />
+				<nodrop />
+				<displaysign />
+			</linkednumber>
+<!-- Beschreibung standard 105 hoch testweise geändert-->
+
+			<genericcontrol name="descriptionframe">
+				<bounds>83,618,535,105</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<stringfield name="description" source="base.description">
+				<anchored>
+					<to>descriptionframe</to>
+					<position>over</position>
+					<offset>-14,-9</offset>
+				</anchored>
+				<multilinespacing>20</multilinespacing>
+				<font>sheettext</font>
+				<frame>
+					<name>textline</name>
+					<offset>2,0,2,0</offset>
+				</frame>
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="sub1">
+		<sheetdata>
+			<genericcontrol name="edgeframe">
+				<bounds>468,123,150,66</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol name="magiclabel">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Magic</static>
+			</stringcontrol>
+			<attributescore name="magicbase" source="base.attribute.magic.base">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>20,36</offset>
+				</anchored>
+			</attributescore>
+
+			<stringcontrol name="magicbaselabel">
+				<anchored>
+					<to>magicbase</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Base</static>
+				<center />
+				<tooltip>
+					<text>Basic Magic</text>
+				</tooltip>
+			</stringcontrol>
+
+			<numberfield name="magicuse" source="base.attribute.magic.use">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>60,36</offset>
+				</anchored>
+				<invisible />
+			</numberfield>
+			<numberfield name="magicloss" source="base.attribute.magic.loss">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>60,36</offset>
+				</anchored>
+				<invisible />
+			</numberfield>
+
+			<magresbonus name="magicmod" source="base.attribute.magic.mod">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>60,36</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<scorefield>base.attribute.magic.use</scorefield>
+				<score2field>base.attribute.magic.loss</score2field>
+				<modifierfield>base.attribute.magic.bonus</modifierfield>
+		</magresbonus>
+
+			<stringcontrol name="magicmodlabel">
+				<anchored>
+					<to>magicmod</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Mod.</static>
+				<center />
+				<tooltip>
+					<text>Magic Modifier</text>
+				</tooltip>
+			</stringcontrol>
+
+			<linkednumber name="magiccheck" source="base.attribute.magic.check">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>100,36</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<source>
+					<name>base.attribute.magic.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.magic.mod</name>
+					<op>+</op>
+				</source>
+				<readonly />
+				<script>
+					function onValueChanged()
+						local b = self.getValue();
+						local spellsNode = window.getDatabaseNode().getChild("spells");
+						if spellsNode then
+							local a = window.getDatabaseNode().getChild("spells").getChildren();
+							for i, v in pairs (a) do
+								a[i].getChild("spellstandardforce").setValue(b)
+							end
+						end
+					end
+				</script>
+			</linkednumber>
+			<stringcontrol name="magicchecklabel">
+				<anchored>
+					<to>magiccheck</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Curr.</static>
+				<center />
+				<tooltip>
+					<text>check Magic</text>
+				</tooltip>
+			</stringcontrol>
+
+			<button_iconcycler name="drainattributecycler">
+				<anchored>
+					<left>
+						<parent>magiclabel</parent>
+						<anchor>right</anchor>
+						<offset>-48</offset>
+					</left>
+					<top>
+						<parent>magiclabel</parent>
+						<anchor>bottom</anchor>
+						<offset>-20</offset>
+					</top>
+					<size>
+						<width>30</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_one|button_toggle_one|button_toggle_all|button_toggle_single</icons>
+					<tooltips>Willpower|Logic|Intuition|Charisma</tooltips>
+					<values>Willpower|Logic|Intuition|Charisma</values>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Choose your Drainattribute</defaulttooltip>
+				</parameters>
+				<script>
+					function onInit()
+						super.onInit();
+						local a = "0"
+						if window.getDatabaseNode().getChild("base.special.magical") then
+							a = window.getDatabaseNode().getChild("base.special.magical").getValue();
+						end
+						if a == "1" or a == "2" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						 elseif a == "3" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						end
+					end
+
+					function onValueChanged()
+						local a = window.getDatabaseNode().getChild("magical").getValue();
+						if a == "1" or a == "2" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						elseif a == "3" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						end
+					end
+				</script>
+			</button_iconcycler>
+		</sheetdata>
+	</windowclass>
+	<windowclass name="sub2">
+		<sheetdata>
+			<genericcontrol name="edgeframe">
+				<bounds>468,123,150,66</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol name="resonancelabel">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Resonance</static>
+			</stringcontrol>
+			<attributescore name="resonancebase" source="base.attribute.resonance.base">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>20,36</offset>
+				</anchored>
+			</attributescore>
+
+			<stringcontrol name="resonancebaselabel">
+				<anchored>
+					<to>resonancebase</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Base</static>
+				<center />
+				<tooltip>
+					<text>Basic Resonance</text>
+				</tooltip>
+			</stringcontrol>
+
+			<magresbonus name="resonancemod" source="base.attribute.resonance.mod">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>60,36</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<scorefield>base.attribute.resonance.use</scorefield>
+				<score2field>base.attribute.resonance.loss</score2field>
+				<modifierfield>base.attribute.resonance.bonus</modifierfield>
+			</magresbonus>
+			<numberfield name="resonanceuse" source="base.attribute.resonance.use">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>60,36</offset>
+				</anchored>
+				<invisible />
+			</numberfield>
+			<numberfield name="resonanceloss" source="base.attribute.resonance.loss">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>60,36</offset>
+				</anchored>
+				<invisible />
+			</numberfield>
+
+
+			<stringcontrol name="resonancemodlabel">
+				<anchored>
+					<to>resonancemod</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Mod.</static>
+				<center />
+				<tooltip>
+					<text>Resonance Modifier</text>
+				</tooltip>
+			</stringcontrol>
+
+			<linkednumber name="resonancecheck" source="base.attribute.resonance.check">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>100,36</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>bonus</name>
+					<offset>5,5,5,5</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</keyeditframe>
+				<font>sheetnumber</font>
+				<source>
+					<name>base.attribute.resonance.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.resonance.mod</name>
+					<op>+</op>
+				</source>
+				<readonly />
+				<script>
+					function onValueChanged()
+						local b = self.getValue();
+						local a = window.getDatabaseNode().getChild("spells").getChildren();
+						for i, v in pairs (a) do
+								a[i].getChild("spellstandardforce").setValue(b)
+						end
+					end
+				</script>
+			</linkednumber>
+			<stringcontrol name="resonancechecklabel">
+				<anchored>
+					<to>resonancecheck</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Curr.</static>
+				<center />
+				<tooltip>
+					<text>check Resonance</text>
+				</tooltip>
+			</stringcontrol>
+
+			<button_iconcycler name="drainattributecycler" source="drainattributecycler">
+				<anchored>
+					<left>
+						<parent>resonancelabel</parent>
+						<anchor>right</anchor>
+						<offset>-48</offset>
+					</left>
+					<top>
+						<parent>resonancelabel</parent>
+						<anchor>bottom</anchor>
+						<offset>-20</offset>
+					</top>
+					<size>
+						<width>30</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_one|button_toggle_one|button_toggle_all|button_toggle_single</icons>
+					<tooltips>Willpower|Logic|Intuition|Charisma</tooltips>
+					<values>Willpower|Logic|Intuition|Charisma</values>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Choose your Drainattribute</defaulttooltip>
+				</parameters>
+				<script>
+					function onInit()
+						super.onInit();
+						local a = "0"
+						if window.getDatabaseNode().getChild("magical") then
+							a = window.getDatabaseNode().getChild("magical").getValue();
+						end
+						if a == "1" or a == "2" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						 elseif a == "3" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						end
+					end
+
+					function onValueChanged()
+						local a = window.getDatabaseNode().getChild("magical").getValue();
+						if a == "1" or a == "2" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						elseif a == "3" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						end
+					end
+				</script>
+			</button_iconcycler>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="sub3">
+		<sheetdata>
+			<genericcontrol name="edgeframe">
+				<bounds>468,223,150,66</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Logo</static>
+			</stringcontrol>
+		<!---->
+		</sheetdata>
+	</windowclass>
+
+</root>

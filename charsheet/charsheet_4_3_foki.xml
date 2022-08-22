@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+
+
+	<windowclass name="charsheet_4_3_foki">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="skillframemagic">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframemagic</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == "" then
+							return true;
+						elseif w2.skillsort.getValue() == "" then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Magic" then
+							return true;
+						end
+						return false;
+
+					end
+
+
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+
+	<!-- fokusits-->
+
+			<genericcontrol name="fokusframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_foki">
+				<anchored>
+					<to>fokusframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.fokilist</datasource>
+				<class>charsheet_fokusitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.fokisort.getValue() == "" then
+							return true;
+						elseif w2.fokisort.getValue() == "" then
+							return false;
+						end
+						return w1.fokisort.getValue() > w2.fokisort.getValue();
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- Ammunitionitem-->
+
+	<windowclass name="charsheet_fokusitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_fokusitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatefokusdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<powerstring name="fokisort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+
+			<button_stringcycler name="fokustype">
+				<anchored>
+					<position>insidetopleft</position>
+					<offset>90,0</offset>
+					<size>
+						<width>250</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>Fokus of 1|Fokus of 2|Fokus of 3|Fokus of 4|Fokus of 5|Fokus of 6</labels>
+					<values>Fokus of 1|Fokus of 2|Fokus of 3|Fokus of 4|Fokus of 5|Fokus of 6</values>
+				</parameters>
+				<tabtarget>
+					<prev></prev>
+					<next></next>
+				</tabtarget>
+				<tooltip>
+					<text>Type of the Fokus</text>
+				</tooltip>
+			</button_stringcycler>
+
+			<skillscore name="fokusforce" source="fokus.force">
+				<anchored>
+					<to>fokustype</to>
+					<position>right</position>
+					<offset>20,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Force of the Fokus</text>
+				</tooltip>
+			</skillscore>
+			<checkbox name="fokusactivebox">
+				<anchored>
+					<left>
+						<parent>fokusforce</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>fokusforce</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Fokus is a bound Fokus</text>
+				</tooltip>
+			</checkbox>
+
+			<skilldescfieldpc name="fokusdescription">
+				<anchored>
+					<top>
+						<parent>fokustype</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>fokustype</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+
+		</sheetdata>
+	</windowclass>
+</root>

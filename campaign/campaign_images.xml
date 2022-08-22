@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+
+	<windowclass name="imagelist">
+		<frame>campaignlistwithtabs</frame>
+		<placement>
+			<size width="300" height="400" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="400" />
+			<dynamic />
+		</sizelimits>
+		<softclose />
+		<nodelete />
+		<sheetdata>
+			<banner_campaign>
+				<icon>title_images</icon>
+			</banner_campaign>
+
+			<button_image_folder />
+
+			<frame_note_content name="contentframe">
+  				<bounds>50,35,-30,-70</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</frame_note_content>
+
+			<list_campaign name="list">
+				<datasource>.</datasource>
+				<class>imagesmall</class>
+				<empty font="list-empty" gmtextres="image_emptylist" />
+				<script>
+					function onDrop(x, y, draginfo)
+						local sDragType = draginfo.getType();
+						if sDragType == "shortcut" or sDragType == "file" then
+							return CampaignDataManager.handleDrop("image", draginfo);
+						end
+					end
+				</script>
+			</list_campaign>
+			<scrollbar_list />
+
+			<anchor_campaign2 />
+			<button_iedit_campaign />
+			<button_iadd_campaign2>
+				<class>imagewindow</class>
+				<tooltip textres="image_tooltip_listadd" />
+			</button_iadd_campaign2>
+			<filter_campaign />
+
+			<categories>
+				<targetcontrol>list</targetcontrol>
+			</categories>
+
+			<resize_campaignlistwithtabs />
+			<close_campaignlist />
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="referenceprogram">
+		<frame>referencepage</frame>
+		<placement>
+			<size width="400" height="350" />
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_program_header</class>
+			</sub_ref_header>
+
+			<sub_ref_content name="content">
+				<class>ref_program_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+
+			<resize_referencepage />
+			<close_referencepage />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ref_program_header">
+		<margins control="0,0,0,7" />
+		<sheetdata>
+			<link_record_header>
+				<class>referenceprogram</class>
+			</link_record_header>
+			<string_record_name name="name">
+				<anchored>
+					<top offset="5"/>
+					<left offset="40" />
+					<right offset="-25" />
+				</anchored>
+				<static />
+			</string_record_name>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ref_program_stats">
+		<script>
+		  function onInit()
+		    sTypeLabel = "[" .. skill.getValue() .. "]";
+		    type_label.setValue(sTypeLabel);
+			type_label.setValue(sLabel);
+			local sDesc = "See page " .. page.getValue() .. " of " .. source.getValue() .. ".";
+			desc_label.setValue(sDesc);		
+		  end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<hs name="category" />
+			<hs name="skill" />
+			<hs name="page" />
+			<hs name="source" />
+			
+			<label name="type_label">
+				<anchored>
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="7" />
+					<left />
+					<right />
+				</anchored>
+				<font>reference-b-large</font>
+			</label>
+			<label_column name="programgroup_label">
+				<static textres="ref_label_programgroup" />
+			</label_column>
+			<string_column_left name="programgroup">
+				<readonly />
+			</string_column_left>
+			<label_column name="programtype_label">
+				<static textres="ref_label_programtype" />
+			</label_column>
+			<string_column name="category">
+				<readonly />
+			</string_column>
+
+			<ft_columnh name="text">
+				<readonly />
+			</ft_columnh>
+
+			<label_column name="desc_label">
+				<readonly />
+			</label_column>
+		</sheetdata>
+	</windowclass>
+</root>

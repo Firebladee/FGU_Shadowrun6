@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for
+  attribution and copyright information.
+-->
+
+<root>
+	<template name="scroller">
+		<scrollercontrol>
+			<button>
+				<normal>button_scroller</normal>
+				<pressed>button_scroller_down</pressed>
+			</button>
+		</scrollercontrol>
+	</template>
+	<template name="scroller_mini">
+		<scrollercontrol>
+			<button>
+				<normal>button_scroller_mini</normal>
+				<pressed>button_scroller_mini_down</pressed>
+			</button>
+		</scrollercontrol>
+	</template>
+	<template name="scroller_image">
+		<scrollercontrol>
+			<button>
+				<normal>button_scrollerpan</normal>
+				<pressed>button_scrollerpan_down</pressed>
+				<zoom>button_zoomer</zoom>
+				<zoompressed>button_zoomer_down</zoompressed>
+			</button>
+		</scrollercontrol>
+	</template>
+
+	<template name="buttongroup_radiov">
+		<genericcontrol>
+			<stateicons>
+				<on>button_checkon</on>
+				<off>button_checkoff</off>
+			</stateicons>
+			<script file="common/scripts/buttongroup_radiov.lua" />
+		</genericcontrol>
+	</template>
+	<template name="buttongroup_tabs_h">
+		<genericcontrol>
+			<frame name="tabs" />
+			<tab mergerule="resetandadd" />
+			<script file="common/scripts/buttongroup_tabs_h.lua" />
+		</genericcontrol>
+	</template>
+	<template name="buttongroup_counterred">
+		<genericcontrol>
+			<stateicons>
+				<on>button_checkon_red</on>
+				<off>button_checkoff_red</off>
+			</stateicons>
+			<script file="common/scripts/buttongroup_counter.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="button_toggle">
+		<genericcontrol>
+			<script file="common/scripts/button_toggle.lua" />
+		</genericcontrol>
+	</template>
+</root>

@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet_5_2_agents">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="programframe">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_programs">
+				<anchored>
+					<to>programframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.programs</datasource>
+				<class>charsheet_programitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.programsort.getValue() == "" then
+							return true;
+						elseif w2.programsort.getValue() == "" then
+							return false;
+						end
+						return w1.programsort.getValue() > w2.programsort.getValue();
+					end
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_programs</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_programs</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+
+	<!-- agents-->
+			<genericcontrol name="agentframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_agents">
+				<anchored>
+					<to>agentframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.agents</datasource>
+				<class>charsheet_agentitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.agentsort.getValue() == "" then
+							return true;
+						elseif w2.agentsort.getValue() == "" then
+							return false;
+						end
+						return w1.agentsort.getValue() > w2.agentsort.getValue();
+					end
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- agentmodifieritem-->
+	<windowclass name="charsheet_agentmodifieritem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_agentmodifieritem.lua" />
+
+		<sheetdata>
+			<numberfield name="order">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</numberfield>
+
+			<skilldescfieldpc name="agentprogramname">
+				<anchored>
+					<left>
+						<parent>order</parent>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-180</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<droptypes>
+					<type>program</type>
+				</droptypes>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Program loaded by the Agent/Sprite &#187;</empty>
+				<script>
+					function onDrop(x,y,draginfo)
+						local vmodifiername = draginfo.getDescription();
+						local vmodifier = draginfo.getNumberData();
+						local vmodifiernode = draginfo.getStringData()
+						local vtype = draginfo.getCustomData();
+						local a = draginfo.getCustomData();
+						if a == "program" then
+							window.windowlist.window.modifierDrop(vmodifiername, vmodifier, vmodifiernode)
+						end
+					end
+				</script>
+			</skilldescfieldpc>
+
+			<stringfield name="agentprogramnode" source="agentprogramnode">
+			<bounds>0,0,1,1</bounds>
+			<invisible />
+			</stringfield>
+
+			<skillscore name="agentprogramrating">
+				<anchored>
+					<left>
+						<parent>agentprogramname</parent>
+						<anchor>right</anchor>
+						<offset>55</offset>
+					</left>
+					<top>
+						<parent>agentprogramname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Rating of the Program being Run (might Vary to the actual Program)</text>
+				</tooltip>
+			</skillscore>
+			<attributelabel>
+				<anchored>
+					<to>agentprogramrating</to>
+					<offset>-20</offset>
+				</anchored>
+				<static>Rtg.</static>
+				<tooltip>
+					<text>Program Rating for Use with this Agent</text>
+				</tooltip>
+			</attributelabel>
+
+
+
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_agentitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_agentitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activateagentdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<button_toggle name="activateagentmodifier">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_sword</icon>
+				<script>
+					function onInit()
+						super.onInit();
+
+						local nodeAgentmModifierList = NodeManager.createChild(window.getDatabaseNode(), "agentmodifier");
+
+						if nodeAgentmModifierList then
+							nodeAgentmModifierList.onChildAdded = updateVisibility;
+							nodeAgentmModifierList.onChildUpdate = updateVisibility;
+							updateVisibility(nodeAgentmModifierList);
+						else
+							setVisible(false);
+						end
+					end
+
+					function updateVisibility(nodeAgentmModifierList)
+						if nodeAgentmModifierList.getChildCount() > 0 then
+							if not isVisible() then
+								setValue(true);
+							end
+							setVisible(true);
+						else
+							setVisible(false);
+							if getValue() then
+								setValue(false);
+							end
+						end
+					end
+
+					function onValueChanged()
+						window.toggleAgentModifier();
+					end
+				</script>
+			</button_toggle>
+
+
+			<powerstring name="agentsort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<powerstring name="agentname">
+				<anchored>
+					<left>
+						<parent>agentsort</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-180</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; agent &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+				</droptypes>
+				<script>
+					function updateColor()
+						window.agentname.setColor("ffffffff");
+						window.agentname.setFrame("dailyframe", 7, 3, 9, 1)
+					end
+
+					function onInit()
+						updateColor();
+					end
+
+					function onDrop(x,y,draginfo)
+						local vmodifiername = draginfo.getDescription();
+						local vmodifier = draginfo.getNumberData();
+						local vmodifiernode = draginfo.getStringData()
+						local vtype = draginfo.getCustomData();
+						local a = draginfo.getCustomData();
+						if a == "program" then
+							window.modifierDrop(vmodifiername, vmodifier, vmodifiernode)
+						end
+					end
+				function onDrag(button, x, y, draginfo)
+					draginfo.setType("agent");
+					draginfo.setDescription(self.getValue());
+					draginfo.setStringData(window.getDatabaseNode().getNodeName());
+					draginfo.setNumberData(window.agentprogramcount.getValue());
+					draginfo.setCustomData("agent");
+					draginfo.setIcon("indicator_targeting");
+					return true;
+				end
+
+				</script>
+			</powerstring>
+
+			<skillscore name="agentprogramcount" source="agentprogramcount">
+				<anchored>
+					<to>agentname</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Programs loaded and used by the Agent</text>
+				</tooltip>
+				<readonly />
+			</skillscore>
+
+
+			<skillscore name="agentrating" source="agentrating">
+				<anchored>
+					<to>agentprogramcount</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Rating of the Agent</text>
+				</tooltip>
+			</skillscore>
+			<windowlist name="list_agentmodifier">
+				<anchored>
+					<top>
+						<parent>agentname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>agentname</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<skipempty />
+				<noscroll />
+				<datasource>.agentmodifier</datasource>
+				<class>charsheet_agentmodifieritem</class>
+				<menutext>agentmodifier</menutext>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.order.getValue() &gt; w2.order.getValue();
+					end
+
+					function reset()
+						for k,v in pairs(getWindows()) do
+							v.getDatabaseNode().delete();
+						end
+					end
+
+					function getOrder(node)
+						if NodeManager.get(node, "order", 0) == 0 then
+							local ordertable = {};
+							for k,v in pairs(getDatabaseNode().getChildren()) do
+								ordertable[NodeManager.get(v, "order", 0)] = true;
+							end
+
+							local i = 1;
+							while ordertable[i] do
+								i = i + 1;
+							end
+
+							NodeManager.set(node, "order", "number", i);
+						end
+					end
+
+
+				</script>
+			</windowlist>
+
+			<skilldescfieldpc name="agentdescription">
+				<anchored>
+					<top>
+						<parent>agentname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>agentname</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+
+
+<root version="2.0">
+
+	<includefile source="charsheet/charsheet_7_3_contacts_sub.xml" />
+	<!-- List for all contact-->			
+	<windowclass name="charsheet_contactitem_all">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_contactitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatecontactdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+	
+			<powerstring name="contactlocation" source = "contact.location">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<tabtarget>
+					<next>contactname</next>
+				</tabtarget>
+				<nodrag />
+				<empty>&#171; Location &#187;</empty>
+			</powerstring>
+			
+			<powerstring name="contactname">
+				<anchored>
+					<left>
+						<parent>contactlocation</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-147</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>contactLR</next>
+					<prev>contactlocation</prev>
+				</tabtarget>
+				<empty>&#171; contact item &#187;</empty>
+				<script>
+					function updateStatus()
+						window.contactname.setColor("ffffffff");
+						window.contactname.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+					
+					function onInit()
+						updateStatus();
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("contactlocation");
+						draginfo.setCustomData(window.getDatabaseNode().getName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+				</script>
+			</powerstring>
+		
+			<numberfield name="contactCR" source="contact.CR">
+				<anchored>
+					<to>contactname</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>contactLR</next>
+					<prev>contactname</prev>
+				</tabtarget>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</numberfield>
+			
+			<numberfield name="contactfilteritem" source="contact.filteritem">
+				<anchored>
+					<to>contactname</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+		
+			<numberfield name="contactLR" source="contact.LR">
+				<anchored>
+					<to>contactCR</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>loyalty rating</text>
+				</tooltip>
+				<tabtarget>
+					<prev>contactCR</prev>
+				</tabtarget>				
+			</numberfield>			
+
+			<skilldescfieldpc name="contactdescription">
+				<anchored>
+					<top>
+						<parent>contactname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<parent>contactname</parent>
+						<anchor>left</anchor>
+						<offset>-10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>contactCR</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+			<spacer name="spacer">
+				<anchor>contactdescription</anchor>
+				<height>3</height>
+			</spacer>			
+		</sheetdata>		
+	</windowclass>
+	
+	<!-- List for subwindows contact-->			
+	<windowclass name="charsheet_contactitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_contactitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatecontactdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+		
+			<powerstring name="contactname">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-147</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>contactLR</next>
+				</tabtarget>
+				<empty>&#171; contact item &#187;</empty>
+				<script>
+					function updateStatus()
+						window.contactname.setColor("ffffffff");
+						window.contactname.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+					
+					function onInit()
+						updateStatus();
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("contactlocation");
+						draginfo.setCustomData(window.getDatabaseNode().getName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+				</script>
+			</powerstring>
+		
+			<numberfield name="contactCR" source="contact.CR">
+				<anchored>
+					<to>contactname</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>contactLR</next>
+					<prev>contactname</prev>
+				</tabtarget>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</numberfield>
+			
+			<numberfield name="contactfilteritem" source="contact.filteritem">
+				<anchored>
+					<to>contactname</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+		
+			<numberfield name="contactLR" source="contact.LR">
+				<anchored>
+					<to>contactCR</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>loyalty rating</text>
+				</tooltip>
+				<tabtarget>
+					<prev>contactCR</prev>
+				</tabtarget>				
+			</numberfield>			
+
+			<skilldescfieldpc name="contactdescription">
+				<anchored>
+					<top>
+						<parent>contactname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<parent>contactname</parent>
+						<anchor>left</anchor>
+						<offset>-10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>contactCR</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+			<spacer name="spacer">
+				<anchor>contactdescription</anchor>
+				<height>3</height>
+			</spacer>			
+		</sheetdata>		
+	</windowclass>	
+
+
+	<windowclass name="charsheet_7_3_contact">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>	
+			<subwindow name="charsheetcontact_all">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_3_1</class>
+			</subwindow>
+			<subwindow name="charsheetcontact_2">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_3_2</class>
+			</subwindow>
+			<subwindow name="charsheetcontact_3">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_3_3</class>
+			</subwindow>
+			<subwindow name="charsheetcontact_4">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_3_4</class>
+			</subwindow>
+			<subwindow name="charsheetcontact_5">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_3_5</class>
+			</subwindow>
+			<subwindow name="charsheetcontact_6">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_3_6</class>
+			</subwindow>
+			<subwindow name="charsheetcontact_7">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_3_7</class>
+			</subwindow>
+
+			<tabcontrol_h name="tabscontact">
+				<bounds>117,123,500,25</bounds>
+				<tab>
+					<text>Overview</text>
+					<target>contacttabtext1</target>
+					<subwindow>charsheetcontact_all</subwindow>
+				</tab>
+				<tab>
+					<text>Loc 1</text>
+					<target>contacttabtext2</target>
+					<subwindow>charsheetcontact_2</subwindow>
+				</tab>
+				<tab>
+					<text>Loc 2</text>
+					<target>contacttabtext3</target>
+					<subwindow>charsheetcontact_3</subwindow>
+				</tab>
+				<tab>
+					<text>Loc 3</text>
+					<target>contacttabtext4</target>
+					<subwindow>charsheetcontact_4</subwindow>
+				</tab>
+				<tab>
+					<text>Loc 4</text>
+					<target>contacttabtext5</target>
+					<subwindow>charsheetcontact_5</subwindow>
+				</tab>
+				<tab>
+					<text>Loc 5</text>
+					<target>contacttabtext6</target>
+					<subwindow>charsheetcontact_6</subwindow>
+				</tab>
+				<tab>
+					<text>Loc 6</text>
+					<target>contacttabtext7</target>
+					<subwindow>charsheetcontact_7</subwindow>
+				</tab>
+				<script file="charsheet/scripts/charsheet_htabs_contact.lua" />
+				<activate>1</activate>
+			</tabcontrol_h>
+			
+			<stringfield name="contacttabtext1" source="contacttabtext1">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="contacttabtext2" source="contacttabtext2">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.contactlist_all.changeLocationName(a,b);
+					end				
+				</script>
+			</stringfield>
+			<stringfield name="contacttabtext3" source="contacttabtext3">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.contactlist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>
+			<stringfield name="contacttabtext4" source="contacttabtext4">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.contactlist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>		
+			<stringfield name="contacttabtext5" source="contacttabtext5">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.contactlist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>		
+			<stringfield name="contacttabtext6" source="contacttabtext6">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.contactlist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>	
+			<stringfield name="contacttabtext7" source="contacttabtext7">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.contactlist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>	
+		
+	<!-- contacts contactlist-->
+
+			<windowlist name="contactlist_all">
+				<bounds>0,0,0,0</bounds>
+				<invisible />				
+				<datasource>.contactlist</datasource>
+				<class>charsheet_contactitem</class>
+				<script file="charsheet/scripts/charsheet_list_contact_all.lua" />
+			</windowlist>	
+
+		</sheetdata>		
+	</windowclass>
+</root>

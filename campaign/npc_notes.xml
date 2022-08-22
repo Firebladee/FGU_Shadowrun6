@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="npc_description">
+		<sheetdata>
+			<genericcontrol name="notesframe">
+				<bounds>83,10,-35,458</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<!-- DESCRIPTION -->
+			<formattedtextfield name="text">
+				<anchored>
+					<to>notesframe</to>
+					<position>insidetopleft</position>
+					<offset>13,23</offset>
+					<sizelimits>
+						<maximum>
+							<width>310</width>
+							<height>420</height>
+						</maximum>
+					</sizelimits>
+				</anchored>
+				<font>
+					<normal>chatfont</normal>
+					<bold>narratorfont</bold>
+					<italic>chatitalicfont</italic>
+					<bolditalic>chatbolditalicfont</bolditalic>
+					<title>defaultstringcontrol</title>
+				</font>
+				<linkicon>
+					<link>button_openwindow</link>
+					<emptylink>button_emptytarget</emptylink>
+				</linkicon>
+				<selectioncolor>#FFD296</selectioncolor>
+				<footer>footer_narrow</footer>
+				<empty>Click to enter description</empty>
+				<script>
+				function onDoubleClick()
+					DataCommon.dumpSkillData();
+				end
+				</script>
+			</formattedtextfield>
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="note" merge="merge">
+		<placement>
+			<size width="400" height="350" />
+		</placement>
+		<sizelimits>
+			<minimum width="400" height="350" />
+			<dynamic />
+		</sizelimits>
+		<sheetdata>
+			<frame_note_content name="contentframe">
+  				<bounds>40,85,-40,-85</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</frame_note_content>
+
+			<simpleft name="text">
+				<bounds>53,98,-53,-98</bounds>
+				<empty textres="ft_empty" />
+			</simpleft>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="note_header" merge="merge">
+		<margins control="0,0,0,7" />
+		<sheetdata>
+			<stringfield name="name">
+				<anchored to="rightanchor" height="24">
+					<top offset="-8" />
+					<left parent="" offset="120" />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<font>title-b</font>
+				<empty textres="note_emptyname" />
+				<nodrag />
+			</stringfield>
+
+			<label name="owner_label">
+				<anchored position="insidetopleft" offset="25,32" />
+				<static textres="note_label_owner" />
+			</label>
+			<stringcontrol name="owner">
+				<anchored to="owner_label" position="righthigh" offset="5,0" height="20" />
+				<font>reference-r</font>
+				<readonly />
+			</stringcontrol>
+			<buttonc_checkbox name="ispublic">
+				<bounds>-45,32,20,20</bounds>
+				<script>
+					function onValueChanged()
+						window.onPublicChanged();
+					end
+				</script>
+			</buttonc_checkbox>
+			<genericcontrol name="separator">
+				<bounds>15,52,-15,3</bounds>
+				<frame name="separatorline" />
+				<disabled />
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="notelist">
+		<frame>campaignlistwithtabs</frame>
+		<softclose />
+		<placement>
+			<size width="300" height="400" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="400" />
+			<dynamic />
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<banner_campaign>
+				<icon>title_notes</icon>
+			</banner_campaign>
+
+			<frame_note_content name="contentframe">
+  				<bounds>50,35,-30,-60</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</frame_note_content>
+			<list_campaign_nofilter name="list">
+				<datasource>.</datasource>
+				<class>notesmall</class>
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("shortcut") then
+							return CampaignDataManager.handleDrop("notes", draginfo);
+						end
+					end
+				</script>
+			</list_campaign_nofilter>
+			<scrollbar_list />
+
+			<anchor_campaign_nofilter />
+			<button_iedit_campaign>
+				<script>
+					function onInit()
+						setVisible(true);
+					end
+				</script>
+			</button_iedit_campaign>
+			<button_iadd_campaign2>
+				<class>note</class>
+			</button_iadd_campaign2>
+
+			<resize_campaignlistwithtabs />
+			<close_campaignlist />
+		</sheetdata>
+	</windowclass>
+	
+</root>

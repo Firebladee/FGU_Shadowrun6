@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+	<windowclass name="charsheet_4_1_spells">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="skillframemagic">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframemagic</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == "" then
+							return true;
+						elseif w2.skillsort.getValue() == "" then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Magic" then
+							return true;
+						end
+						return false;
+
+					end
+
+
+				</script>
+			</windowlist>
+			<scrollbar>
+				<anchored to="list_skills" offset="-20,0"/>
+				<target>list_skills</target>
+			</scrollbar>
+<!--
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+ -->
+	<!-- spells-->
+			<genericcontrol name="spellframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_spells">
+				<anchored>
+					<to>spellframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.spells</datasource>
+				<class>charsheet_spellitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.spellsort.getValue() == "" then
+							return true;
+						elseif w2.spellsort.getValue() == "" then
+							return false;
+						end
+						return w1.spellsort.getValue() > w2.spellsort.getValue();
+					end
+					local bActiveLock = false
+					function onActiveSpellChanged(sChildNodeName)
+						if not bActiveLock then
+							for k, v in ipairs(getWindows()) do
+								if (v.getDatabaseNode().getName() ~= sChildNodeName) then
+									v.getDatabaseNode().getChild("color").setValue("ffffffff");
+									v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+									v.spellname.setFrame("dailyframe");
+									v.spellname.setColor("ffffffff");
+									v.spellisactive.setState(false);
+									v.skillcheck.setVisible(false);
+								else
+									if v.spellisactive.getState() == true then
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+										v.spellname.setFrame("dailyframe");
+										v.spellname.setColor("ffffffff");
+										v.spellisactive.setState(false);
+										v.skillcheck.setVisible(false);
+										v.windowlist.window.getDatabaseNode().getChild("node.activespell").setValue("none");
+									else
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("atwillframe");
+										v.spellname.setFrame("atwillframe");
+										v.spellname.setColor("ffffffff");
+										v.spellisactive.setState(true);
+										v.skillcheck.setVisible(true);
+										local spellnode = v.getDatabaseNode().getNodeName();
+										v.windowlist.window.getDatabaseNode().getChild("node.activespell").setValue(spellnode);
+										local f = v.windowlist.window.getDatabaseNode().getChild("node.activespell").getValue();
+									end
+								end
+							end
+
+							bActiveLock = false;
+						end
+					end
+					function onInit()
+						if window.getDatabaseNode().getChild("base.attribute.magic.check") then
+						local b = window.getDatabaseNode().getChild("base.attribute.magic.check").getValue();
+							for i, v in pairs (getWindows()) do
+								v.getDatabaseNode().getChild("spellstandardforce").setValue(b);
+							end
+						end
+					end
+					function onDrop(x, y, draginfo)
+						local sDragType = draginfo.getType();
+						if sDragType ~= "shortcut" then
+							return false;
+						end
+						local sDropClass, sDropNodeName = draginfo.getShortcutData();
+						if not StringManager.contains({ "referencespell"}, sDropClass) then
+							return false;
+						end
+						local nodeSource = draginfo.getDatabaseNode();
+
+						local sSourceName = DB.getValue(nodeSource, "name", "");
+						local sSourceSpellGroup = DB.getValue(nodeSource, "spellgroup", "");
+						local nSourceDrain = DB.getValue(nodeSource, "drain", 0);
+
+						local w = createWindow();
+						w.spellname.setValue(sSourceName);
+						w.spelltype.setStringValue(sSourceSpellGroup);
+						w.spelldrain.setValue(nSourceDrain);
+
+						w.shortcut.setValue(draginfo.getShortcutData());
+
+						return true;
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+
+
+<!-- Spellitem-->
+
+	<windowclass name="charsheet_spellitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_spellitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatespelldetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<powerstring name="spellsort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-460</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<linkfield name="shortcut">
+				<anchored width="20" height="20">
+					<top parent="spellsort" anchor="top" offset="0" />
+					<left parent="spellsort" anchor="right" offset="5" />
+				</anchored>
+				<class>referencespell</class>
+				<readonly />
+			</linkfield>
+
+			<powerstring name="spellname">
+				<anchored>
+					<left>
+						<parent>spellsort</parent>
+						<anchor>right</anchor>
+						<offset>35</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-220</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; spell &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+				</droptypes>
+				<script>
+					function updateColor()
+						window.spellname.setColor(window.getDatabaseNode().getChild("color").getValue());
+						window.spellname.setFrame(window.getDatabaseNode().getChild("frame").getValue(), 8, 0, 8, 1);
+					end
+
+					function onInit()
+						window.updateColorframe();
+						updateColor();
+						local b = window.windowlist.window.getDatabaseNode().getChild("node.activespell").getValue();
+						if b == "" then
+							window.windowlist.window.getDatabaseNode().getChild("node.activespell").setValue("none");
+						end
+					end
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveSpellChanged(a);
+					end
+
+				</script>
+			</powerstring>
+			<stringfield name="color">
+				<anchored>
+					<to>spellname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("ffffffff");
+						end
+					end
+				</script>
+			</stringfield>
+			<stringfield name="frame">
+				<anchored>
+					<to>spellname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("dailyframe");
+						end
+					end
+				</script>
+			</stringfield>
+
+			<!-- Cycle type of spell -->
+			<button_iconcycler name="spelltype">
+				<anchored>
+					<left>
+						<parent>spellname</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>spellname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_spell_combat|button_spell_detection|button_spell_health|button_spell_illusion|button_spell_manipulation</icons>
+					<values>Combat|Detection|Health|Illusion|Manipulation</values>
+					<tooltips>Combat|Detection|Health|Illusion|Manipulation</tooltips>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Choose Spelltype</defaulttooltip>
+				</parameters>
+			</button_iconcycler>
+
+			<!-- Select spell drain modifier box -->
+			<skillscore name="spelldrain" source="spelldrain">
+				<anchored>
+					<to>spelltype</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>spellforce</next>
+					<prev>spellname</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Drainvalue of the Spell</text>
+				</tooltip>
+				<displaysign />
+			</skillscore>
+
+			<!-- Assign force of the spell -->
+			<attributebonus name="spellforce" source="spellforce">
+				<anchored>
+					<to>spelldrain</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>spellname</next>
+					<prev>spelldrain</prev>
+				</tabtarget>
+				<!-- <readonly /> -->
+				<!-- Readonly removed, functionality impaired with it **Barrow -->
+				<target>Damage</target>
+				<tooltip>
+					<text>Force of the Spell (Standard Magic) [Apply Modifer at Will]</text>
+				</tooltip>
+				<scorefield>spellstandardforce</scorefield>
+				<modifierfield>spellforcemodifier</modifierfield>
+				<displaysign />
+			</attributebonus>
+
+			<numberfield name="spellstandardforce" source="spellstandardforce">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+				<script>
+					function onInit()
+						local charNode = window.getDatabaseNode().getParent().getParent();
+						if charNode.getChild("base.attribute.magic.check") then
+							local b = charNode.getChild("base.attribute.magic.check").getValue();
+							setValue(b);
+						end
+					end
+				</script>
+			</numberfield>
+
+			<checkbox name="spellisactive" source="spellisactive">
+				<anchored>
+					<left>
+						<parent>activatespelldetail</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>activatespelldetail</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveSpellChanged(a);
+					end
+				</script>
+			</checkbox>
+
+			<spellskillcheck name="skillcheck" source="skillcheck">
+				<anchored>
+					<to>spellisactive</to>
+				</anchored>
+				<weaponsubtype>weaponsubtype</weaponsubtype>
+			</spellskillcheck>
+
+			<skilldescfieldpc name="spelldescription">
+				<anchored>
+					<top>
+						<parent>spellname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>spellname</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description of the Spell &#187;</empty>
+			</skilldescfieldpc>
+
+		</sheetdata>
+	</windowclass>
+</root>

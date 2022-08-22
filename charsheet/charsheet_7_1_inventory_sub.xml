@@ -1,0 +1,1057 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+<!-- first subwindow shows all inventory items -->
+	<windowclass name="charsheet_7_1_1">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- inventorys-->
+			<numberfield name="inventorysort" source="inventorysort">
+				<bounds>0,0,0,0</bounds>
+				<script>
+					function onValueChanged()
+						window.inventorylist.applySort();
+					end
+				</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="inventoryframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<list_charinv name="inventorylist">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+			</list_charinv>
+			<scrollbar>
+				<anchored to="inventorylist" />
+				<target>inventorylist</target>
+			</scrollbar>
+
+			<label name="count_label">
+				<anchored to="inventoryframe" position="insidetopleft" offset="15,10" width="20" />
+				<center />
+				<static>#</static>
+			</label>
+			<genericcontrol name="rightanchor">
+				<anchored to="inventoryframe" width="0" height="0">
+					<top offset="10" />
+					<right offset="-8" />
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<genericcontrol name="idelete_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+			<genericcontrol name="shortcut_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-2" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+			<genericcontrol name="carried_header">
+				<anchored to="rightanchor" width="12" height="10">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<icon>char_encumbrance</icon>
+				<tooltip textres="char_tooltip_itemcarried" />
+			</genericcontrol>
+			<label name="weight_label">
+				<anchored to="rightanchor" width="30">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<center />
+				<static textres="char_label_itemweight" />
+				<tooltip textres="char_tooltip_itemweight" />
+			</label>
+			<label name="location_label">
+				<anchored to="rightanchor" width="80">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<center />
+				<static textres="char_label_itemlocation" />
+			</label>
+			<label name="name_label">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="inventoryframe" offset="55" />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<static textres="char_label_itemname" />
+				<center />
+			</label>
+		
+<!--
+			<windowlist name="inventorylist">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem_all</class>
+				<script file="charsheet/scripts/charsheet_list_inventory.lua" />
+			</windowlist>			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Location</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 1 then 
+							window.labelone.setFont("sheetlabel");
+						else
+ 							window.labelone.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end				
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(1);
+						window.labelone.setFont("sheetlabel");
+						window.labeltwo.setFont("sheetlabelsmall");
+					end
+				</script>				
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 2 then 
+							window.labeltwo.setFont("sheetlabel");
+						else
+ 							window.labeltwo.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end					
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(2);
+						window.labelone.setFont("sheetlabelsmall");
+						window.labeltwo.setFont("sheetlabel");
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="labelthree">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</genericcontrol>
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+			<genericcontrol name="rightanchor">
+				<anchored to="inventoryframe" width="0" height="0">
+					<top offset="10" />
+					<right offset="-20" />
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<genericcontrol name="idelete_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+ --> 
+			<button_iedit name="inventorylist_iedit">
+				<anchored to="inventorylist" position="aboveright" offset="5,0" />
+				<target>inventorylist</target>
+			</button_iedit>
+			<button_iadd name="inventorylist_iadd">
+				<anchored to="inventorylist_iedit" position="lefthigh" offset="5,0" />
+				<target>inventorylist</target>
+			</button_iadd>
+			
+
+		</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows inventory items in loc 1 -->	
+	<windowclass name="charsheet_7_1_7">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- inventorys-->
+			<numberfield name="inventorysort" source="inventorysort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_inventory_7.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="inventoryframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_inventory_7">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem</class>
+				<script file="charsheet/scripts/charsheet_list_inventory.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sublocation</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 1 then 
+							window.labelone.setFont("sheetlabel");
+						else
+ 							window.labelone.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end				
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(1);
+						window.labelone.setFont("sheetlabel");
+						window.labeltwo.setFont("sheetlabelsmall");
+					end
+				</script>				
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 2 then 
+							window.labeltwo.setFont("sheetlabel");
+						else
+ 							window.labeltwo.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end					
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(2);
+						window.labelone.setFont("sheetlabelsmall");
+						window.labeltwo.setFont("sheetlabel");
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="labelthree">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</genericcontrol>
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows inventory items in loc 1 -->	
+	<windowclass name="charsheet_7_1_2">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- inventorys-->
+			<numberfield name="inventorysort" source="inventorysort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_inventory_2.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="inventoryframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_inventory_2">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem</class>
+				<script file="charsheet/scripts/charsheet_list_inventory.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sublocation</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 1 then 
+							window.labelone.setFont("sheetlabel");
+						else
+ 							window.labelone.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end				
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(1);
+						window.labelone.setFont("sheetlabel");
+						window.labeltwo.setFont("sheetlabelsmall");
+					end
+				</script>				
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 2 then 
+							window.labeltwo.setFont("sheetlabel");
+						else
+ 							window.labeltwo.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end					
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(2);
+						window.labelone.setFont("sheetlabelsmall");
+						window.labeltwo.setFont("sheetlabel");
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="labelthree">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</genericcontrol>
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows inventory items in loc 3 -->	
+	<windowclass name="charsheet_7_1_3">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- inventorys-->
+			<numberfield name="inventorysort" source="inventorysort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_inventory_3.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="inventoryframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_inventory_3">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem</class>
+				<script file="charsheet/scripts/charsheet_list_inventory.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sublocation</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 1 then 
+							window.labelone.setFont("sheetlabel");
+						else
+ 							window.labelone.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end				
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(1);
+						window.labelone.setFont("sheetlabel");
+						window.labeltwo.setFont("sheetlabelsmall");
+					end
+				</script>				
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 2 then 
+							window.labeltwo.setFont("sheetlabel");
+						else
+ 							window.labeltwo.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end					
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(2);
+						window.labelone.setFont("sheetlabelsmall");
+						window.labeltwo.setFont("sheetlabel");
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="labelthree">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</genericcontrol>
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows inventory items in loc 4 -->	
+	<windowclass name="charsheet_7_1_4">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- inventorys-->
+			<numberfield name="inventorysort" source="inventorysort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_inventory_4.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="inventoryframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_inventory_4">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem</class>
+				<script file="charsheet/scripts/charsheet_list_inventory.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sublocation</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 1 then 
+							window.labelone.setFont("sheetlabel");
+						else
+ 							window.labelone.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end				
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(1);
+						window.labelone.setFont("sheetlabel");
+						window.labeltwo.setFont("sheetlabelsmall");
+					end
+				</script>				
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 2 then 
+							window.labeltwo.setFont("sheetlabel");
+						else
+ 							window.labeltwo.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end					
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(2);
+						window.labelone.setFont("sheetlabelsmall");
+						window.labeltwo.setFont("sheetlabel");
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="labelthree">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</genericcontrol>
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows inventory items in loc 5 -->	
+	<windowclass name="charsheet_7_1_5">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- inventorys-->
+			<numberfield name="inventorysort" source="inventorysort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_inventory_5.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="inventoryframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_inventory_5">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem</class>
+				<script file="charsheet/scripts/charsheet_list_inventory.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sublocation</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 1 then 
+							window.labelone.setFont("sheetlabel");
+						else
+ 							window.labelone.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end				
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(1);
+						window.labelone.setFont("sheetlabel");
+						window.labeltwo.setFont("sheetlabelsmall");
+					end
+				</script>				
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 2 then 
+							window.labeltwo.setFont("sheetlabel");
+						else
+ 							window.labeltwo.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end					
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(2);
+						window.labelone.setFont("sheetlabelsmall");
+						window.labeltwo.setFont("sheetlabel");
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="labelthree">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</genericcontrol>
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows inventory items in loc 6 -->	
+	<windowclass name="charsheet_7_1_6">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- inventorys-->
+			<numberfield name="inventorysort" source="inventorysort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_inventory_6.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="inventoryframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_inventory_6">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem</class>
+				<script file="charsheet/scripts/charsheet_list_inventory.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sublocation</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 1 then 
+							window.labelone.setFont("sheetlabel");
+						else
+ 							window.labelone.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end				
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(1);
+						window.labelone.setFont("sheetlabel");
+						window.labeltwo.setFont("sheetlabelsmall");
+					end
+				</script>				
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 2 then 
+							window.labeltwo.setFont("sheetlabel");
+						else
+ 							window.labeltwo.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end					
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(2);
+						window.labelone.setFont("sheetlabelsmall");
+						window.labeltwo.setFont("sheetlabel");
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="labelthree">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</genericcontrol>
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>	
+	
+
+</root>

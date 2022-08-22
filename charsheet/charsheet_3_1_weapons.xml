@@ -1,0 +1,1947 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet_3_1_weapons">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+
+		<!-- Skills-->
+<!--
+			<genericcontrol name="skillframe">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == " then
+							return true;
+						elseif w2.skillsort.getValue() == " then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Combat" then
+							return true;
+						end
+						return false;
+					end
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+-->
+	<!-- Weapons-->
+			<genericcontrol name="weaponframe">
+				<bounds>83,123,515,400</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_weapons">
+				<anchored>
+					<to>weaponframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.weapons</datasource>
+				<class>charsheet_weaponitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.weaponsort.getValue() == "" then
+							return true;
+						elseif w2.weaponsort.getValue() == "" then
+							return false;
+						end
+						return w1.weaponsort.getValue() > w2.weaponsort.getValue();
+					end
+
+					local bActiveLock = false
+					function onActiveWeaponChanged(sChildNodeName)
+						if not bActiveLock then
+							for k, v in ipairs(getWindows()) do
+								if (v.getDatabaseNode().getName() ~= sChildNodeName) then
+									v.getDatabaseNode().getChild("color").setValue("ffffffff");
+									v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+									v.weaponname.setFrame("dailyframe");
+									v.weaponname.setColor("ffffffff");
+									v.weaponisactive.setState(false);
+									v.skillcheck.setVisible(false);
+								else
+									if v.weaponisactive.getState() == true then
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+										v.weaponname.setFrame("dailyframe");
+										v.weaponname.setColor("ffffffff");
+										v.weaponisactive.setState(false);
+										v.skillcheck.setVisible(false);
+										local msg = "[Weapon-Change] Unarmed";
+										ChatManager.Message(msg, "ooc");
+										local weaponnode = v.getDatabaseNode().getNodeName();
+										v.windowlist.window.getDatabaseNode().getChild("node.activeweapon").setValue("none");
+									else
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("atwillframe");
+										v.weaponname.setFrame("atwillframe");
+										v.weaponname.setColor("ffffffff");
+										v.weaponisactive.setState(true);
+										v.skillcheck.onSourceUpdate();
+										v.skillcheck.setVisible(true);
+										local name = v.weaponname.getValue();
+										local msg = "[Weapon-Change] (" .. name .. ")";
+										ChatManager.Message(msg, "ooc");
+										local weaponnode = v.getDatabaseNode().getNodeName();
+										v.windowlist.window.getDatabaseNode().getChild("node.activeweapon").setValue(weaponnode);
+									end
+								end
+							end
+
+							bActiveLock = false;
+						end
+					end
+
+					function onDrop(x, y, draginfo)
+						local sDragType = draginfo.getType();
+						if sDragType ~= "shortcut" then
+							return false;
+						end
+						local sDropClass, sDropNodeName = draginfo.getShortcutData();
+						if not StringManager.contains({ "referenceweapon"}, sDropClass) then
+							return false;
+						end
+						local nodeSource = draginfo.getDatabaseNode();
+						local sSourceType = DB.getValue(nodeSource, "subtype", "");
+						local sSourceName = DB.getValue(nodeSource, "name", "");
+						local sSourceCategory = DB.getValue(nodeSource, "category", "");
+						local nSourceReach = DB.getValue(nodeSource, "reach", 0);
+						local nSourceDamage = DB.getValue(nodeSource, "damage", 0);
+						local nSourceDamageStrength = DB.getValue(nodeSource, "damagestrength", 0);
+						local sSourceDamageType = DB.getValue(nodeSource, "damagetype", "");
+						local nSourceAP = DB.getValue(nodeSource, "ap", 0);
+						local nSourceRecoil = DB.getValue(nodeSource, "recoil", 0);
+						local sSourceMode = DB.getValue(nodeSource, "mode", "");
+						local nSourceAmmo = DB.getValue(nodeSource, "ammo", 0);
+						local sSourceAmmoType = DB.getValue(nodeSource, "ammotype", "");
+
+						local w = createWindow();
+						w.weaponname.setValue(sSourceName);
+						w.weaponsubtype.setStringValue(sSourceCategory);
+						w.weaponreach.setValue(nSourceReach);
+						w.weapondamage.setValue(nSourceDamage);
+						if nSourceDamageStrength == 1 then
+							w.weaponhasstrength.setState(true);
+						else
+							w.weaponhasstrength.setState(false);
+						end
+						if sSourceDamageType == "P" then
+							w.weapondamagetype.setStringValue("Physical");
+						elseif sSourceDamageType == "S" then
+							w.weapondamagetype.setStringValue("Stun");
+						elseif sSourceDamageType == "f" or  sSourceDamageType == "Pf" then
+							w.weapondamagetype.setStringValue("Flechette");
+						elseif sSourceDamageType == "S(e)" then
+							w.weapondamagetype.setStringValue("Electricity");
+						elseif sSourceDamageType == "t" then
+							w.weapondamagetype.setStringValue("Toxic");
+						elseif sSourceDamageType == "F" then
+							w.weapondamagetype.setStringValue("Fire");
+						elseif sSourceDamageType == "m" then
+							w.weapondamagetype.setStringValue("Magic");
+						elseif sSourceDamageType == "s" then
+							w.weapondamagetype.setStringValue("Special");
+						end
+						w.weaponarmourpenetration.setValue(nSourceAP);
+						w.weaponrecoil.setValue(nSourceRecoil);
+						w.weaponrecoil.setReadOnly(true);
+						w.availablemodes.setValue(sSourceMode);
+						w.availablemodes.setReadOnly(true);
+						local sFirstFireMode = string.sub (sSourceMode, 0, 2);
+						if sFirstFireMode == "SS" then
+							sFirstFireMode = "1";
+						elseif sFirstFireMode == "SA" then
+							sFirstFireMode = "2";
+						elseif sFirstFireMode == "SB" then
+							sFirstFireMode = "3";
+						elseif sFirstFireMode == "LB" then
+							sFirstFireMode = "4";
+						elseif sFirstFireMode == "FA" then
+							sFirstFireMode = "5";
+						end
+						w.sa.setStringValue(sFirstFireMode);
+						w.weaponloadcapacity.setValue(nSourceAmmo);
+						w.weaponmagazinetype.setStringValue(sSourceAmmoType);
+						w.weaponsubtype.setReadOnly(true);
+						w.weaponreach.setReadOnly(true);
+						w.weapondamage.setReadOnly(true);
+						w.weaponhasstrength.setReadOnly(true);
+						w.weapondamagetype.setReadOnly(true);
+						w.weaponarmourpenetration.setReadOnly(true);
+						w.weaponloadcapacity.setReadOnly(true);
+						w.weaponmagazinetype.setReadOnly(true);
+						w.locked.setValue(1);
+						w.skillcheck.onSourceUpdate();
+						w.skillcheck.setReadOnly(true);
+
+						w.shortcut.setValue(draginfo.getShortcutData());
+
+						if sSourceType == "Firearms" then
+							local w2 = w.list_ammunition.createWindow();
+							if  w.weapondamagetype.getStringValue() == "Flechette" then
+								w2.ammunitionname.setValue("Flechette Ammo");
+								w2.ammodv.setValue(0);
+								w2.ammodamagetype.setStringValue(w.weapondamagetype.getStringValue());
+								w2.ammoarmourused.setStringValue("I");
+								w2.ammoap.setValue(0);
+							else
+								w2.ammunitionname.setValue("Regular Ammo");
+								w2.ammodv.setValue(0);
+								w2.ammodamagetype.setStringValue(w.weapondamagetype.getStringValue());
+								w2.ammoarmourused.setStringValue("B");
+								w2.ammoap.setValue(0);
+							end
+
+							w2.locked.setValue(1);
+							w2.ammocount.onDoubleClick();
+							w2.ammunitioninusebox.onDoubleClick();
+
+							w2.ammunitionname.setReadOnly(true);
+							w2.ammodv.setReadOnly(true);
+							w2.ammodamagetype.setReadOnly(true);
+							w2.ammoarmourused.setReadOnly(true);
+							w2.ammoap.setReadOnly(true);
+						end
+
+						return true;
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- Ammunitionitem-->
+	<windowclass name="charsheet_ammunitionitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_ammunitionitem.lua" />
+
+		<sheetdata>
+			<numberfield name="order">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</numberfield>
+
+			<hn name="locked"/>
+			<skilldescfieldpc name="ammunitionname">
+				<anchored>
+					<left>
+						<parent>order</parent>
+						<anchor>right</anchor>
+						<offset>25</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-280</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Type of Ammunition/Missile &#187;</empty>
+			</skilldescfieldpc>
+
+			<linkfield name="shortcut">
+				<anchored width="20" height="20">
+					<top parent="ammunitionname" anchor="top" offset="0" />
+					<left parent="ammunitionname" anchor="left" offset="-25" />
+				</anchored>
+				<class>referenceweapon</class>
+				<readonly />
+			</linkfield>
+
+			<skillscore name="ammocount" source="ammunition.count">
+				<anchored>
+					<left>
+						<parent>ammunitionname</parent>
+						<anchor>right</anchor>
+						<offset>30</offset>
+					</left>
+					<top>
+						<parent>ammunitionname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Ammocount</text>
+				</tooltip>
+				<script>
+					function onDoubleClick()
+						rWeaponNode = window.getDatabaseNode().getParent().getParent();
+
+						local nCapacity = NodeManager.get(window.getDatabaseNode().getParent().getParent(), "weapon.loadcapacity", 0);
+						self.setValue(nCapacity);
+
+						local name = window.ammunitionname.getValue();
+
+						local msg = "[Ammo-Reload] (" .. name .. " x " .. nCapacity .. ")";
+						ChatManager.Message(msg, "ooc");
+
+					end
+				</script>
+			</skillscore>
+			<attributeshortlabel>
+				<anchored>
+					<to>ammocount</to>
+					<offset>5</offset>
+				</anchored>
+				<static>Cnt</static>
+				<tooltip>
+					<text>Ammocount</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="ammodv" source="ammunition.dv">
+				<anchored>
+					<left>
+						<parent>ammunitionname</parent>
+						<anchor>right</anchor>
+						<offset>90</offset>
+					</left>
+					<top>
+						<parent>ammunitionname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Additional Damage Value</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel>
+				<anchored>
+					<to>ammodv</to>
+					<offset>5</offset>
+				</anchored>
+				<static>DV</static>
+				<tooltip>
+					<text>Additional Damage Value</text>
+				</tooltip>
+			</attributeshortlabel>
+			<button_iconcycler name="ammodamagetype" source="ammo.damagetype">
+				<anchored>
+					<left>
+						<parent>ammunitionname</parent>
+						<anchor>right</anchor>
+						<offset>105</offset>
+					</left>
+					<top>
+						<parent>ammunitionname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_phys|button_toggle_stun|button_toggle_flech|button_toggle_elec|button_toggle_toxic|button_toggle_fire|button_toggle_magic|button_toggle_spec</icons>
+					<values>Physical|Stun|Flechette|Electricity|Toxic|Fire|Magic|Special</values>
+					<tooltips>Physical|Stun|Flechette|Electricity|Toxic|Fire|Magic|Special</tooltips>
+					<defaulticon>button_toggle_damm</defaulticon>
+					<defaulttooltip>Choose Damagetype</defaulttooltip>
+				</parameters>
+			</button_iconcycler>
+			<button_stringcycler name="ammoarmourused" source="ammoarmourused">
+				<anchored>
+					<left>
+						<parent>ammunitionname</parent>
+						<anchor>right</anchor>
+						<offset>170</offset>
+					</left>
+					<top>
+						<parent>ammunitionname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>16</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<parameters>
+					<labels>B|I</labels>
+					<values>B|I</values>
+					<tooltips>Ballistic|Impact</tooltips>
+					<defaultlabel>B</defaultlabel>
+					<defaulttooltip>Versus which armour?</defaulttooltip>
+				</parameters>
+			</button_stringcycler>
+			<attributeshortlabel>
+				<anchored>
+					<to>ammoarmourused</to>
+					<offset>5</offset>
+				</anchored>
+				<static>Vs</static>
+				<tooltip>
+					<text>Versus which armour?</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="ammoap" source="ammunition.ap">
+				<anchored>
+					<left>
+						<parent>ammunitionname</parent>
+						<anchor>right</anchor>
+						<offset>220</offset>
+					</left>
+					<top>
+						<parent>ammunitionname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Ammunition additional Armour Piercing Value</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel>
+				<anchored>
+					<to>ammoap</to>
+					<offset>5</offset>
+				</anchored>
+				<static>AP</static>
+				<tooltip>
+					<text>Ammunition additional Armour Piercing Value</text>
+				</tooltip>
+			</attributeshortlabel>
+
+
+			<checkbox name="ammunitioninusebox">
+				<anchored>
+					<left>
+						<parent>ammunitionname</parent>
+						<anchor>right</anchor>
+						<offset>260</offset>
+					</left>
+					<top>
+						<parent>ammunitionname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveChanged(a);
+					end
+				</script>
+				<tooltip>
+					<text>Ammo in Use</text>
+				</tooltip>
+			</checkbox>
+
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_weaponitem">
+		<sizelimits>
+			<minimum>
+				<height>48</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_weaponitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activateweapondetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>image_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<button_toggle name="activateammunition">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_sword</icon>
+				<script>
+					function onInit()
+						super.onInit();
+						local nodeChar = window.getDatabaseNode();
+						if nodeChar then
+							local nodeAmmunitionList = nodeChar.createChild("ammunition","string");
+
+							if nodeAmmunitionList then
+								nodeAmmunitionList.onChildAdded = updateVisibility;
+								nodeAmmunitionList.onChildUpdate = updateVisibility;
+								updateVisibility(nodeAmmunitionList);
+							else
+								setVisible(false);
+							end
+						end
+					end
+
+					function updateVisibility(nodeAmmunitionList)
+						if nodeAmmunitionList.getChildCount() > 0 then
+							if not isVisible() then
+								setValue(true);
+							end
+							setVisible(true);
+						else
+							setVisible(false);
+							if getValue() then
+								setValue(false);
+							end
+						end
+					end
+
+					function onValueChanged()
+						window.toggleAmmunition();
+					end
+
+
+				</script>
+			</button_toggle>
+
+
+			<powerstring name="weaponsort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<powerstring name="weaponname">
+				<anchored>
+					<left>
+						<parent>weaponsort</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-280</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; Weapon &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+				</droptypes>
+				<script>
+					function updateColor()
+						window.weaponname.setColor(window.getDatabaseNode().getChild("color").getValue());
+						window.weaponname.setFrame(window.getDatabaseNode().getChild("frame").getValue(), 8, 0, 8, 1)
+					end
+
+					function onInit()
+						window.updateColorframe();
+						updateColor();
+						if not window.windowlist.window.getDatabaseNode().getChild("node.activeweapon") then
+							window.windowlist.window.getDatabaseNode().createChild("node.activeweapon", "string").setValue("none");
+						end
+						local b = window.windowlist.window.getDatabaseNode().getChild("node.activeweapon").getValue();
+					end
+
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveWeaponChanged(a);
+					end
+				</script>
+			</powerstring>
+			<stringfield name="color">
+				<anchored>
+					<to>weaponname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("ffffffff");
+						end
+					end
+				</script>
+			</stringfield>
+			<stringfield name="frame">
+				<anchored>
+					<to>weaponname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("dailyframe");
+						end
+					end
+				</script>
+			</stringfield>
+
+			<hn name="locked" source="locked"/>
+
+			<numberfield name="firemode">
+				<anchored>
+					<to>weaponname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local nValue = self.getValue();
+						if not nValue or nValue == 0 then
+							self.setValue("1");
+						end
+						if nValue == 1 then
+							window.weaponsingleshot.setColor("ffffae29");
+							window.weaponshortburst.setColor("ff000000");
+							window.weaponlongburst.setColor("ff000000");
+							window.weaponfullauto.setColor("ff000000");
+						elseif nValue == 2 then
+							window.weaponsingleshot.setColor("ff000000");
+							window.weaponshortburst.setColor("ffffae29");
+							window.weaponlongburst.setColor("ff000000");
+							window.weaponfullauto.setColor("ff000000");
+						elseif nValue == 3 then
+							window.weaponsingleshot.setColor("ff000000");
+							window.weaponshortburst.setColor("ff000000");
+							window.weaponlongburst.setColor("ffffae29");
+							window.weaponfullauto.setColor("ff000000");
+						elseif nValue == 4 then
+							window.weaponsingleshot.setColor("ff000000");
+							window.weaponshortburst.setColor("ff000000");
+							window.weaponlongburst.setColor("ff000000");
+							window.weaponfullauto.setColor("ffffae29");
+						end
+					end
+					function onValueChanged()
+						local nValue = self.getValue();
+						if nValue == 1 then
+							window.weaponsingleshot.setColor("ffffae29");
+							window.weaponshortburst.setColor("ff000000");
+							window.weaponlongburst.setColor("ff000000");
+							window.weaponfullauto.setColor("ff000000");
+						elseif nValue == 2 then
+							window.weaponsingleshot.setColor("ff000000");
+							window.weaponshortburst.setColor("ffffae29");
+							window.weaponlongburst.setColor("ff000000");
+							window.weaponfullauto.setColor("ff000000");
+						elseif nValue == 3 then
+							window.weaponsingleshot.setColor("ff000000");
+							window.weaponshortburst.setColor("ff000000");
+							window.weaponlongburst.setColor("ffffae29");
+							window.weaponfullauto.setColor("ff000000");
+						elseif nValue == 4 then
+							window.weaponsingleshot.setColor("ff000000");
+							window.weaponshortburst.setColor("ff000000");
+							window.weaponlongburst.setColor("ff000000");
+							window.weaponfullauto.setColor("ffffae29");
+						end
+					end
+				</script>
+			</numberfield>
+
+			<button_stringcycler name="weaponsubtype" source="weaponsubtype">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>right</anchor>
+						<offset>16</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>110</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<parameters>
+					<labels>Blades|Clubs|Exotic Weapons|Unarmed Combat|Tasers|Hold-out Pistols|Light Pistols|Heavy Pistols|Machine Pistols|Submachine Guns|Assault Rifles|Shotguns|Sporting Rifles|Sniper Rifles|Lgt Machine Guns|Med Machine Guns|Hvy Machine Guns|Assault Cannons|Grenade Launchers|Missile Launchers|Bows|Light Crossbows|Medium Crossbows|Heavy Crossbows|Throwing Weapons|Standard Grenade|Aerodynamic Grenade</labels>
+					<values>Blades|Clubs|Exotic Melee Weapons|Unarmed Combat|Taser|Hold-outs|Light Pistols|Heavy Pistols|Machine Pistols|Submachine Guns|Assault Rifles|Shotguns|Sporting Rifles|Sniper Rifles|Light Machine Guns|Medium Machine Guns|Heavy Machine Guns|Assault Cannons|Grenade Launchers|Missile Launchers|Bows|Light Crossbows|Medium Crossbows|Heavy Crossbows|Throwing Weapons|Standard Grenades|Aerodynamic Grenades</values>
+					<tooltips>Blades|Clubs|Exotic Weapons|Unarmed Combat|Tasers|Hold-out Pistols|Light Pistols|Heavy Pistols|Machine Pistols|Submachine Guns|Assault Rifles|Shotguns|Sporting Rifles|Sniper Rifles|Lgt Machine Guns|Med Machine Guns|Hvy Machine Guns|Assault Cannons|Grenade Launchers|Missile Launchers|Bows|Light Crossbows|Medium Crossbows|Heavy Crossbows|Throwing Weapons|Standard Grenade|Aerodynamic Grenade</tooltips>
+					<defaultlabel>Type</defaultlabel>
+					<defaulttooltip>Choose Weapontype</defaulttooltip>
+				</parameters>
+				<script>
+					function onValueChanged()
+						updateWeaponTypeVisibility();
+					end
+
+					function onInit()
+						if not window.getDatabaseNode().getChild("weapontype") then
+							window.getDatabaseNode().createChild("weapontype", "string");
+						end
+						if not window.getDatabaseNode().getChild("weaponsubtype") then
+							window.getDatabaseNode().createChild("weaponsubtype", "string");
+						end
+					    super.onInit();
+					    updateWeaponTypeVisibility();
+					end
+
+					function getRange(sRange)
+						local mult = 1;
+						local nRange = 0;
+						local strengthNode = window.getDatabaseNode().getParent().getParent();
+						if sRange == "STR" then
+							nRange = NodeManager.get(strengthNode, "base.attribute.strength.check", 1);
+						elseif string.match(sRange, "STRx*", 0) then
+							nRange = NodeManager.get(strengthNode, "base.attribute.strength.check", 1);
+							local sMult = string.sub(sRange, 5);
+							mult = tonumber(sMult);
+						else
+							nRange = sRange;
+						end
+						return nRange * mult;
+					end
+
+					function updateWeaponTypeVisibility()
+						local b = window.getDatabaseNode().getChild("weaponsubtype").getValue();
+						local a = b;
+						local rWeaponType = DataCommon.weapondata[b];
+						if rWeaponType then
+							local dbNode = window.getDatabaseNode().getChild("weapon");
+
+							window.minimumrange.setValue(getRange(rWeaponType.min));
+							window.shortrange.setValue(getRange(rWeaponType.short));
+							window.mediumrange.setValue(getRange(rWeaponType.medium));
+							window.longrange.setValue(getRange(rWeaponType.long));
+							window.extremerange.setValue(getRange(rWeaponType.extreme));
+							a = rWeaponType.type;
+						end
+						window.getDatabaseNode().getChild("weapontype").setValue(a);
+
+						if a == "Melee" then
+							window.weaponarmourpenetration.setVisible(true);
+							window.ap.setVisible(true)
+							window.weaponrecoil.setVisible(false);
+							window.weaponmagazinetype.setVisible(false);
+							window.rc.setVisible(false);
+							window.weaponloadcapacity.setVisible(false);
+							window.sa.setVisible(false);
+							window.bursttype.setVisible(false);
+							window.minimumrange.setVisible(false);
+							window.shortrange.setVisible(false);
+							window.mediumrange.setVisible(false);
+							window.longrange.setVisible(false);
+							window.extremerange.setVisible(false);
+							window.ranges.setVisible(false);
+							window.weaponmagazinetype.setVisible(false);
+							window.weaponreach.setVisible(true);
+							window.labelreach.setVisible(true);
+							window.weaponhasstrength.setVisible(true);
+							window.labelhasstrength.setVisible(true);
+							window.weaponstrengthbonus.setVisible(true);
+
+						elseif a == "Missile" or a == "Thrown" then
+							window.weaponarmourpenetration.setVisible(true);
+							window.ap.setVisible(true)
+							window.weaponrecoil.setVisible(false);
+							window.weaponmagazinetype.setVisible(false);
+							window.rc.setVisible(false);
+							window.weaponloadcapacity.setVisible(false);
+							window.sa.setVisible(false);
+							window.bursttype.setVisible(false);
+							window.minimumrange.setVisible(false);
+							window.shortrange.setVisible(false);
+							window.mediumrange.setVisible(false);
+							window.longrange.setVisible(false);
+							window.extremerange.setVisible(false);
+							window.ranges.setVisible(false);
+							window.weaponmagazinetype.setVisible(false);
+							window.weaponreach.setVisible(false);
+							window.labelreach.setVisible(false);
+							window.weaponhasstrength.setVisible(true);
+							window.labelhasstrength.setVisible(true);
+							window.weaponstrengthbonus.setVisible(true);
+
+						elseif a == "Firearm" then
+							window.weaponarmourpenetration.setVisible(true);
+							window.ap.setVisible(true)
+							window.weaponrecoil.setVisible(true);
+							window.weaponmagazinetype.setVisible(false);
+							window.rc.setVisible(true);
+							window.weaponloadcapacity.setVisible(true);
+							window.sa.setVisible(true);
+							window.bursttype.setVisible(true);
+							window.minimumrange.setVisible(false);
+							window.shortrange.setVisible(false);
+							window.mediumrange.setVisible(false);
+							window.longrange.setVisible(false);
+							window.extremerange.setVisible(false);
+							window.ranges.setVisible(false);
+							window.weaponmagazinetype.setVisible(true);
+							window.weaponreach.setVisible(false);
+							window.labelreach.setVisible(false);
+							window.weaponhasstrength.setVisible(false);
+							window.labelhasstrength.setVisible(false);
+							window.weaponstrengthbonus.setVisible(false);
+						else
+							window.weaponarmourpenetration.setVisible(false);
+							window.ap.setVisible(false)
+							window.weaponrecoil.setVisible(false);
+							window.weaponmagazinetype.setVisible(false);
+							window.rc.setVisible(false);
+							window.weaponloadcapacity.setVisible(false);
+							window.sa.setVisible(false);
+							window.bursttype.setVisible(false);
+							window.minimumrange.setVisible(false);
+							window.shortrange.setVisible(false);
+							window.mediumrange.setVisible(false);
+							window.longrange.setVisible(false);
+							window.extremerange.setVisible(false);
+							window.ranges.setVisible(false);
+							window.weaponmagazinetype.setVisible(false);
+							window.weaponreach.setVisible(false);
+							window.labelreach.setVisible(false);
+							window.weaponhasstrength.setVisible(false);
+							window.labelhasstrength.setVisible(false);
+							window.weaponstrengthbonus.setVisible(false);
+						end
+					end
+				</script>
+			</button_stringcycler>
+
+			<skillscore name="weaponskillbonus" source="weapon.skillbonus">
+				<anchored>
+					<to>weaponsubtype</to>
+					<position>right</position>
+					<offset>57,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<target>Damage</target>
+				<tooltip>
+					<text>Weapon Bonus for Skillroll (including Specialization/Equipment see Description for more Information)</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel>
+				<anchored>
+					<to>weaponskillbonus</to>
+					<offset>9</offset>
+				</anchored>
+				<size>
+					<width>35</width>
+				</size>
+				<static>Bonus</static>
+				<tooltip>
+					<text>Bonus for Skillrolls using this weapon</text>
+				</tooltip>
+			</attributeshortlabel>
+
+
+			<linkfield name="shortcut">
+				<anchored width="20" height="20">
+					<top offset="4"  parent="weaponname" anchor="bottom"/>
+					<left parent="weaponname" anchor="left" offset="-75" />
+				</anchored>
+				<class>referenceweapon</class>
+				<readonly />
+			</linkfield>
+
+
+			<skillscore name="weapondamage" source="weapon.damage">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>-35</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Weapon Damage</text>
+				</tooltip>
+				<scorefield>weapon.strengthbonus</scorefield>
+				<modifierfield>weapon.damagemodifier</modifierfield>
+			</skillscore>
+			<attributeshortlabel>
+				<anchored>
+					<to>weapondamage</to>
+					<offset>5</offset>
+				</anchored>
+				<size>
+					<width>10</width>
+				</size>
+				<static>DV</static>
+				<tooltip>
+					<text>Damagevalue of the weapon</text>
+				</tooltip>
+			</attributeshortlabel>
+			<button_iconcycler name="weapondamagetype" source="weapon.damagetype">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>-15</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_phys|button_toggle_stun|button_toggle_flech|button_toggle_elec|button_toggle_toxic|button_toggle_fire|button_toggle_magic|button_toggle_spec</icons>
+					<values>Physical|Stun|Flechette|Electricity|Toxic|Fire|Magic|Special</values>
+					<tooltips>Physical|Stun|Flechette|Electricity|Toxic|Fire|Magic|Special</tooltips>
+					<defaulticon>button_toggle_damm</defaulticon>
+					<defaulttooltip>Choose Damagetype</defaulttooltip>
+				</parameters>
+			</button_iconcycler>
+			<skillscore name="weaponarmourpenetration" source="weapon.armourpenetration">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>50</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<displaysign />
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Armour Penetration Basis</text>
+				</tooltip>
+			</skillscore>
+
+			<attributeshortlabel name="ap">
+				<anchored>
+					<to>weaponarmourpenetration</to>
+					<offset>5</offset>
+				</anchored>
+				<size>
+					<width>12</width>
+				</size>
+				<static>AP</static>
+				<tooltip>
+					<text>Armour Penetration Basis</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="weaponrecoil" source="weapon.recoil">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>100</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<displaysign />
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Recoil</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="rc">
+				<anchored>
+					<to>weaponrecoil</to>
+					<offset>0</offset>
+				</anchored>
+				<size>
+					<width>12</width>
+				</size>
+				<static>RC</static>
+				<tooltip>
+					<text>Recoil</text>
+				</tooltip>
+			</attributeshortlabel>
+
+<!-- Firearm -->
+
+			<button_stringcycler name="sa" source="firemode_str">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>140</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>36</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<parameters>
+					<labels>SS|SA|SB|LB|FA</labels>
+					<values>1|2|3|4|5</values>
+					<tooltips>Single Shot|Semi-Automatic|Short Burst|Long Burst|Full Auto</tooltips>
+					<defaultlabel>Mode</defaultlabel>
+					<defaulttooltip>Choose mode of fire</defaulttooltip>
+				</parameters>
+				<script file="charsheet/scripts/charsheet_3_1_firemode_str.lua"/>
+			</button_stringcycler>
+			<hs name="availablemodes"  source="availablemodes"/>
+			<button_stringcycler name="bursttype" source="bursttype">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>185</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>16</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<parameters>
+					<labels>N|W</labels>
+					<values>1|2</values>
+					<tooltips>Narrow Burst|Wide Burst</tooltips>
+					<defaultlabel>W</defaultlabel>
+					<defaulttooltip>Choose type of burst</defaulttooltip>
+				</parameters>
+			</button_stringcycler>
+
+			<numberfield name="weaponsingleshot" source="weapon.singleshot">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>90</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible/>
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Ammo needed for Single Shot/Semi Automatic</text>
+				</tooltip>
+				<script>
+					function onInit()
+						setValue(1);
+					end
+					function onGainFocus()
+						window.getDatabaseNode().createChild("firemode","number").setValue(1);
+					end
+				</script>
+			</numberfield>
+
+			<numberfield name="weaponshortburst" source="weapon.shortburst">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>123</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible/>
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Ammo needed for short Burst</text>
+				</tooltip>
+				<script>
+					function onInit()
+						setValue(3);
+					end
+					function onGainFocus()
+						window.getDatabaseNode().createChild("firemode","number").setValue(2);
+					end
+				</script>
+			</numberfield>
+
+			<numberfield name="weaponlongburst" source="weapon.longburst">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>156</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible/>
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Ammo needed for long Burst</text>
+				</tooltip>
+				<script>
+					function onInit()
+						setValue(6);
+					end
+					function onGainFocus()
+						window.getDatabaseNode().createChild("firemode","number").setValue(3);
+					end
+				</script>
+			</numberfield>
+			<numberfield name="weaponfullauto" source="weapon.fullauto">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>189</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible/>
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>ammo needed for full automatic fire</text>
+				</tooltip>
+				<script>
+					function onInit()
+						setValue(10);
+					end
+					function onGainFocus()
+						window.getDatabaseNode().createChild("firemode","number").setValue(4);
+					end
+				</script>
+			</numberfield>
+<!--
+			<button_stringcycler name="rangeband" source="rangeband">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>108</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<labels>Sht|Med|Lng|Ext</labels>
+					<values>0|-1|-3|-6</values>
+					<tooltips>Short|Medium|Long|Extreme</tooltips>
+					<defaultlabel>Rng</defaultlabel>
+					<defaulttooltip>Choose range band of fire</defaulttooltip>
+				</parameters>
+				<script>
+					function onValueChanged()
+						nVal = self.getStringValue();
+						window.getDatabaseNode().createChild("firemode","number").setValue(tonumber(nVal));
+					end
+				</script>
+			</button_stringcycler>
+-->
+			<numberfield name="rangebandno">
+				<anchored>
+					<to>weaponname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local nValue = self.getValue();
+						if not nValue or nValue == 0 then
+							self.setValue("1");
+						end
+						onValueChanged();
+					end
+					function onValueChanged()
+						local nValue = self.getValue();
+						if nValue == 1 then
+							window.minimumrange.setColor("ffffae29");
+							window.shortrange.setColor("ff000000");
+							window.mediumrange.setColor("ff000000");
+							window.longrange.setColor("ff000000");
+							window.extremerange.setColor("ff000000");
+						elseif nValue == 2 then
+							window.minimumrange.setColor("ff000000");
+							window.shortrange.setColor("ffffae29");
+							window.mediumrange.setColor("ff000000");
+							window.longrange.setColor("ff000000");
+							window.extremerange.setColor("ff000000");
+						elseif nValue == 3 then
+							window.minimumrange.setColor("ff000000");
+							window.shortrange.setColor("ff000000");
+							window.mediumrange.setColor("ffffae29");
+							window.longrange.setColor("ff000000");
+							window.extremerange.setColor("ff000000");
+						elseif nValue == 4 then
+							window.minimumrange.setColor("ff000000");
+							window.shortrange.setColor("ff000000");
+							window.mediumrange.setColor("ff000000");
+							window.longrange.setColor("ffffae29");
+							window.extremerange.setColor("ff000000");
+						elseif nValue == 4 then
+							window.minimumrange.setColor("ff000000");
+							window.shortrange.setColor("ff000000");
+							window.mediumrange.setColor("ff000000");
+							window.longrange.setColor("ff000000");
+							window.extremerange.setColor("ffffae29");
+						end
+					end
+				</script>
+			</numberfield>
+			<skillscore name="minimumrange" source="weapon.minumumrange">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>143</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible />
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Minumum range to use weapon</text>
+				</tooltip>
+				<script>
+					function onGainFocus()
+						window.getDatabaseNode().createChild("rangebandno","number").setValue(1);
+					end
+				</script>
+			</skillscore>
+			<skillscore name="shortrange" source="weapon.shortrange">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>176</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible />
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Short range for weapon</text>
+				</tooltip>
+				<script>
+					function onGainFocus()
+						window.getDatabaseNode().createChild("rangebandno","number").setValue(2);
+					end
+				</script>
+			</skillscore>
+			<skillscore name="mediumrange" source="weapon.mediumrange">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>209</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible />
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Medium range for weapon</text>
+				</tooltip>
+				<script>
+					function onGainFocus()
+						window.getDatabaseNode().createChild("rangebandno","number").setValue(3);
+					end
+				</script>
+			</skillscore>
+			<skillscore name="longrange" source="weapon.longrange">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>242</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible />
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Long range for weapon</text>
+				</tooltip>
+				<script>
+					function onGainFocus()
+						window.getDatabaseNode().createChild("rangebandno","number").setValue(4);
+					end
+				</script>
+			</skillscore>
+			<skillscore name="extremerange" source="weapon.extremerange">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>275</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<invisible />
+				<hideonvalue>0</hideonvalue>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Extreme range for weapon</text>
+				</tooltip>
+				<script>
+					function onGainFocus()
+						window.getDatabaseNode().createChild("rangebandno","number").setValue(5);
+					end
+				</script>
+			</skillscore>
+			<attributeshortlabel name="ranges">
+				<anchored>
+					<to>minimumrange</to>
+					<offset>1</offset>
+				</anchored>
+				<invisible />
+				<size>
+					<width>24</width>
+				</size>
+				<static>Range</static>
+				<tooltip>
+					<text>Weapn range bands in metres (Minimum / Short / Medium / Long / Extreme)</text>
+				</tooltip>
+			</attributeshortlabel>
+
+
+			<skillscore name="weaponloadcapacity" source="weapon.loadcapacity">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>230</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+
+				<tooltip>
+					<text>Weapon Load Capacity (Ammo)</text>
+				</tooltip>
+			</skillscore>
+
+			<button_stringcycler name="weaponmagazinetype">
+				<anchored>
+					<left>
+						<parent>weaponloadcapacity</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>weaponloadcapacity</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>70</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>Cylinder|Clip|Magazine|Breach|Belt|Missile</labels>
+					<values>(cy)|(c)|(m)|(b)|(belt)|(ml)</values>
+					<defaultlabel>Load Type</defaultlabel>
+				</parameters>
+				<tabtarget>
+					<prev>subtype</prev>
+					<next>magical</next>
+				</tabtarget>
+				<tooltip>
+					<text>Ammuntion Storage Type</text>
+				</tooltip>
+			</button_stringcycler>
+
+
+			<attributeshortlabel name="capacitylabel">
+				<anchored>
+					<to>weaponloadcapacity</to>
+					<offset>1</offset>
+				</anchored>
+				<invisible/>
+				<size>
+					<width>24</width>
+				</size>
+				<static>Cap.</static>
+				<tooltip>
+					<text>Weapn Load Capacity (Ammo)</text>
+				</tooltip>
+			</attributeshortlabel>
+
+
+			<checkbox name="weaponisactive" source="weapon.isactive">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>25</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+
+				<script>
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveWeaponChanged(a);
+					end
+				</script>
+			</checkbox>
+
+			<weaponskillcheck name="skillcheck" source="skillcheck">
+				<anchored>
+					<to>weaponisactive</to>
+				</anchored>
+				<weaponsubtype>weaponsubtype</weaponsubtype>
+			</weaponskillcheck>
+
+<!-- melee -->
+			<skillscore name="weaponreach" source="weapon.reach">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>130</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<displaysign />
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Reach Bonus of your Melee Weapon</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labelreach">
+				<anchored>
+					<to>weaponreach</to>
+					<offset>5</offset>
+				</anchored>
+				<size>
+					<width>35</width>
+				</size>
+				<static>Reach</static>
+				<tooltip>
+					<text>Reach Bonus for your Melee Weapon</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<checkbox name="weaponhasstrength" source="weapon.hasstrengh">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>220</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Half of your Strength will be added to the damage (rounded up)</text>
+				</tooltip>
+				<script>
+ 					function onInit()
+ 						super.onInit();
+						weaponStrengthBonus();
+					end
+
+					function onValueChanged()
+						weaponStrengthBonus();
+					end
+
+					function weaponStrengthBonus()
+						local a = self.getState();
+						if a == false then
+							window.getDatabaseNode().getChild("weapon.strengthbonus").setValue("0");
+						else
+							local b = math.ceil(window.windowlist.window.getDatabaseNode().getChild("base.attribute.strength.check").getValue() /2);
+							window.getDatabaseNode().getChild("weapon.strengthbonus").setValue(b);
+						end
+					end
+				</script>
+			</checkbox>
+			<attributeshortlabel name="labelhasstrength">
+				<anchored>
+					<right>
+						<parent>weaponhasstrength</parent>
+						<anchor>left</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<parent>weaponhasstrength</parent>
+						<anchor>top</anchor>
+						<offset>-4</offset>
+					</top>
+
+				</anchored>
+				<size>
+					<width>30</width>
+				</size>
+				<static>Damage</static>
+				<tooltip>
+					<text>Half of your Strength will be added to the damage (rounded up)</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skillscore name="weaponstrengthbonus" source="weapon.strengthbonus">
+				<anchored>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>240</offset>
+					</left>
+					<top>
+						<parent>weaponname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<readonly />
+				<displaysign />
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Strength Bonus to Damage of your Melee Weapon</text>
+				</tooltip>
+			</skillscore>
+
+			<windowlist name="list_ammunition">
+				<anchored>
+					<top>
+						<parent>weaponarmourpenetration</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<skipempty />
+				<noscroll />
+				<datasource>.ammunition</datasource>
+				<class>charsheet_ammunitionitem</class>
+				<menutext>Ammunition</menutext>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.order.getValue() &gt; w2.order.getValue();
+					end
+
+					function reset()
+						for k,v in pairs(getWindows()) do
+							v.getDatabaseNode().delete();
+						end
+					end
+
+					function getOrder(node)
+						if NodeManager.get(node, "order", 0) == 0 then
+							local ordertable = {};
+							for k,v in pairs(getDatabaseNode().getChildren()) do
+								ordertable[NodeManager.get(v, "order", 0)] = true;
+							end
+
+							local i = 1;
+							while ordertable[i] do
+								i = i + 1;
+							end
+
+							NodeManager.set(node, "order", "number", i);
+						end
+					end
+					local bActiveLock = false
+					function onActiveChanged(sChildNodeName)
+
+						if not bActiveLock then
+							for k, v in ipairs(getWindows()) do
+								if (v.getDatabaseNode().getName() ~= sChildNodeName) then
+									v.ammunitioninusebox.setState(false);
+								else
+									v.ammunitioninusebox.setState(true);
+									local f = v.getDatabaseNode().getParent().getParent().getChild("frame").getValue();
+									if f == "atwillframe" then
+										local name = v.ammunitionname.getValue();
+										local msg = "[Ammo-Change] (" .. name .. ")";
+										ChatManager.Message(msg, "ooc");
+									end
+									local ammonode = v.getDatabaseNode().getNodeName();
+									if not v.windowlist.window.getDatabaseNode().getChild("activeammo") then
+									v.windowlist.window.getDatabaseNode().createChild("activeammo", "string");
+									end
+									v.windowlist.window.getDatabaseNode().getChild("activeammo").setValue(ammonode);
+								end
+							end
+
+							bActiveLock = false;
+						end
+					end
+
+				</script>
+			</windowlist>
+
+			<skilldescfieldpc name="weapondescription">
+				<anchored>
+					<top>
+						<parent>weaponarmourpenetration</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>weaponname</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+		</sheetdata>
+	</windowclass>
+</root>

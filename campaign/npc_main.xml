@@ -1,0 +1,2085 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="npc_main">
+		<margins control="0,0,0,2" />
+		<script>
+			function onInit()
+				update();
+			end
+			
+			function update()
+				local bReadOnly = WindowManager.getReadOnlyState(getDatabaseNode());
+			end
+		</script>
+		<sheetdata>
+		
+			<!-- OVERVIEW-->
+			<genericcontrol name="overviewframe">
+				<bounds>83,10,-35,50</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<string_labeled name="metatype" source="base.metatype">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>10,10</offset>
+					<size>
+						<width>100</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<anchorto>overviewframe</anchorto>
+				<height>20</height>
+				<label>Metatype</label>
+<!-- 				<tabtarget>
+					<prev>name</prev>
+					<next>subtype</next>
+				</tabtarget> -->
+				<tooltip>
+					<text>Metatype (Race) of your Character (Basetype only)</text>
+				</tooltip>
+			</string_labeled>
+			
+			<button_stringcycler name="freind">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>115,13</offset>
+					<size>
+						<width>60</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>Friend|Neutral|Foe</labels>
+					<values>1|2|3</values>
+				</parameters>
+				<tooltip>
+					<text>Choose (with doubleclick) if Friend, Neutral or Foe</text>
+				</tooltip>
+			</button_stringcycler>
+			
+			<button_stringcycler name="magical" source="base.special.magical">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>180,13</offset>
+					<size>
+						<width>60</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>Mage|Adept|T-mancer|Shaman</labels>
+					<values>1|2|3|4</values>
+				</parameters>
+				
+				<tooltip>
+					<text>Choose (with doubleclick) if Adept, Mage, Technomancer or Shaman</text>
+				</tooltip>
+				<script>
+					function onInit()
+						super.onInit();
+						updateVisibility();
+						updateDrainAttribute();
+					end
+					function onValueChanged()
+						updateVisibility();
+						updateDrainAttribute();
+					end
+					function updateDrainAttribute()
+						local b = window.getDatabaseNode().getChild("magical").getValue();
+						if b == "1" then
+							local node = window.getDatabaseNode().getChild("drainattributecycler");
+							if not node then
+								window.getDatabaseNode().createChild("drainattributecycler", "string");
+							end
+							window.getDatabaseNode().getChild("drainattributecycler").setValue("Logic");
+						elseif b == "4" then
+							local node = window.getDatabaseNode().getChild("drainattributecycler");
+							if not node then
+								window.getDatabaseNode().createChild("drainattributecycler", "string");
+							end
+							window.getDatabaseNode().getChild("drainattributecycler").setValue("Charisma");
+						end
+					end
+					function updateVisibility()
+						local b = 0;
+						if window.getDatabaseNode().getChild("magical") then
+							b = window.getDatabaseNode().getChild("magical").getValue();
+						end
+						
+						if b == "1" then
+							window.magic.setVisible(true);
+							window.magicbonus.setVisible(true);
+							window.magiccheck.setVisible(true);
+							window.magiclabel.setVisible(true);
+						elseif b == "2" then
+							window.magic.setVisible(true);
+							window.magicbonus.setVisible(true);
+							window.magiccheck.setVisible(true);
+							window.magiclabel.setVisible(true);
+						elseif b == "4" then
+							window.magic.setVisible(true);
+							window.magicbonus.setVisible(true);
+							window.magiccheck.setVisible(true);
+							window.magiclabel.setVisible(true);
+						else
+							window.magic.setVisible(false);
+							window.magicbonus.setVisible(false);
+							window.magiccheck.setVisible(false);
+							window.magiclabel.setVisible(false);
+						end
+						local sw = window.parentcontrol.window.items.subwindow;
+						if sw then
+							sw.spells.checkVisibility(true);
+						end
+					end
+					
+				</script>
+			</button_stringcycler>
+			<button_iconcycler name="drainattributecycler">
+				<anchored>
+					<left>
+						<parent>magical</parent>
+						<anchor>right</anchor>
+						<offset>-48</offset>
+					</left>
+					<top>
+						<parent>magical</parent>
+						<anchor>bottom</anchor>
+						<offset>-20</offset>
+					</top>
+					<size>
+						<width>30</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<invisible/>
+				<parameters>
+					<icons>button_toggle_one|button_toggle_one|button_toggle_all|button_toggle_single</icons>
+					<tooltips>Willpower|Logic|Intuition|Charisma</tooltips>
+					<values>Willpower|Logic|Intuition|Charisma</values>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Choose your Drainattribute</defaulttooltip>
+				</parameters>
+				<script>
+					function onInit()
+						super.onInit();
+						local a = "0"
+						onValueChanged();					
+					end
+
+					function onValueChanged()
+						local a = "0"
+						if window.getDatabaseNode().getChild("base.special.magical") then
+							a = window.getDatabaseNode().getChild("base.special.magical").getValue();
+						end
+						if a == "1" or a == "2"  or a == "4" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								if a == "1" then 
+									setValue("Logic");
+									local node = window.getDatabaseNode().getChild("base.special.drainattribute");
+									if not node then
+										window.getDatabaseNode().createChild("base.special.drainattribute", "string");
+									end
+									window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+								elseif a == "4" then
+									setValue("Charisma");
+									window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+								else
+									window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+								end
+							end
+						 elseif a == "3" then
+							local b = window.getDatabaseNode().getChild("drainattributecycler").getValue();
+							if b == "Willpower" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue());
+							elseif b == "Logic" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.logic.check").getValue());
+							elseif b == "Intuition" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.intuition.check").getValue());
+							elseif b == "Charisma" then
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(window.getDatabaseNode().getChild("base.attribute.charisma.check").getValue());
+							else
+								window.getDatabaseNode().getChild("base.special.drainattribute").setValue(0);
+							end
+						end
+						if not window.getDatabaseNode().getChild("base.special.drainresistvalue") then
+							window.getDatabaseNode().createChild("base.special.drainresistvalue", "number");
+						end
+						local nWillpower = window.getDatabaseNode().getChild("base.attribute.willpower.check").getValue();
+						local nAttribute = 0;
+						if window.getDatabaseNode().getChild("base.special.drainattribute") then
+							nAttribute = window.getDatabaseNode().getChild("base.special.drainattribute").getValue();
+						end
+						local nResist = nWillpower + nAttribute;
+						
+						window.getDatabaseNode().getChild("base.special.drainresistvalue").setValue(nResist);
+
+					end
+				</script>
+			</button_iconcycler>
+			
+			<!-- ATTRIBUTES -->
+			<genericcontrol name="attributeframe">
+				<bounds>83,60,200,310</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<stringcontrol name="LabelAttributes">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Attributes</static>
+				<script>
+					function onHover(state)
+						if state == true then
+							setColor(ff000000);
+						else
+							setColor(ffffffff);
+						end
+					end
+				</script>
+			</stringcontrol>
+			
+			
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>73,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Base</static>
+			</stringcontrol>
+
+
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>113,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Mod</static>
+			</stringcontrol>			
+			
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>150,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>check</static>
+			</stringcontrol>
+			
+				<!-- Body -->
+		
+			<attributescore name="body" source="base.attribute.body.base">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>70,39</offset>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+			</attributescore>
+			
+			<npcattributebonus name="bodybonus" source="base.attribute.body.bonus">
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<scorefield>base.attribute.body.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.body.bonusmodifier</modifierfield>
+			</npcattributebonus>
+			
+			<npcattributecheckbonus name="bodycheck" source="base.attribute.body.check">
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<target>Body</target>
+				<attributebonusfield>base.attribute.body.bonus</attributebonusfield>
+				<attributescore>base.attribute.body.base</attributescore>
+				<script>
+					function onValueChanged()
+						calulateArmorPenalty();
+					end
+					function onInit()
+						super.onInit();
+						calulateArmorPenalty();
+					end
+				
+					function calulateArmorPenalty()
+						local node = window.getDatabaseNode().getChild("armor.encumbrance.hiddenballisticvalue");
+						if node then
+							local a = window.getDatabaseNode().getChild("armor.encumbrance.hiddenballisticvalue").getValue();
+							local b = window.getDatabaseNode().getChild("armor.encumbrance.hiddenimpactvalue").getValue();
+							local c = window.getDatabaseNode().getChild("base.attribute.body.check").getValue();
+							local d = math.ceil((math.max(a,b)-(c+c)) /2)
+							local e = -d
+							if d > 0 then
+								window.getDatabaseNode().getChild("armor.hiddenpenalty").setValue(e);
+							else
+								window.getDatabaseNode().getChild("armor.hiddenpenalty").setValue(0);
+							end
+						end
+					end
+				</script>
+
+			</npcattributecheckbonus>			
+						
+			<attributehiddenbonus name="bodyhiddenbonus" source="base.attribute.body.hiddenbonus">
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+		
+			<attributelabel>
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<static>Body</static>
+			</attributelabel>
+
+	<!-- agility -->
+			<attributescore name="agility" source="base.attribute.agility.base">
+				<anchored>
+					<to>body</to>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+			</attributescore>
+			
+			<npcattributebonus name="agilitybonus" source="base.attribute.agility.bonus">
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<scorefield>base.attribute.agility.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.agility.bonusmodifier</modifierfield>
+			</npcattributebonus>
+			
+			<npcattributecheckbonus name="agilitycheck" source="base.attribute.agility.check">
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<target>Agility</target>
+				<attributebonusfield>base.attribute.agility.bonus</attributebonusfield>
+				<attributescore>base.attribute.agility.base</attributescore>
+			</npcattributecheckbonus>			
+						
+			<attributehiddenbonus name="agilityhiddenbonus" source="base.attribute.agility.hiddenbonus">
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+		
+			<attributelabel>
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<static>Agility</static>
+			</attributelabel>
+
+	<!-- reaction -->
+			<attributescore name="reaction" source="base.attribute.reaction.base">
+				<anchored>
+					<to>agility</to>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+			</attributescore>
+			
+			<npcattributebonus name="reactionbonus" source="base.attribute.reaction.bonus">
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<scorefield>base.attribute.reaction.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.reaction.bonusmodifier</modifierfield>
+			</npcattributebonus>
+			
+			<npcattributecheckbonus name="reactioncheck" source="base.attribute.reaction.check">
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<target>Reaction</target>
+				<attributebonusfield>base.attribute.reaction.bonus</attributebonusfield>
+				<attributescore>base.attribute.reaction.base</attributescore>
+			</npcattributecheckbonus>			
+						
+			<attributehiddenbonus name="reactionhiddenbonus" source="base.attribute.reaction.hiddenbonus">
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+		
+			<attributelabel>
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<static>Reaction</static>
+			</attributelabel>
+
+	<!-- strength -->
+			<attributescore name="strength" source="base.attribute.strength.base">
+				<anchored>
+					<to>reaction</to>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+			</attributescore>
+			
+			<npcattributebonus name="strengthbonus" source="base.attribute.strength.bonus">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<scorefield>base.attribute.strength.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.strength.bonusmodifier</modifierfield>
+			</npcattributebonus>
+			
+			<npcattributecheckbonus name="strengthcheck" source="base.attribute.strength.check">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<target>Strength</target>
+				<attributebonusfield>base.attribute.strength.bonus</attributebonusfield>
+				<attributescore>base.attribute.strength.base</attributescore>
+			</npcattributecheckbonus>			
+						
+			<attributehiddenbonus name="strengthhiddenbonus" source="base.attribute.strength.hiddenbonus">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+		
+			<attributelabel>
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<static>Strength</static>
+			</attributelabel>
+
+			
+	<!-- charisma -->
+			<attributescore name="charisma" source="base.attribute.charisma.base">
+				<anchored>
+					<to>strength</to>
+				</anchored>
+				<tabtarget>
+					<next>intuition</next>
+					<prev>strength</prev>
+				</tabtarget>
+			</attributescore>
+			
+			<npcattributebonus name="charismabonus" source="base.attribute.charisma.bonus">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<scorefield>base.attribute.charisma.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.charisma.bonusmodifier</modifierfield>
+			</npcattributebonus>
+			
+			<npcattributecheckbonus name="charismacheck" source="base.attribute.charisma.check">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<target>Charisma</target>
+				<attributebonusfield>base.attribute.charisma.bonus</attributebonusfield>
+				<attributescore>base.attribute.charisma.base</attributescore>
+			</npcattributecheckbonus>			
+						
+			<attributehiddenbonus name="charismahiddenbonus" source="base.attribute.charisma.hiddenbonus">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+		
+			<attributelabel>
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<static>Charisma</static>
+			</attributelabel>
+
+	<!-- intuition -->
+			<attributescore name="intuition" source="base.attribute.intuition.base">
+				<anchored>
+					<to>charisma</to>
+				</anchored>
+				<tabtarget>
+					<next>logic</next>
+					<prev>charisma</prev>
+				</tabtarget>
+			</attributescore>
+			
+			<npcattributebonus name="intuitionbonus" source="base.attribute.intuition.bonus">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<scorefield>base.attribute.intuition.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.intuition.bonusmodifier</modifierfield>
+			</npcattributebonus>
+			
+			<npcattributecheckbonus name="intuitioncheck" source="base.attribute.intuition.check">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<target>Intuition</target>
+				<attributebonusfield>base.attribute.intuition.bonus</attributebonusfield>
+				<attributescore>base.attribute.intuition.base</attributescore>
+			</npcattributecheckbonus>
+	<!-- 					
+			<npcattributecheckbonus name="intuitioncheck2" source="base.attribute.intuition2.check">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<invisible />
+				<target>Intuition</target>
+				<attributebonusfield>base.attribute.intuition.bonus</attributebonusfield>
+				<attributescore>base.attribute.intuition.base</attributescore>
+			</npcattributecheckbonus>			
+ -->
+			<attributehiddenbonus name="intuitionhiddenbonus" source="base.attribute.intuition.hiddenbonus">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+		
+			<attributelabel>
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<static>Intuition</static>
+			</attributelabel>
+
+	<!-- logic -->
+			<attributescore name="logic" source="base.attribute.logic.base">
+				<anchored>
+					<to>intuition</to>
+				</anchored>
+				<tabtarget>
+					<next>willpower</next>
+					<prev>intuition</prev>
+				</tabtarget>
+			</attributescore>
+			
+			<npcattributebonus name="logicbonus" source="base.attribute.logic.bonus">
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<scorefield>base.attribute.logic.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.logic.bonusmodifier</modifierfield>
+			</npcattributebonus>
+			
+			<npcattributecheckbonus name="logiccheck" source="base.attribute.logic.check">
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<target>Logic</target>
+				<attributebonusfield>base.attribute.logic.bonus</attributebonusfield>
+				<attributescore>base.attribute.logic.base</attributescore>
+			</npcattributecheckbonus>			
+						
+			<attributehiddenbonus name="logichiddenbonus" source="base.attribute.logic.hiddenbonus">
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+		
+			<attributelabel>
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<static>Logic</static>
+			</attributelabel>
+			
+	<!-- willpower -->
+			<attributescore name="willpower" source="base.attribute.willpower.base">
+				<anchored>
+					<to>logic</to>
+				</anchored>
+				<tabtarget>
+					<next>magic</next>
+					<prev>logic</prev>
+				</tabtarget>
+			</attributescore>
+			
+			<npcattributebonus name="willpowerbonus" source="base.attribute.willpower.bonus">
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<scorefield>base.attribute.willpower.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.willpower.bonusmodifier</modifierfield>
+			</npcattributebonus>
+			
+			<npcattributecheckbonus name="willpowercheck" source="base.attribute.willpower.check">
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<target>Willpower</target>
+				<attributebonusfield>base.attribute.willpower.bonus</attributebonusfield>
+				<attributescore>base.attribute.willpower.base</attributescore>
+			</npcattributecheckbonus>			
+						
+			<attributehiddenbonus name="willpowerhiddenbonus" source="base.attribute.willpower.hiddenbonus">
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</attributehiddenbonus>
+		
+			<attributelabel>
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<static>Willpower</static>
+			</attributelabel>
+
+
+
+				<!-- Magic -->
+		
+			<attributescore name="magic" source="base.attribute.magic.base">
+				<anchored>
+					<to>willpower</to>
+				</anchored>
+				<invisible />
+				<tabtarget>
+					<next>constitution</next>
+					<prev>willpower</prev>
+				</tabtarget>
+				<script>
+					function onInit()
+						super.onInit();
+						calulateMagic();
+					end
+				
+					function calulateMagic()
+						local node = window.getDatabaseNode().getChild("base.attribute.essence.current");
+						if node then
+							local a = window.getDatabaseNode().getChild("base.attribute.essence.current").getValue();
+							local b = math.floor(a);
+							window.getDatabaseNode().getChild("base.attribute.magic.base").setValue(b);
+						end
+					end
+				</script>
+			</attributescore>
+			
+			<attributebonus name="magicbonus" source="base.attribute.magic.bonus">
+				<anchored>
+					<to>magic</to>
+				</anchored>
+				<invisible />
+				<scorefield>base.attribute.magic.hiddenbonus</scorefield>
+				<modifierfield>base.attribute.magic.bonusmodifier</modifierfield>
+			</attributebonus>
+
+
+			<npcattributecheckbonus name="magiccheck" source="base.attribute.magic.check">
+				<anchored>
+					<to>magic</to>
+				</anchored>
+				<invisible />
+				<target>Magic</target>
+				<attributebonusfield>base.attribute.magic.bonus</attributebonusfield>
+				<attributescore>base.attribute.magic.base</attributescore>
+
+			</npcattributecheckbonus>						
+			<attributehiddenbonus name="magichiddenbonus" source="base.attribute.magic.hiddenbonus">
+				<anchored>
+					<to>magic</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+		
+			<attributelabel name="magiclabel">
+				<anchored>
+					<to>magic</to>
+				</anchored>
+				<invisible />
+				<static>Magic</static>
+			</attributelabel>
+			
+			<!-- Essence -->
+			
+			<genericcontrol name="essframe">
+				<bounds>283,60,-35,70</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			
+			<stringcontrol>
+				<anchored>
+					<to>essframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Essence</static>
+			</stringcontrol>
+				
+			<essencescore name="essencebase" source="base.attribute.essence.base">
+				<anchored>
+					<to>essframe</to>
+					<position>insidetopleft</position>
+					<offset>10,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<script>
+				function onInit()
+					if super.onInit then
+						super.onInit();
+					end
+					
+					if getValue() == 0 then
+						setValue(6);
+					end
+				end
+				</script>
+			</essencescore>
+			
+			<stringcontrol>
+				<anchored>
+					<to>essencebase</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Base</static>
+				<center />
+				<tooltip>
+					<text>Base</text>
+				</tooltip>
+			</stringcontrol>
+			
+			<essencemodifierscore name="essencemodifier" source="base.attribute.essence.modifier">
+				<anchored>
+					<to>essframe</to>
+					<position>insidetopleft</position>
+					<offset>46,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+			</essencemodifierscore>
+			
+			<stringcontrol>
+				<anchored>
+					<to>essencemodifier</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Mod.</static>
+				<center />
+				<tooltip>
+					<text>complete Modifier</text>
+				</tooltip>
+			</stringcontrol>			
+			
+			<linkednumber name="essencecheck" source="base.attribute.essence.current">
+				<anchored>
+					<to>essframe</to>
+					<position>insidetopleft</position>
+					<offset>82,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<source>
+					<name>base.attribute.essence.modifier</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.essence.base</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.essenceloss.bio</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.essenceloss.cyber</name>
+					<op>+</op>
+				</source>
+				<script>
+					function onValueChanged()
+						local a = 6 -(math.floor(self.getValue()));
+						b = -a
+						window.getDatabaseNode().createChild("base.attribute.magic.loss", "number").setValue(b);
+						window.getDatabaseNode().createChild("base.attribute.resonance.loss", "number").setValue(b); 
+					end
+				</script>
+			</linkednumber>
+			<stringcontrol>
+				<anchored>
+					<to>essencecheck</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Curr.</static>
+				<center />
+				<tooltip>
+					<text>check</text>
+				</tooltip>
+			</stringcontrol>			
+			
+			<!-- Edge -->
+			<genericcontrol name="edgeframe">
+				<bounds>283,130,-35,70</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Edge</static>
+			</stringcontrol>
+			
+			<attributescore name="edge" source="base.attribute.edge.score">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>10,39</offset>
+				</anchored>
+				<noreset />
+				<target>Edge</target>
+				<description>
+					<text>Edge check</text>
+				</description>
+			</attributescore>
+									
+			<stringcontrol>
+				<anchored>
+					<to>edge</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Base</static>
+			</stringcontrol>
+
+			<attributescore name="edgemod" source="base.attribute.edge.mod">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>46,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<gmonly />
+				<tabtarget>
+					<next>edge</next>
+					<prev>edge</prev>
+				</tabtarget>
+			</attributescore>
+
+			<stringcontrol>
+				<anchored>
+					<to>edgemod</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Used</static>
+			</stringcontrol>	
+			
+			<edgecheck name="edgecheck" source="base.attribute.edge.check">
+				<anchored>
+					<to>edgeframe</to>
+					<position>insidetopleft</position>
+					<offset>82,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<readonly />
+				<source>
+					<name>base.attribute.edge.score</name>
+					<op>+</op>
+				</source>
+  				<source>
+					<name>base.attribute.edge.mod</name>
+					<op>-</op>
+				</source>
+				<target>Edge</target>
+			</edgecheck>	
+
+			<stringcontrol>
+				<anchored>
+					<to>edgecheck</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Check</static>
+			</stringcontrol>		
+			<checkbox name="edgecheckbox">
+				<anchored>
+					<to>edgecheck</to>
+					<position>above</position>
+					<offset>15,15</offset>
+					<size>12,12</size>
+				</anchored>
+				<parameters>
+					<tooltips>Use Edge with following Dice-Roll</tooltips>
+					<defaulttooltip>Check to use Edge for following Dice-Roll</defaulttooltip>
+				</parameters>
+			</checkbox>
+
+
+			
+			<!-- Initiative -->
+			<genericcontrol name="iniframe">
+				<bounds>283,200,-35,70</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>iniframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Initiative</static>
+			</stringcontrol>
+
+			
+			<inicheck name="initcheck" source="base.attribute.ini.check">
+				<anchored>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>10,39</offset>
+				</anchored>
+
+				<readonly />
+				<source>
+					<name>base.attribute.reaction.check</name>
+					<op>+</op>
+				</source>
+  				<source>
+					<name>base.attribute.ini.mod</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.attribute.intuition.check</name>
+					<op>+</op>
+				</source>
+				<target>base.attribute.ini.check</target>
+				<script merge="replace">
+					function onInit()
+						super.onInit();
+					end
+	
+					function action(draginfo)
+						local dbNode = window.getDatabaseNode();
+						local rActor = ActorManager2.getActor("npc", dbNode);
+						ActionInit.performRoll(draginfo, rActor, self.target[1]);
+						return true;
+					end
+	
+					function onDragStart(button, x, y, draginfo)
+						return action(draginfo);
+					end
+	
+					function onDoubleClick(x,y)
+						return action();
+					end
+			</script>
+			</inicheck>	
+
+			<stringcontrol>
+				<anchored>
+					<to>initcheck</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Check</static>
+			</stringcontrol>			
+
+			<attributescore name="initmod" source="base.attribute.ini.mod">
+				<anchored>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>46,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<gmonly />
+				<tabtarget>
+					<next>init</next>
+					<prev>init</prev>
+				</tabtarget>
+			</attributescore>
+
+			<stringcontrol>
+				<anchored>
+					<to>initmod</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Mod</static>
+			</stringcontrol>	
+
+
+			<attributescore name="inipass" source="base.attribute.inipass.score">
+				<anchored>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>82,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<noreset />
+				<target>Initiative</target>
+				<description>
+					<text>Initiative check</text>
+				</description>
+			</attributescore>
+									
+			<stringcontrol>
+				<anchored>
+					<to>inipass</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Pass</static>
+			</stringcontrol>
+
+
+			<button_iconcycler name="initype">
+				<anchored>
+					<to>iniframe</to>
+					<position>insidetopleft</position>
+					<offset>17,164</offset>
+					<size>
+						<width>30</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<icons>indicator_sword|indicator_heal|indicator_effect</icons>
+					<labels>Astral|Matrix|Mtx.Hot|</labels>
+					<values>1|2|3</values>
+					<defaulticon>indicator_question</defaulticon>
+					<defaultlabel>Normal</defaultlabel>
+					<defaultvalue>0</defaultvalue>
+				</parameters>
+				<script>
+					function onInit()
+						if not window.getDatabaseNode().getChild("initype") then
+							window.getDatabaseNode().createChild("initype","string")
+						end
+						super.onInit();
+					end
+				</script>
+				<invisible />
+			</button_iconcycler>
+			
+			<!-- Armour -->
+			<genericcontrol name="armorframe">
+				<bounds>283,270,-35,100</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+
+			<stringcontrol>
+				<anchored>
+					<to>armorframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Armor</static>
+			</stringcontrol>
+			
+			<attributebonus name="armorpenalty" source="base.special.penalty">
+				<anchored>
+					<to>armorframe</to>
+					<position>belowright</position>
+					<offset>0,5</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Penalty and Modifier of Penalty (Armor) Penalty applies to Agility and Reaction Rolls</text>
+				</tooltip>
+				<scorefield>armor.hiddenpenalty</scorefield>
+				<modifierfield>armor.penaltymodifier</modifierfield>
+				<invisible />
+			</attributebonus>
+			<attributehiddenbonus name="armorhiddenpenalty" source="armor.hiddenpenalty">
+				<anchored>
+					<to>armorpenalty</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+
+			<skillscore name="armorballistic" source="base.special.ballistic">
+				<anchored>
+					<to>armorframe</to>
+					<position>insidetopleft</position>
+					<offset>46,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Ballistic Armor</text>
+				</tooltip>
+				<script>
+					function onValueChanged( )
+						updateHiddenValue();
+					end
+					
+					function onInint()
+						updateHiddenValue();
+					end
+					
+					function updateHiddenValue()
+						window.getDatabaseNode().getChild("armor.hiddenballisticvalue").setValue(getValue());
+					end
+				</script>
+			</skillscore>
+
+
+			<skillscore name="armorimpact" source="base.special.impact">
+				<anchored>
+					<to>armorframe</to>
+					<position>insidetopleft</position>
+					<offset>82,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Impact Armor</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						updateHiddenValue();
+					end
+					
+					function onInint()
+						updateHiddenValue();
+					end
+					
+					function updateHiddenValue()
+						window.getDatabaseNode().getChild("armor.hiddenimpactvalue").setValue(getValue());
+					end
+				</script>
+			</skillscore>
+
+			<resistcheck name="ballisticarmorvalue" source="base.special.ballisticvalue">
+				<anchored>
+					<to>armorframe</to>
+					<position>insidetopleft</position>
+					<offset>46,61</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+
+				<target>Ballistic Armor</target>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of activated Balastic Armor and Body (apply other Boni accordingly)</text>
+				</tooltip>
+				<scorefield>base.special.ballistic</scorefield>
+				<score2field>base.attribute.body.check</score2field>
+				<modifierfield>armor.ballisticvaluemodifier</modifierfield>
+				<script>
+					function action(draginfo)
+						local rActor = ActorManager2.getActor("npc", window.getDatabaseNode());
+						Resist.performRoll(draginfo, rActor, self.target[1]);
+						return true;
+					end
+					function onDragStart(button, x, y, draginfo)
+						return action(draginfo);
+					end
+	
+					function onDoubleClick(x,y)
+						return action();
+					end					
+					function onSourceUpdate()
+						setValue(sources[scorefield[1]].getValue()+ sources[score2field[1]].getValue()  +  getModifier());
+					end
+	
+					function onInit()
+						addSource(score2field[1]);
+						addSource(scorefield[1]);
+						super.onInit();
+						calulateArmorPenalty();
+					end
+					function onValueChanged()
+						calulateArmorPenalty();
+					end
+
+					function calulateArmorPenalty()
+						local node = window.getDatabaseNode().getChild("armor.encumbrance.hiddenballisticvalue");
+						if node then
+							local a = window.getDatabaseNode().getChild("armor.encumbrance.hiddenballisticvalue").getValue();
+							local b = window.getDatabaseNode().getChild("armor.encumbrance.hiddenimpactvalue").getValue();
+							local c = window.getDatabaseNode().getChild("base.attribute.body.check").getValue();
+							local d = math.ceil((math.max(a,b)-(c+c)) /2)
+							local e = -d
+							if d > 0 then
+								window.getDatabaseNode().getChild("armor.hiddenpenalty").setValue(e);
+							else
+								window.getDatabaseNode().getChild("armor.hiddenpenalty").setValue(0);
+							end
+						end
+					end
+				</script>
+			</resistcheck>
+			<attributehiddenbonus name="hiddenballisticarmorvalue" source="armor.hiddenballisticvalue">
+				<anchored>
+					<to>ballisticarmorvalue</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+			<attributehiddenbonus name="hiddenballisticarmorforencumbrancevalue" source="armor.encumbrance.hiddenballisticvalue">
+				<anchored>
+					<to>ballisticarmorvalue</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+
+			<stringcontrol>
+				<anchored>
+					<to>armorballistic</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>ballistic</static>
+			</stringcontrol>	
+			
+			<resistcheck name="impactarmorvalue" source="base.special.impactvalue">
+				<anchored>
+					<to>armorframe</to>
+					<position>insidetopleft</position>
+					<offset>82,61</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+
+				<target>Impact Armor</target>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of activated Impact Armor and Body (apply other Boni accordingly)</text>
+				</tooltip>
+				<scorefield>base.special.impact</scorefield>
+				<score2field>base.attribute.body.check</score2field>
+				<modifierfield>armor.impactvaluemodifier</modifierfield>
+				<script>
+					function action(draginfo)
+						local rActor = ActorManager2.getActor("npc", window.getDatabaseNode());
+						Resist.performRoll(draginfo, rActor, self.target[1]);
+						return true;
+					end
+					function onDragStart(button, x, y, draginfo)
+						return action(draginfo);
+					end
+	
+					function onDoubleClick(x,y)
+						return action();
+					end
+					function onSourceUpdate()
+						setValue(sources[scorefield[1]].getValue()+ sources[score2field[1]].getValue()  +  getModifier());
+					end
+	
+					function onInit()
+						addSource(score2field[1]);
+						addSource(scorefield[1]);
+						super.onInit();
+						calulateArmorPenalty();
+					end
+	
+					function onValueChanged()
+						calulateArmorPenalty();
+					end
+
+					function calulateArmorPenalty()
+						local node = window.getDatabaseNode().getChild("armor.encumbrance.hiddenballisticvalue");
+						if node then
+							local a = window.getDatabaseNode().getChild("armor.encumbrance.hiddenballisticvalue").getValue();
+							local b = window.getDatabaseNode().getChild("armor.encumbrance.hiddenimpactvalue").getValue();
+							local c = window.getDatabaseNode().getChild("base.attribute.body.check").getValue();
+							local d = math.ceil((math.max(a,b)-(c+c)) /2)
+							local e = -d
+							if d > 0 then
+								window.getDatabaseNode().getChild("armor.hiddenpenalty").setValue(e);
+							else
+								window.getDatabaseNode().getChild("armor.hiddenpenalty").setValue(0);
+							end
+						end
+					end
+				</script>
+			</resistcheck>
+			<resistcheck name="resistvalue" source="base.special.resistvalue">
+				<anchored>
+					<to>armorframe</to>
+					<position>insidetopleft</position>
+					<offset>10,39</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<target>Resist</target>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value for Resistance against incoming attack</text>
+				</tooltip>
+				<scorefield>base.attribute.reaction.check</scorefield>
+
+				<modifierfield>base.special.penalty</modifierfield>
+				<script>
+				function onSourceUpdate()
+					setValue(sources[scorefield[1]].getValue() +  getModifier());
+				end
+
+				function onInit()
+					addSource(scorefield[1]);
+					super.onInit();
+					calulateResistancePenalty();
+				end
+				function onValueChanged()
+					calulateResistancePenalty();
+				end
+
+				function calulateResistancePenalty()
+					local nResistVal = sources[scorefield[1]].getValue() +  getModifier();
+					local fulldefense = window.fulldefensecheckbox.getState();
+					if fulldefense  then
+						local rActor = ActorManager2.getActor("ct", window.getDatabaseNode());
+						local sDesc, dodgecheck = ActorManager2.getSkillScoreSearch(rActor, "Dodge", 0, "");
+						local sDesc2, gymcheck = ActorManager2.getSkillScoreSearch(rActor, "Gymnastics", 0, "");
+						if dodgecheck > gymcheck then
+							nResistVal = nResistVal + dodgecheck;
+						else
+							nResistVal = nResistVal + gymcheck;
+						end
+					end
+					setValue(nResistVal);
+				end
+				</script>
+			</resistcheck>
+
+			<stringcontrol>
+				<anchored>
+					<to>resistvalue</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>resist</static>
+			</stringcontrol>	
+
+			<checkbox name="fulldefensecheckbox" source="base.special.fulldefense">
+				<anchored>
+					<to>resistvalue</to>
+					<position>below</position>
+					<offset>3,2</offset>
+					<size>
+						<width>15</width>
+						<height>15</height>
+					</size>				</anchored>
+				<parameters>
+					<tooltips>Use Complex action to add Dodge/Athletics to following Dice-Roll</tooltips>
+					<defaulttooltip>Use Complex action to add Dodge/Athletics to following Dice-Roll</defaulttooltip>
+				</parameters>
+				<script>
+					function onInit()
+						super.onInit();
+						onValueChanged()
+					end
+					function onValueChanged()
+						local a = self.getState();
+						window.resistvalue.calulateResistancePenalty()
+					end
+				</script>
+			</checkbox>
+
+
+			<attributehiddenbonus name="hiddenimpactarmorvalue" source="armor.hiddenimpactvalue">
+				<anchored>
+					<to>impactarmorvalue</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+			<attributehiddenbonus name="hiddenimpactarmorforencumbrancevalue" source="armor.encumbrance.hiddenimpactvalue">
+				<anchored>
+					<to>impactarmorvalue</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+			<checkbox name="armorcheckmode">
+				<anchored>
+					<to>fulldefensecheckbox</to>
+					<position>below</position>
+					<offset>0,0</offset>
+					<size>
+						<width>15</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>Check for half Armor Value (e.g. Electrical Shock)</tooltips>
+					<defaulttooltip>Half Armor Value is being counted for the following Armor Resist Check</defaulttooltip>
+				</parameters>
+			</checkbox>	
+			<stringcontrol>
+				<anchored>
+					<to>armorimpact</to>
+					<position>above</position>
+					<offset>5,3</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<center />
+				<static>Impact</static>
+			</stringcontrol>		
+
+			<!-- damageframe -->			
+			<genericcontrol name="damageframe">
+				<bounds>83,373,330,95</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetop</position>
+					<offset>0,6</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>General Damage</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>70,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Damage</static>
+			</stringcontrol>			
+
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>190,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Penalty</static>
+				<tooltip>
+					<text>Damage Penealty</text>
+				</tooltip>
+			</stringcontrol>
+			
+			<genericcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>232,26</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_quicklist</icon>
+				<tooltip>
+					<text>text</text>
+				</tooltip>
+			</genericcontrol>				
+			
+			<stringcontrol>
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>260,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>DMG Penalty</static>
+				<tooltip>
+					<text>Damage Penealty</text>
+				</tooltip>
+			</stringcontrol>			
+
+			<numberfield name="physicalcurrent" source="damage.physical.current">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>235,40</offset>
+				</anchored>
+				<tabtarget>
+					<next>physicalmod</next>
+					<prev>stunValue</prev>
+				</tabtarget>
+				<script>
+					function onValueChanged()
+						local a = window.physicalmax.getValue();
+						local b = getValue();
+						if a == b then 
+							window.physicaldamageoverflow.setVisible(true);
+						else
+							window.physicaldamageoverflow.setVisible(false);
+						end
+					end
+				</script>
+				<invisible />
+			</numberfield>	
+
+			<attributescore name="physicalcurrentred" source="damage.physical.red">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>235,40</offset>
+				</anchored>
+				<invisible />
+				<tabtarget>
+					<next>physicalmod</next>
+					<prev>stunValue</prev>
+				</tabtarget>	
+				<invisible />
+			</attributescore>		
+ 
+			<attributescore name="physicalmod" source="damage.physical.mod">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>290,40</offset>
+				</anchored>
+				<tabtarget>
+					<next>stunbase</next>
+					<prev>physicalbase</prev>
+				</tabtarget>
+				<tooltip>
+					<text>max. Damage Modifier</text>
+				</tooltip>
+				<invisible />
+			</attributescore>				
+
+			<linkednumber name="physicalmax" source="damage.physical.max">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>330,40</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+				<source>
+					<name>base.attribute.body.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.physical.mod</name>
+					<op>+</op>
+				</source>
+				<script file="charsheet/scripts/charsheet_1_damage.lua" />
+			</linkednumber>
+ 			
+			<attributescore name="physicalignore" source="damage.physical.ignore">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>330,40</offset>
+				</anchored>
+				<tooltip>
+					<text>physicalignore</text>
+				</tooltip>
+				<invisible />
+			</attributescore>		
+				
+			<checkbox name="physicalcheckbox" source="damage.box.physical.check">
+				<anchored>
+					<left>
+						<parent>physicalignore</parent>
+						<anchor>left</anchor>
+						<offset>-100</offset>
+					</left>
+					<top>
+						<parent>physicalignore</parent>	
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>ACTIVE Disadvantage (every 2 Damage -1 Modifier)</tooltips>
+					<defaulttooltip>Check to activate Disadvantage</defaulttooltip>
+				</parameters>
+			</checkbox>
+
+			<linkednumber name="physicalcheckboxnumber" source="damage.box.physical.number">
+				<anchored>
+					<left>
+						<parent>physicalignore</parent>
+						<anchor>right</anchor>
+						<offset>25</offset>
+					</left>
+					<top>
+						<parent>physicalignore</parent>	
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<invisible />
+				<font>sheetnumbersmall</font>
+				<nodrag />
+				<nodrop />
+				<readonly />
+				<nokeyedit />
+				<source>
+					<name>physicalcheckbox</name>
+					<op>+</op>
+				</source>
+			</linkednumber>	
+
+			<linkednumber name="physicalmodifier" source="damage.physical.modifier">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>190,40</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<source>
+					<name>damage.physical.ignore</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.physical.current</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>physicalcheckbox</name>
+					<op>+</op>
+				</source>
+				<script file="charsheet/scripts/charsheet_1_damagemodifier.lua" />
+				<tooltip>
+					<text>physicalmodifier</text>
+				</tooltip>
+				<readonly />
+				<nodrag />
+				<nodrop />
+				<displaysign />
+			</linkednumber>	
+			
+			
+			<checkcounter name="physicaldamage">
+				<anchored>
+					<to>damageframe</to>
+					<position>righthigh</position>
+					<offset>-260,45</offset>
+					<size>
+						<height>10</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.physical.current</current>
+					<maximum>damage.physical.max</maximum>
+				</sourcefields>
+			</checkcounter>
+			
+			<checkcounterred name="physicaldamageoverflow">
+				<anchored>
+					<to>damageframe</to>
+					<position>righthigh</position>
+					<offset>-260,55</offset>
+					<size>
+						<height>10</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.physical.red</current>
+					<maximum>base.attribute.body.check</maximum>
+				</sourcefields>
+				<invisible />
+			</checkcounterred>
+			
+			<stringcontrol name="physicaldamagelabel">
+				<anchored>
+					<to>physicaldamage</to>
+					<position>lefthigh</position>
+					<offset>0,-2</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Physical</static>
+			</stringcontrol>			
+<!-- Stun -->
+			<attributescore name="stuncurrent" source="damage.stun.current">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>235,65</offset>
+				</anchored>
+				<tabtarget>
+					<next>stunValue</next>
+					<prev>stunValue</prev>
+				</tabtarget>
+				<invisible />	
+			</attributescore>			
+		
+
+			<attributescore name="stunValue" source="damage.stun.mod">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>290,65</offset>
+				</anchored>
+				<tabtarget>
+					<next>stunbase</next>
+					<prev>stunbase</prev>
+				</tabtarget>
+				<tooltip>
+					<text>max. Stun Modifier</text>
+				</tooltip>
+				<script>
+					function onInit()
+						setColor("ff000000");
+					end
+				</script>
+				<invisible />
+			</attributescore>				
+
+ 
+			<linkednumber name="stunmax" source="damage.stun.max">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>315,65</offset>
+				</anchored>
+				<font>sheetnumber</font>
+				<source>
+					<name>base.attribute.willpower.check</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.stun.mod</name>
+					<op>+</op>
+				</source>
+				<script file="charsheet/scripts/charsheet_1_stun.lua" />
+				<tooltip>
+					<text>stunmax</text>
+				</tooltip>
+				<invisible />
+			</linkednumber>	
+			
+			<attributescore name="stunignore" source="damage.stun.ignore">
+				<anchored>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>330,65</offset>
+				</anchored>
+				<tooltip>
+					<text>physicalignore</text>
+				</tooltip>
+				<invisible />
+			</attributescore>			
+			
+			<checkbox name="stuncheckbox" source="damage.box.stun.check">
+				<anchored>
+					<left>
+						<parent>stunignore</parent>
+						<anchor>left</anchor>
+						<offset>-100</offset>
+					</left>
+					<top>
+						<parent>stunignore</parent>	
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>ACTIVE Disadvantage (every 2 Damage -1 Modifier)</tooltips>
+					<defaulttooltip>Check to activate Disadvantage</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<linkednumber name="stuncheckboxnumber" source="damage.box.stun.number">
+				<anchored>
+					<left>
+						<parent>physicalignore</parent>
+						<anchor>right</anchor>
+						<offset>50</offset>
+					</left>
+					<top>
+						<parent>physicalignore</parent>	
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<invisible />
+				<font>sheetnumbersmall</font>
+				<nodrag />
+				<nodrop />
+				<readonly />
+				<nokeyedit />
+				<source>
+					<name>stuncheckbox</name>
+					<op>+</op>
+				</source>
+			</linkednumber>			
+
+			<checkcounter name="stundamage">
+				<anchored>
+					<to>damageframe</to>
+					<position>righthigh</position>
+					<offset>-260,65</offset>
+					<size>
+						<height>20</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.stun.current</current>
+					<maximum>damage.stun.max</maximum>
+				</sourcefields>
+			</checkcounter>
+			
+			<stringcontrol name="stundamagelabel">
+				<anchored>
+					<to>stundamage</to>
+					<position>lefthigh</position>
+					<offset>0,3</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Stun</static>
+			</stringcontrol>
+			
+			<linkednumber name="stunModifier" source="damage.stun.modifier">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>190,65</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<source>
+					<name>damage.stun.ignore</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.stun.current</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>box.stun.number</name>
+					<op>+</op>
+				</source>
+				<script file="charsheet/scripts/charsheet_1_stunmodifier.lua" />
+				<tooltip>
+					<text>physicalmodifier</text>
+				</tooltip>
+				<readonly />
+				<nodrag />
+				<nodrop />
+				<displaysign />
+			</linkednumber>	
+			
+			<linkednumber name="allmodifier" source="damage.all.modifier">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>damageframe</to>
+					<position>insidetopleft</position>
+					<offset>270,45</offset>
+				</anchored>
+				<font>sheetnumber</font>
+				<source>
+					<name>damage.stun.modifier</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.physical.modifier</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>base.special.spellsustainedpenalty</name>
+					<op>+</op>
+				</source>
+				<tooltip>
+					<text>over all penalty</text>
+				</tooltip>
+				<readonly />
+				<nodrag />
+				<nodrop />
+				<displaysign />
+			</linkednumber>	
+		</sheetdata>
+	</windowclass>
+</root>

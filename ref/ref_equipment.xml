@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<!-- Weapon -->
+	<windowclass name="referenceweapon">
+		<frame>referencepage</frame>
+		<placement>
+			<size width="400" height="350" />
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_weapon_header</class>
+			</sub_ref_header>
+
+			<sub_ref_content name="content">
+				<class>ref_weapon_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+			
+			<resize_referencepage />
+			<close_referencepage />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ref_weapon_header">
+		<margins control="0,0,0,7" />
+		<sheetdata>
+			<link_record_header>
+				<class>referenceweapon</class>
+			</link_record_header>
+			<string_record_name name="name">
+				<anchored>
+					<top offset="5"/>
+					<left offset="40" />
+					<right offset="-25" />
+				</anchored>
+				<static />
+			</string_record_name>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="ref_weapon_stats">
+		<script>
+		
+			function onInit()
+				local sLabel = "[" .. type.getValue() .. "; " .. category.getValue();
+				if restricted.getValue() == "R" then
+					sLabel = sLabel .. "; Restricted";
+				elseif restricted.getValue() == "F" then
+					sLabel = sLabel .. "; Forbidden";
+				end 
+				sLabel = sLabel .. "]"
+				type_label.setValue(sLabel);
+				local sDamageCode = damage.getValue() .. damagetype.getValue();
+				local nDamageStrength = damagestrength.getValue();
+				if nDamageStrength == 1 then
+					sDamageCode = "(STR/2)+" ..  sDamageCode
+				end
+				damagecode.setValue(sDamageCode);
+				local sType = type.getValue();
+				if sType == "Melee Weapons" or sType == "Projectile and Throwing Weapons" then
+					ammo_label.setVisible(false);
+					ammo.setVisible(false);
+					ammotype_label.setVisible(false);
+					ammotype.setVisible(false);
+					recoil_label.setVisible(false);
+					recoil.setVisible(false);
+					firemodes_label.setVisible(false);
+					mode.setVisible(false);
+				else
+					reach_label.setVisible(false);
+					reach.setVisible(false);
+				end
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<hs name="type" />
+			<hs name="category" />
+			<hs name="restricted" />
+			<hn name="damagestrength" />
+			<hn name="damage" />
+			<hs name="damagetype" />
+
+			
+			<label_column name="type_label">
+				<anchored>
+					<top relation="relative" offset="7" />
+				</anchored>
+				<font>reference-b-large</font>
+			</label_column>
+
+			<line_column />
+			
+			<label_column name="cost_label">
+				<static textres="ref_label_cost" />
+			</label_column>
+			<number_column name="cost">
+				<readonly />
+			</number_column>
+			
+			<label_column_right>
+				<anchored to="cost" />
+				<static textres="ref_label_availability" />
+			</label_column_right>
+			<number_column_right name="availability">
+				<anchored to="cost" />
+				<readonly />
+			</number_column_right>
+			
+			<line_column />
+			
+			<label_column>
+				<static textres="ref_label_ap" />
+			</label_column>
+			<number_column name="ap">
+				<readonly />
+			</number_column>
+			<label_column_right>
+				<static textres="ref_label_damagecode" />
+				<anchored to="ap" />
+				<readonly />
+			</label_column_right>
+			<string_column_right name="damagecode">
+				<anchored to="ap" />
+				<readonly />
+			</string_column_right>
+
+			
+			<label_column name="reach_label">
+				<static textres="ref_label_reach" />
+			</label_column>
+			<number_column name="reach">
+				<readonly />
+			</number_column>
+			
+			<label_column name="ammo_label">
+				<static textres="ref_label_ammo" />
+			</label_column>
+			<number_column name="ammo">
+				<readonly />
+			</number_column>
+			<label_column_right name="ammotype_label">
+				<static textres="ref_label_ammotype" />
+				<anchored to="ammo" />
+				<readonly />
+			</label_column_right>
+			<stringc_column_right name="ammotype">
+				<anchored to="ammo" />
+				<readonly />
+			</stringc_column_right>
+
+			<label_column name="recoil_label">
+				<static textres="ref_label_recoil" />
+			</label_column>
+			<number_column name="recoil">
+				<readonly />
+			</number_column>
+			<label_column_right name="firemodes_label">
+				<static textres="ref_label_firemodes" />
+				<anchored to="recoil" />
+				<readonly />
+			</label_column_right>
+
+			<stringc_column_right name="mode">
+				<anchored to="recoil" />
+			</stringc_column_right>
+
+			
+			<line_column name="line_desc"/>
+			
+			<ft_columnh name="description">
+				<separator>line_desc</separator>
+				<readonly />
+			</ft_columnh>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Ammo -->
+	<windowclass name="referenceammo">
+		<frame>referencepage</frame>
+		<placement>
+			<size width="400" height="350" />
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_ammo_header</class>
+			</sub_ref_header>
+
+			<sub_ref_content name="content">
+				<class>ref_ammo_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+			
+			<resize_referencepage />
+			<close_referencepage />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ref_ammo_header">
+		<margins control="0,0,0,7" />
+		<sheetdata>
+			<link_record_header>
+				<class>referencearmor</class>
+			</link_record_header>
+			<string_record_name name="name">
+				<anchored>
+					<top offset="5"/>
+					<left offset="40" />
+					<right offset="-25" />
+				</anchored>
+				<static />
+			</string_record_name>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="ref_ammo_stats">
+		<script>
+			function onInit()
+				local sLabel = "[Ammo";
+				if restricted.getValue() == "R" then
+					sLabel = sLabel .. "; Restricted";
+				elseif restricted.getValue() == "F" then
+					sLabel = sLabel .. "; Forbidden";
+				end 
+				sLabel = sLabel .. "]"
+				type_label.setValue(sLabel);
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<hs name="type" />
+			<hs name="restricted" />
+
+			<label_column name="type_label">
+				<anchored>
+					<top relation="relative" offset="7" />
+				</anchored>
+				<font>reference-b-large</font>
+			</label_column>
+
+			<line_column />
+			
+			<label_column>
+				<static textres="ref_label_cost" />
+			</label_column>
+			<number_column name="cost">
+				<readonly />
+			</number_column>
+
+			
+			<label_column_right>
+				<anchored to="cost" />
+				<static textres="ref_label_availability" />
+			</label_column_right>
+			<number_column_right name="availability">
+				<anchored to="cost" />
+				<readonly />
+			</number_column_right>
+			
+			<line_column />
+			
+			<label_column>
+				<static textres="ref_label_damagemodifier" />
+			</label_column>
+			<number_column name="damagemodifier">
+				<readonly />
+			</number_column>
+			<stringc_column_right name="damagetype">
+				<anchored to="damagemodifier" />
+				<readonly />
+			</stringc_column_right>
+			
+			<label_column>
+				<static textres="ref_label_apmodifier" />
+			</label_column>
+			<number_column name="apmodifier">
+				<readonly />
+			</number_column>
+			<label_column_right>
+				<anchored to="apmodifier" />
+				<static textres="ref_label_armorused" />
+			</label_column_right>
+			<stringc_column_right name="armorused">
+				<anchored to="apmodifier" />
+				<readonly />
+			</stringc_column_right>
+
+						
+			<line_column name="line_desc" />
+			
+			<ft_columnh name="description">
+				<separator>line_desc</separator>
+				<readonly />
+			</ft_columnh>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Armor -->
+	<windowclass name="referencearmor">
+		<frame>referencepage</frame>
+		<placement>
+			<size width="400" height="350" />
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_armor_header</class>
+			</sub_ref_header>
+
+			<sub_ref_content name="content">
+				<class>ref_armor_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+			
+			<resize_referencepage />
+			<close_referencepage />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ref_armor_header">
+		<margins control="0,0,0,7" />
+		<sheetdata>
+			<link_record_header>
+				<class>referencearmor</class>
+			</link_record_header>
+			<string_record_name name="name">
+				<anchored>
+					<top offset="5"/>
+					<left offset="40" />
+					<right offset="-25" />
+				</anchored>
+				<static />
+			</string_record_name>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="ref_armor_stats">
+		<script>
+			function onInit()
+				local sLabel = "[" .. type.getValue();
+				if restricted.getValue() == "R" then
+					sLabel = sLabel .. "; Restricted";
+				elseif restricted.getValue() == "F" then
+					sLabel = sLabel .. "; Forbidden";
+				end 
+				sLabel = sLabel .. "]"
+				type_label.setValue(sLabel);
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<hs name="type" />
+			<hs name="restricted" />
+
+			<label_column name="type_label">
+				<anchored>
+					<top relation="relative" offset="7" />
+				</anchored>
+				<font>reference-b-large</font>
+			</label_column>
+
+			<line_column />
+			
+			<label_column>
+				<static textres="ref_label_cost" />
+			</label_column>
+			<number_column name="cost">
+				<readonly />
+			</number_column>
+
+			
+			<label_column_right>
+				<anchored to="cost" />
+				<static textres="ref_label_availability" />
+			</label_column_right>
+			<number_column_right name="availability">
+				<anchored to="cost" />
+				<readonly />
+			</number_column_right>
+			
+			<line_column />
+			
+			<label_column>
+				<static textres="ref_label_armorrating" />
+			</label_column>
+			<number_column name="ballisticrating">
+				<readonly />
+			</number_column>
+			<number_column_right name="impactrating">
+				<anchored to="ballisticrating" />
+				<readonly />
+			</number_column_right>
+			
+			<line_column name="line_desc" />
+			
+			<ft_columnh name="description">
+				<separator>line_desc</separator>
+				<readonly />
+			</ft_columnh>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Equipment -->
+	<windowclass name="referenceequipment">
+		<frame>referencepage</frame>
+		<placement>
+			<size width="400" height="250" />
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="name" />
+		<nodelete />
+		<sheetdata>
+			<sub_ref_header name="header">
+				<class>ref_equipment_header</class>
+			</sub_ref_header>
+
+			<sub_ref_content name="content">
+				<class>ref_equipment_stats</class>
+			</sub_ref_content>
+			<scrollbar_ref_content />
+			
+			<resize_referencepage />
+			<close_referencepage />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="ref_equipment_header">
+		<margins control="0,0,0,7" />
+		<sheetdata>
+			<link_record_header>
+				<class>referenceequipment</class>
+			</link_record_header>
+			<string_record_name name="name">
+				<anchored>
+					<top offset="5"/>
+					<left offset="40" />
+					<right offset="-25" />
+				</anchored>
+				<static />
+			</string_record_name>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="ref_equipment_stats">
+		<script>
+			function onInit()
+				local sLabel = "[" .. type.getValue() .. "; " .. category.getValue();
+				if restricted.getValue() == "R" then
+					sLabel = sLabel .. "; Restricted";
+				elseif restricted.getValue() == "F" then
+					sLabel = sLabel .. "; Forbidden";
+				end 
+				sLabel = sLabel .. "]"
+				type_label.setValue(sLabel);
+				local sDesc = "See page " .. page.getValue() .. " of " .. source.getValue() .. ".";
+				desc_label.setValue(sDesc);
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<hs name="type" />
+			<hs name="subtype" />
+			<hs name="category" />
+			<hs name="restricted" />
+			<hs name="page" />
+			<hs name="source" />
+			
+			<label_column name="type_label">
+				<anchored>
+					<top relation="relative" offset="7" />
+				</anchored>
+				<font>reference-b-large</font>
+			</label_column>
+
+			<line_column />
+			
+			<label_column name="cost_label">
+				<static textres="ref_label_cost" />
+			</label_column>
+			<number_column name="cost">
+				<readonly />
+			</number_column>
+			
+			
+			<label_column_right>
+				<anchored to="cost" />
+				<static textres="ref_label_availability" />
+			</label_column_right>
+			<number_column_right name="availability">
+				<anchored to="cost" />
+				<readonly />
+			</number_column_right>
+
+			<label_column name="rating_label">
+				<static textres="ref_label_rating" />
+			</label_column>
+			<string_column name="rating">
+				<readonly />
+			</string_column>
+			
+			<line_column name="line_desc" />
+
+			<ft_columnh name="description">
+				<separator>line_desc</separator>
+				<readonly />
+			</ft_columnh>
+
+			<label_column name="desc_label">
+				<readonly />
+			</label_column>
+
+		</sheetdata>
+	</windowclass>
+</root>

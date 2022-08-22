@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<template name="npcattributebonus">
+		<number>
+			<anchored>
+				<position>right</position>
+				<offset>5,0</offset>
+				<size>
+					<width>36</width>
+				</size>
+			</anchored>
+			<hideonvalue value="0" />
+			<frame>
+				<name>sheetbonus</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,4,2,4</offset>
+			</keyeditframe>
+			<font>sheetnumber</font>
+			<displaysign />
+			<modifiersize>mini</modifiersize>
+		</number>
+	</template>
+
+	<template name="npcattributecheckbonus">
+		<linkednumber>
+			<noreset />
+			<anchored>
+				<position>right</position>
+				<offset>50,0</offset>
+				<size>
+					<width>32</width>
+				</size>
+			</anchored>
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<readonly />
+			<font>sheetnumber</font>
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function onSourceUpdate()
+					setValue(sources[attributebonusfield[1]].getValue() + sources[attributescore[1]].getValue());
+				end
+
+				function onInit()
+					addSource(attributebonusfield[1]);
+					addSource(attributescore[1]);
+
+					super.onInit();
+				end
+				
+				function action(draginfo)
+					local rActor = ActorManager2.getActor("npc", window.getDatabaseNode());
+					ActionAttribute.performRoll(draginfo, rActor, self.target[1]);
+					return true;
+				end
+				
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+			
+				function onDoubleClick(x,y)
+					return action();
+				end
+			</script>
+		</linkednumber>
+	</template>
+
+</root>

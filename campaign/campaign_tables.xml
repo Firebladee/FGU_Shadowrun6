@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="tablelist">
+		<frame>campaignlistwithtabs</frame>
+		<softclose />
+		<placement>
+			<size width="300" height="400" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="400" />
+			<dynamic />
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<banner_campaign>
+				<icon>title_tables</icon>
+			</banner_campaign>
+
+			<frame_note_content name="contentframe">
+  				<bounds>50,35,-30,-70</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</frame_note_content>
+			<list_campaign name="list">
+				<datasource>.</datasource>
+				<class>tablesmall</class>
+				<script>
+					function onListChanged()
+						update();
+					end
+					
+					function update()
+						local bEditMode = (window.list_iedit.getValue() == 1);
+						for _,w in ipairs(getWindows()) do
+							w.idelete.setVisibility(bEditMode);
+						end
+					end
+	
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("shortcut") then
+							return CampaignDataManager.handleDrop("tables", draginfo);
+						end
+					end
+				</script>
+			</list_campaign>
+
+
+			<scrollbar_list />
+			
+			<anchor_campaign2 />
+			<button_iedit_campaign />
+			<button_iadd_campaign2>
+				<script file="campaign/scripts/table_add.lua" />
+			</button_iadd_campaign2>
+			<filter_campaign />
+
+			<categories>
+				<targetcontrol>list</targetcontrol>
+			</categories>
+			
+			<resize_campaignlistwithtabs />
+			<close_campaignlist />
+		</sheetdata>
+	</windowclass>
+
+</root>

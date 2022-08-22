@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for
+  attribution and copyright information.
+-->
+
+<root>
+	<template name="spacer">
+		<genericcontrol>
+			<anchored>
+				<left>
+					<anchor>left</anchor>
+				</left>
+				<right>
+					<anchor>right</anchor>
+				</right>
+				<top>
+					<anchor>top</anchor>
+				</top>
+				<size>
+					<height>0</height>
+				</size>
+			</anchored>
+			<disabled />
+			<script>
+				function onInit()
+					if anchor then
+						if relative then
+							setAnchor("top", anchor[1], "bottom", "relative", 0);
+						else
+							setAnchor("top", anchor[1], "bottom", "absolute", 0);
+						end
+					end
+					if height then
+						setAnchoredHeight(tonumber(height[1]) or 0);
+					end
+				end
+			</script>
+		</genericcontrol>
+	</template>
+	<template name="powerstring">
+		<stringfield>
+			<font>sheettextsmall</font>
+			<frame>
+				<name>modifier</name>
+				<offset>6,5,5,5</offset>
+			</frame>
+			<script>
+				function onInit()
+					if gmonly and not Session.IsHost then
+						setReadOnly(true);
+					end
+				end
+
+				function onEnter()
+					if Input.isShiftPressed() then
+						if window.windowlist and window.windowlist.onEnter then
+							window.windowlist.onEnter();
+						end
+						return true;
+					else
+						--[[ RETURNING FALSE DOES NOT PERFORM DEFAULT BEHAVIOR AS DOCUMENTED. ]]
+						--[[ return false; ]]
+					end
+				end
+
+				function onDrop(x, y, draginfo)
+					if draginfo.isType("dice") or draginfo.isType("number") or draginfo.isType("skill") then
+					print ("ondrop �bergabe");
+					print (draginfo.isType);
+						return window.onDrop(x, y, draginfo);
+					end
+				end
+			</script>
+		</stringfield>
+	</template>
+	<template name="powerdescfield">
+		<stringfield>
+			<frame>
+				<name>modifier</name>
+				<offset>6,5,5,6</offset>
+			</frame>
+			<nodrag />
+			<font>sheettextsmall</font>
+			<multilinespacing>15</multilinespacing>
+		</stringfield>
+	</template>
+	<template name="skilldescfieldpc">
+		<powerdescfield>
+		</powerdescfield>
+	</template>
+	<template name="tabcontrol">
+		<genericcontrol>
+			<tab mergerule="resetandadd" />
+			<frame>
+				<name>tabs</name>
+			</frame>
+			<script file="charsheet/scripts/template_tabcontrol.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="tabcontrol_h">
+		<genericcontrol>
+			<tab mergerule="resetandadd" />
+			<frame>
+				<name>tabs_h</name>
+			</frame>
+			<script file="charsheet/scripts/template_tabcontrol_h.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="checkcounter">
+		<genericcontrol>
+			<stateicons>
+				<on>indicator_checkon</on>
+				<off>indicator_checkoff</off>
+			</stateicons>
+			<spacing>10</spacing>
+			<script file="charsheet/scripts/template_checkcounter.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="checkcounterred">
+		<genericcontrol>
+			<stateicons>
+				<on>indicator_checkon_red</on>
+				<off>indicator_checkoff_red</off>
+			</stateicons>
+			<spacing>10</spacing>
+			<script file="charsheet/scripts/template_checkcounter.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="checkbox">
+		<button_iconcycler>
+			<source>
+				<type>number</type>
+			</source>
+			<parameters>
+				<icons>indicator_checkon</icons>
+				<values>on</values>
+				<defaulticon>indicator_checkoff</defaulticon>
+			</parameters>
+			<script>
+				function onInit()
+					if checked and not sourceless then
+						local srcname = getName();
+						if sourcename then
+							srcname = sourcename[1];
+						end
+
+						local nodeInitial = nil;
+						local nodeParent = window.getDatabaseNode();
+						if nodeParent then
+							nodeInitial = nodeParent.getChild(srcname);
+						end
+
+						super.onInit();
+
+						if getSourceNode() then
+							if not nodeInitial and not isReadOnly() then
+								setIndex(1);
+							end
+						else
+							setIndex(1);
+						end
+					else
+						super.onInit();
+					end
+				end
+
+				function getState()
+					return (getIndex() ~= 0);
+				end
+
+				function setState(varState)
+					if varState == nil or varState == false or varState == 0 then
+						setIndex(0);
+					else
+						setIndex(1);
+					end
+				end
+
+				function onDoubleClick(button, x, y)
+					if not isReadOnly() then
+						cycleIcon();
+					end
+					return true;
+				end
+				function onClickRelease(button, x, y)
+					return true;
+				end
+			</script>
+		</button_iconcycler>
+	</template>
+
+	<template name="string_column">
+		<basicstring>
+			<anchored>
+				<top parent="columnanchor" anchor="bottom" relation="relative" offset="7" />
+				<left offset="107" />
+				<right offset="-5" />
+			</anchored>
+			<multilinespacing>20</multilinespacing>
+		</basicstring>
+	</template>
+	<template name="number_column">
+		<basicnumber>
+			<anchored width="40" height="20">
+				<top parent="columnanchor" anchor="bottom" relation="relative" offset="7" />
+				<left offset="107" />
+			</anchored>
+		</basicnumber>
+	</template>
+
+</root>

@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+<!-- first subwindow shows all ware items -->
+	<windowclass name="charsheet_7_4_1">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- wares-->
+			<numberfield name="waresort" source="waresort">
+				<bounds>0,0,0,0</bounds>
+				<script>
+					function onValueChanged()
+						window.list_ware_1.applySort();
+					end
+				</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="wareframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_ware_1">
+				<anchored>
+					<to>wareframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.else.warelist</datasource>
+				<class>charsheet_wareitem_all</class>
+				<script file="charsheet/scripts/charsheet_list_ware.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Type</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>400,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Essenceloss</static>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+			</stringcontrol>			
+		</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows ware items in loc 1 -->	
+	<windowclass name="charsheet_7_4_7">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- wares-->
+			<numberfield name="waresort" source="waresort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_ware_7.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="wareframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_ware_7">
+				<anchored>
+					<to>wareframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.else.warelist</datasource>
+				<class>charsheet_wareitem</class>
+				<script file="charsheet/scripts/charsheet_list_ware.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>400,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Essenceloss</static>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+			</stringcontrol>			
+		</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows ware items in loc 1 -->	
+	<windowclass name="charsheet_7_4_2">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- wares-->
+			<numberfield name="waresort" source="waresort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_ware_2.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="wareframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_ware_2">
+				<anchored>
+					<to>wareframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.else.warelist</datasource>
+				<class>charsheet_wareitem</class>
+				<script file="charsheet/scripts/charsheet_list_ware.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>			
+
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>400,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Essenceloss</static>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+			</stringcontrol>			
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows ware items in loc 3 -->	
+	<windowclass name="charsheet_7_4_3">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- wares-->
+			<numberfield name="waresort" source="waresort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_ware_3.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="wareframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_ware_3">
+				<anchored>
+					<to>wareframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.else.warelist</datasource>
+				<class>charsheet_wareitem</class>
+				<script file="charsheet/scripts/charsheet_list_ware.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>			
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>400,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Essenceloss</static>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+			</stringcontrol>			
+		
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows ware items in loc 4 -->	
+	<windowclass name="charsheet_7_4_4">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- wares-->
+			<numberfield name="waresort" source="waresort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_ware_4.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="wareframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_ware_4">
+				<anchored>
+					<to>wareframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.else.warelist</datasource>
+				<class>charsheet_wareitem</class>
+				<script file="charsheet/scripts/charsheet_list_ware.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>				
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>400,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Essenceloss</static>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+			</stringcontrol>			
+
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows ware items in loc 5 -->	
+	<windowclass name="charsheet_7_4_5">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- wares-->
+			<numberfield name="waresort" source="waresort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_ware_5.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="wareframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_ware_5">
+				<anchored>
+					<to>wareframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.else.warelist</datasource>
+				<class>charsheet_wareitem</class>
+				<script file="charsheet/scripts/charsheet_list_ware.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>				
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>400,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Essenceloss</static>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+			</stringcontrol>			
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows ware items in loc 6 -->	
+	<windowclass name="charsheet_7_4_6">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- wares-->
+			<numberfield name="waresort" source="waresort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_ware_6.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="wareframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_ware_6">
+				<anchored>
+					<to>wareframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.else.warelist</datasource>
+				<class>charsheet_wareitem</class>
+				<script file="charsheet/scripts/charsheet_list_ware.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>			
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>wareframe</to>
+					<position>insidetopleft</position>
+					<offset>400,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Essenceloss</static>
+				<tooltip>
+					<text>Essenceloss</text>
+				</tooltip>
+			</stringcontrol>			
+		</sheetdata>		
+	</windowclass>	
+	
+
+</root>

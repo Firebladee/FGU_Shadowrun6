@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+<!-- first subwindow shows all note items -->
+	<windowclass name="charsheet_7_2_1">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- notes-->
+			<genericcontrol name="noteframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_note_1">
+				<anchored>
+					<to>noteframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.notelist</datasource>
+				<class>charsheet_noteitem_all</class>
+				<script file="charsheet/scripts/charsheet_list_notes.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>18,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Location</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>100,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Date</static>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>
+	
+<!-- last subwindow shows note items in loc 7 -->	
+	<windowclass name="charsheet_7_2_7">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- notes-->
+			<genericcontrol name="noteframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_note_7">
+				<anchored>
+					<to>noteframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.notelist</datasource>
+				<class>charsheet_noteitem</class>
+				<script file="charsheet/scripts/charsheet_list_notes.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Date</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Note</static>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows note items in loc 1 -->	
+	<windowclass name="charsheet_7_2_2">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- notes-->
+			<genericcontrol name="noteframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_note_2">
+				<anchored>
+					<to>noteframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.notelist</datasource>
+				<class>charsheet_noteitem</class>
+				<script file="charsheet/scripts/charsheet_list_notes.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Date</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Note</static>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows note items in loc 3 -->	
+	<windowclass name="charsheet_7_2_3">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- notes-->
+			<genericcontrol name="noteframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_note_3">
+				<anchored>
+					<to>noteframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.notelist</datasource>
+				<class>charsheet_noteitem</class>
+				<script file="charsheet/scripts/charsheet_list_notes.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Date</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Note</static>
+			</stringcontrol>
+
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows note items in loc 4 -->	
+	<windowclass name="charsheet_7_2_4">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- notes-->
+			<genericcontrol name="noteframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_note_4">
+				<anchored>
+					<to>noteframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.notelist</datasource>
+				<class>charsheet_noteitem</class>
+				<script file="charsheet/scripts/charsheet_list_notes.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Date</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Note</static>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows note items in loc 5 -->	
+	<windowclass name="charsheet_7_2_5">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- notes-->
+			<genericcontrol name="noteframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_note_5">
+				<anchored>
+					<to>noteframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.notelist</datasource>
+				<class>charsheet_noteitem</class>
+				<script file="charsheet/scripts/charsheet_list_notes.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Date</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Note</static>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows note items in loc 6 -->	
+	<windowclass name="charsheet_7_2_6">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- notes-->
+			<genericcontrol name="noteframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_note_6">
+				<anchored>
+					<to>noteframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.notelist</datasource>
+				<class>charsheet_noteitem</class>
+				<script file="charsheet/scripts/charsheet_list_notes.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Date</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>noteframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Note</static>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>	
+	
+
+</root>

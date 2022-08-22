@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for
+  attribution and copyright information.
+-->
+
+<root>
+	<!-- Weapon table -->
+	<windowclass name="reference_weapontablelistitem">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<linkfield name="link">
+				<bounds>5,2,20,20</bounds>
+			</linkfield>
+			<string_list_link name="name">
+				<bounds>30,2,120,20</bounds>
+			</string_list_link>
+
+			<genericcontrol name="reftableanchor">
+				<bounds>150,2,0,0</bounds>
+			</genericcontrol>
+			<string_reftable name="damage">
+				<center />
+			</string_reftable>
+			<string_reftable name="damagetype">
+				<anchored width="150" />
+			</string_reftable>
+			<string_reftable name="ap">
+				<center />
+			</string_reftable>
+			<string_reftable name="mode">
+				<center />
+			</string_reftable>
+			<string_reftable name="recoil">
+				<center />
+			</string_reftable>
+			<string_reftable name="availability" >
+				<center />
+			</string_reftable>
+			<string_reftable name="cost">
+				<center />
+			</string_reftable>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_weapontablegroup">
+		<script file="ref/scripts/ref_listgroup.lua" />
+		<sheetdata>
+			<anchor_column name="topanchor" />
+
+			<frame_groupdesc name="descframe" />
+			<string_groupdesc name="description" />
+			<string_groupsubdesc name="subdescription" />
+
+			<list_reftablegroupitems name="list">
+				<datasource>.weapons</datasource>
+				<class>reference_weapontablelistitem</class>
+			</list_reftablegroupitems>
+
+			<ft_reftablefooter name="footer" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_weapontablelist">
+		<frame>referencelist</frame>
+		<placement>
+			<size width="750" height="650" />
+		</placement>
+		<sizelimits>
+			<minimum width="750" height="650" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="description" />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar>
+				<field>description</field>
+			</windowtitlebar>
+
+			<genericcontrol name="headeranchor">
+				<bounds>65,45,0,0</bounds>
+			</genericcontrol>
+			<label_reftable name="headername">
+				<anchored width="120" />
+				<static textres="ref_label_listname" />
+			</label_reftable>
+			<label_reftable name="headerdamage">
+				<static textres="ref_label_listdamage" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headerdmgtype">
+				<anchored width="150" />
+				<static textres="ref_label_listtype" />
+			</label_reftable>
+			<label_reftable name="headerap">
+				<static textres="ref_label_listap" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headermode">
+				<static textres="ref_label_listmode" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headerrc">
+				<static textres="ref_label_listrc" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headeravail">
+				<static textres="ref_label_listavailability" />
+			</label_reftable>
+			<label_reftable name="headercost">
+				<static textres="ref_label_listcost" />
+				<center />
+			</label_reftable>
+
+			<windowlist name="grouplist">
+				<bounds>35,80,-40,-70</bounds>
+				<frame name="groupbox" offset="15,15,20,15" />
+				<class>reference_weapontablegroup</class>
+				<datasource>.groups</datasource>
+			</windowlist>
+			<scrollbar_reftablegroup />
+
+			<filter_reftable name="filter">
+				<bounds>125,-45,-35,20</bounds>
+			</filter_reftable>
+			<button_expand>
+				<bounds>30,-45,20,20</bounds>
+			</button_expand>
+			<button_collapse>
+				<bounds>60,-45,20,20</bounds>
+			</button_collapse>
+
+			<resize_referencelist />
+			<close_referencelist />
+		</sheetdata>
+	</windowclass>
+
+	<!-- Armor table -->
+	<windowclass name="reference_armortablelistitem">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<linkfield name="link">
+				<bounds>5,2,20,20</bounds>
+			</linkfield>
+			<string_list_link name="name">
+				<bounds>30,2,150,20</bounds>
+			</string_list_link>
+
+			<genericcontrol name="reftableanchor">
+				<bounds>180,2,0,0</bounds>
+			</genericcontrol>
+			<string_reftable name="ratings">
+				<center />
+			</string_reftable>
+			<string_reftable name="availability">
+				<center />
+			</string_reftable>
+			<string_reftable name="cost">
+				<center />
+			</string_reftable>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_armortablegroup">
+		<script file="ref/scripts/ref_listgroup.lua" />
+		<sheetdata>
+			<anchor_column name="topanchor" />
+
+			<frame_groupdesc name="descframe" />
+			<string_groupdesc name="description" />
+			<string_groupsubdesc name="subdescription" />
+
+			<list_reftablegroupitems name="list">
+				<datasource>.armor</datasource>
+				<class>reference_armortablelistitem</class>
+			</list_reftablegroupitems>
+
+			<ft_reftablefooter name="footer" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_armortablelist">
+		<frame>referencelist</frame>
+		<placement>
+			<size width="700" height="650" />
+		</placement>
+		<sizelimits>
+			<minimum width="700" height="650" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="description" />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar>
+				<field>description</field>
+			</windowtitlebar>
+
+			<genericcontrol name="headeranchor">
+				<bounds>65,45,0,0</bounds>
+			</genericcontrol>
+			<label_reftable name="headername">
+				<anchored width="150" />
+				<static textres="ref_label_listarmorname" />
+			</label_reftable>
+			<label_reftable name="headerratings">
+				<static textres="ref_label_listarmorratings" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headeravailability">
+				<static textres="ref_label_listavailability" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headercost">
+				<anchored width="150" />
+				<static textres="ref_label_listarmorcost" />
+				<center />
+			</label_reftable>
+
+			<windowlist name="grouplist">
+				<bounds>35,100,-40,-70</bounds>
+				<frame name="groupbox" offset="15,15,20,15" />
+				<class>reference_armortablegroup</class>
+				<datasource>.groups</datasource>
+			</windowlist>
+			<scrollbar_reftablegroup />
+
+			<filter_reftable name="filter">
+				<bounds>125,-45,-35,20</bounds>
+			</filter_reftable>
+			<button_expand>
+				<bounds>30,-45,20,20</bounds>
+			</button_expand>
+			<button_collapse>
+				<bounds>60,-45,20,20</bounds>
+			</button_collapse>
+
+			<resize_referencelist />
+			<close_referencelist />
+		</sheetdata>
+	</windowclass>
+
+
+	<!-- Ammo table -->
+	<windowclass name="reference_ammotablelistitem">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<linkfield name="link">
+				<bounds>5,2,20,20</bounds>
+			</linkfield>
+			<string_list_link name="name">
+				<bounds>30,2,150,20</bounds>
+			</string_list_link>
+
+			<genericcontrol name="reftableanchor">
+				<bounds>180,2,0,0</bounds>
+			</genericcontrol>
+			<string_reftable name="damagemodifier">
+				<center />
+			</string_reftable>
+			<string_reftable name="apmodifier">
+				<center />
+			</string_reftable>
+			<string_reftable name="armorused">
+				<center />
+			</string_reftable>
+			<string_reftable name="availability">
+				<center />
+			</string_reftable>
+			<string_reftable name="cost">
+				<center />
+			</string_reftable>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_ammotablegroup">
+		<script file="ref/scripts/ref_listgroup.lua" />
+		<sheetdata>
+			<anchor_column name="topanchor" />
+
+			<frame_groupdesc name="descframe" />
+			<string_groupdesc name="description" />
+			<string_groupsubdesc name="subdescription" />
+
+			<list_reftablegroupitems name="list">
+				<datasource>.ammo</datasource>
+				<class>reference_ammotablelistitem</class>
+			</list_reftablegroupitems>
+
+			<ft_reftablefooter name="footer" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_ammotablelist">
+		<frame>referencelist</frame>
+		<placement>
+			<size width="700" height="650" />
+		</placement>
+		<sizelimits>
+			<minimum width="700" height="650" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="description" />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar>
+				<field>description</field>
+			</windowtitlebar>
+
+			<genericcontrol name="headeranchor">
+				<bounds>65,45,0,0</bounds>
+			</genericcontrol>
+			<label_reftable name="headername">
+				<anchored width="150" />
+				<static textres="ref_label_listammoname" />
+			</label_reftable>
+			<label_reftable name="headerdamagemodifier">
+				<static textres="ref_label_listammodamagemodifier" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headerapmodifier">
+				<static textres="ref_label_listammoapmodifier" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headerarmorused">
+				<static textres="ref_label_listammoarmorused" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headeravailability">
+				<static textres="ref_label_listavailability" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headercost">
+				<anchored width="150" />
+				<static textres="ref_label_listammocost" />
+				<center />
+			</label_reftable>
+
+			<windowlist name="grouplist">
+				<bounds>35,100,-40,-70</bounds>
+				<frame name="groupbox" offset="15,15,20,15" />
+				<class>reference_ammotablegroup</class>
+				<datasource>.groups</datasource>
+			</windowlist>
+			<scrollbar_reftablegroup />
+
+			<filter_reftable name="filter">
+				<bounds>125,-45,-35,20</bounds>
+			</filter_reftable>
+			<button_expand>
+				<bounds>30,-45,20,20</bounds>
+			</button_expand>
+			<button_collapse>
+				<bounds>60,-45,20,20</bounds>
+			</button_collapse>
+
+			<resize_referencelist />
+			<close_referencelist />
+		</sheetdata>
+	</windowclass>
+
+	<!-- Equipment table -->
+	<windowclass name="reference_equipmenttablelistitem">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<linkfield name="link">
+				<bounds>5,2,20,20</bounds>
+			</linkfield>
+			<string_list_link name="name">
+				<bounds>30,2,140,20</bounds>
+			</string_list_link>
+
+			<genericcontrol name="reftableanchor">
+				<bounds>170,2,0,0</bounds>
+			</genericcontrol>
+			<string_reftable name="cost">
+				<anchored width="80" />
+				<center />
+			</string_reftable>
+			<string_reftable name="avail">
+				<center />
+			</string_reftable>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_equipmenttablegroup">
+		<script file="ref/scripts/ref_listgroup.lua" />
+		<sheetdata>
+			<anchor_column name="topanchor" />
+
+			<frame_groupdesc name="descframe" />
+			<string_groupdesc name="description" />
+			<string_groupsubdesc name="subdescription" />
+
+			<list_reftablegroupitems name="list">
+				<datasource>.equipment</datasource>
+				<class>reference_equipmenttablelistitem</class>
+			</list_reftablegroupitems>
+
+			<ft_reftablefooter name="footer" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_equipmenttablelist">
+		<frame>referencelist</frame>
+		<placement>
+			<size width="350" height="650" />
+		</placement>
+		<sizelimits>
+			<minimum width="350" height="650" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="description" />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar>
+				<field>description</field>
+			</windowtitlebar>
+
+			<genericcontrol name="headeranchor">
+				<bounds>65,45,0,0</bounds>
+			</genericcontrol>
+			<label_reftable name="headername">
+				<anchored width="140" />
+				<static textres="ref_label_listname" />
+			</label_reftable>
+			<label_reftable name="headercost">
+				<anchored width="80" />
+				<static textres="ref_label_listcost" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headeravailability">
+				<static textres="ref_label_listavailability" />
+				<center />
+			</label_reftable>
+
+			<windowlist name="grouplist">
+				<bounds>35,80,-40,-70</bounds>
+				<frame name="groupbox" offset="15,15,20,15" />
+				<class>reference_equipmenttablegroup</class>
+				<datasource>.groups</datasource>
+			</windowlist>
+			<scrollbar_reftablegroup />
+
+			<filter_reftable name="filter">
+				<bounds>125,-45,-35,20</bounds>
+			</filter_reftable>
+			<button_expand>
+				<bounds>30,-45,20,20</bounds>
+			</button_expand>
+			<button_collapse>
+				<bounds>60,-45,20,20</bounds>
+			</button_collapse>
+
+			<resize_referencelist />
+			<close_referencelist />
+		</sheetdata>
+	</windowclass>
+
+	<!-- Commlink table -->
+	<windowclass name="reference_commlinktablelistitem">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<linkfield name="link">
+				<bounds>5,2,20,20</bounds>
+			</linkfield>
+			<string_list_link name="name">
+				<bounds>30,2,100,20</bounds>
+			</string_list_link>
+
+			<genericcontrol name="reftableanchor">
+				<bounds>130,2,0,0</bounds>
+			</genericcontrol>
+			<string_reftable name="response">
+				<center />
+			</string_reftable>
+			<string_reftable name="signal">
+				<center />
+			</string_reftable>
+			<string_reftable name="cost">
+				<center />
+			</string_reftable>
+			<string_reftable name="avail">
+				<center />
+			</string_reftable>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_commlinktablegroup">
+		<script file="ref/scripts/ref_listgroup.lua" />
+		<sheetdata>
+			<anchor_column name="topanchor" />
+
+			<frame_groupdesc name="descframe" />
+			<string_groupdesc name="description" />
+			<string_groupsubdesc name="subdescription" />
+
+			<list_reftablegroupitems name="list">
+				<datasource>.commlinks</datasource>
+				<class>reference_commlinktablelistitem</class>
+			</list_reftablegroupitems>
+
+			<ft_reftablefooter name="footer" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_commlinktablelist">
+		<frame>referencelist</frame>
+		<placement>
+			<size width="400" height="650" />
+		</placement>
+		<sizelimits>
+			<minimum width="350" height="650" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="description" />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar>
+				<field>description</field>
+			</windowtitlebar>
+
+			<genericcontrol name="headeranchor">
+				<bounds>65,45,0,0</bounds>
+			</genericcontrol>
+			<label_reftable name="headername">
+				<anchored width="100" />
+				<static textres="ref_label_listname" />
+			</label_reftable>
+			<label_reftable name="headerresponse">
+				<static textres="ref_label_listresponse" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headersignal">
+				<static textres="ref_label_listsignal" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headercost">
+				<static textres="ref_label_listcost" />
+				<center />
+			</label_reftable>
+
+			<windowlist name="grouplist">
+				<bounds>35,80,-40,-70</bounds>
+				<frame name="groupbox" offset="15,15,20,15" />
+				<class>reference_commlinktablegroup</class>
+				<datasource>.groups</datasource>
+			</windowlist>
+			<scrollbar_reftablegroup />
+
+			<filter_reftable name="filter">
+				<bounds>125,-45,-35,20</bounds>
+			</filter_reftable>
+			<button_expand>
+				<bounds>30,-45,20,20</bounds>
+			</button_expand>
+			<button_collapse>
+				<bounds>60,-45,20,20</bounds>
+			</button_collapse>
+
+			<resize_referencelist />
+			<close_referencelist />
+		</sheetdata>
+	</windowclass>
+
+	<!-- OperatingSystem table -->
+	<windowclass name="reference_operatingsystemtablelistitem">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<linkfield name="link">
+				<bounds>5,2,20,20</bounds>
+			</linkfield>
+			<string_list_link name="name">
+				<bounds>30,2,100,20</bounds>
+			</string_list_link>
+
+			<genericcontrol name="reftableanchor">
+				<bounds>130,2,0,0</bounds>
+			</genericcontrol>
+			<string_reftable name="firewall">
+				<center />
+			</string_reftable>
+			<string_reftable name="system">
+				<center />
+			</string_reftable>
+			<string_reftable name="cost">
+				<center />
+			</string_reftable>
+			<string_reftable name="avail">
+				<center />
+			</string_reftable>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_operatingsystemtablegroup">
+		<script file="ref/scripts/ref_listgroup.lua" />
+		<sheetdata>
+			<anchor_column name="topanchor" />
+
+			<frame_groupdesc name="descframe" />
+			<string_groupdesc name="description" />
+			<string_groupsubdesc name="subdescription" />
+
+			<list_reftablegroupitems name="list">
+				<datasource>.operatingsystems</datasource>
+				<class>reference_operatingsystemtablelistitem</class>
+			</list_reftablegroupitems>
+
+			<ft_reftablefooter name="footer" />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_operatingsystemtablelist">
+		<frame>referencelist</frame>
+		<placement>
+			<size width="400" height="650" />
+		</placement>
+		<sizelimits>
+			<minimum width="350" height="650" />
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip field="description" />
+		<nodelete />
+		<sheetdata>
+			<windowtitlebar>
+				<field>description</field>
+			</windowtitlebar>
+
+			<genericcontrol name="headeranchor">
+				<bounds>65,45,0,0</bounds>
+			</genericcontrol>
+			<label_reftable name="headername">
+				<anchored width="100" />
+				<static textres="ref_label_listname" />
+			</label_reftable>
+			<label_reftable name="headerfirewall">
+				<static textres="ref_label_listfirewall" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headersystem">
+				<static textres="ref_label_listsystem" />
+				<center />
+			</label_reftable>
+			<label_reftable name="headercost">
+				<static textres="ref_label_listcost" />
+				<center />
+			</label_reftable>
+
+			<windowlist name="grouplist">
+				<bounds>35,80,-40,-70</bounds>
+				<frame name="groupbox" offset="15,15,20,15" />
+				<class>reference_operatingsystemtablegroup</class>
+				<datasource>.groups</datasource>
+			</windowlist>
+			<scrollbar_reftablegroup />
+
+			<filter_reftable name="filter">
+				<bounds>125,-45,-35,20</bounds>
+			</filter_reftable>
+			<button_expand>
+				<bounds>30,-45,20,20</bounds>
+			</button_expand>
+			<button_collapse>
+				<bounds>60,-45,20,20</bounds>
+			</button_collapse>
+
+			<resize_referencelist />
+			<close_referencelist />
+		</sheetdata>
+	</windowclass>
+</root>

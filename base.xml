@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<root version="3.0" release="2" logo="logo.png">
+	<announcement text="Shadowrun 6 v0.1 (1979-01-01) ruleset for Fantasy Grounds." font="emotefont" icon="portrait_gm_token" />
+
+	<!-- Attributes -->
+	<description>
+		<text>Shadowrun 6 Ruleset for Fantasy Grounds 3</text>
+		<author>Fireblade</author>
+	</description>
+
+ 	<!-- Components -->
+	<importruleset source="CoreRPG" />
+
+	<!-- Tabletop settings -->
+	<includefile source="graphics/graphics_icons.xml" />
+	<includefile source="gameelements.xml" />
+
+	<!-- GRAPHICS -->
+	<includefile source="graphics/graphics_fonts.xml" />
+ 	<includefile source="graphics/graphics_frames.xml" />
+	<includefile source="graphics/graphics_misc.xml" />
+
+	<includefile source="graphics/graphics_portraitsets.xml" />
+	
+	<!--  Templates -->
+	<includefile source="common/template_common.xml" />
+	<includefile source="charsheet/template_charsheet.xml" />
+	<includefile source="common/template_buttons.xml" />
+	<includefile source="common/template_windows.xml" />
+	<script name="LibraryDataSR4" file="scripts/data_library_sr4.lua" />
+
+	<!-- Party sheet -->
+
+	<!-- Strings -->
+	<includefile source="strings/strings_sr4.xml" />
+
+	<!-- Desktop -->
+	<script name="OptionsManager2" file="scripts/manager_options2.lua" />
+	
+	<!-- Utility -->
+
+	<!-- Reference -->
+	<includefile source="ref/template_ref.xml" />
+	<includefile source="ref/ref_active_skills.xml" />
+	<includefile source="ref/ref_equipment.xml" />
+	<includefile source="ref/ref_equipment_lists.xml" />
+	<includefile source="ref/ref_spells.xml" />
+	<includefile source="ref/ref_spell_lists.xml" />
+	<includefile source="ref/ref_programs.xml" />
+	<includefile source="ref/ref_program_lists.xml" />
+
+	<!-- Campaign Records -->
+	<includefile source="campaign/campaign_chars.xml" />
+<!-- something 
+ 	<includefile source="campaign/campaign_story.xml" />
+	<includefile source="campaign/campaign_npcs.xml" />
+	<includefile source="campaign/campaign_encounters.xml" />
+	<includefile source="campaign/campaign_images.xml" />
+	<includefile source="campaign/campaign_notes.xml" />
+	<includefile source="campaign/campaign_items.xml" />
+	<includefile source="campaign/campaign_parcels.xml" />
+	<includefile source="campaign/campaign_tables.xml" />
+	<includefile source="campaign/record_table.xml" />
+ something -->
+
+	<!-- CHARACTER SHEET -->
+	<includefile source="charsheet/charsheet_0_toplevel.xml" />
+	<includefile source="charsheet/charsheet_1_main.xml" />
+	<includefile source="charsheet/charsheet_2_skills.xml" />
+	<includefile source="charsheet/charsheet_3_combat.xml" />
+	<includefile source="charsheet/charsheet_4_magic.xml" />
+	<includefile source="charsheet/charsheet_5_matrix.xml" />
+	<includefile source="charsheet/charsheet_6_pilot.xml" />
+	<includefile source="charsheet/charsheet_7_else.xml" />
+	<script name="CharSheetCommon" file="charsheet/scripts/charsheet_common.lua" />
+
+	<!-- NPC -->
+	<includefile source="campaign/template_npc.xml" />
+	<includefile source="campaign/template_campaign.xml" />
+	<includefile source="campaign/record_npc.xml" />
+	<includefile source="campaign/record_item.xml" />
+	<includefile source="campaign/npc_main.xml" />
+	<includefile source="campaign/npc_items.xml" />
+	<includefile source="campaign/npc_critter.xml" />
+	<includefile source="campaign/npc_notes.xml" />
+	
+	<!-- COMBAT TRACKER -->
+	<includefile source="ct/template_ct.xml" />
+	<includefile source="ct/ct_host.xml" />
+	<includefile source="ct/ct_client.xml" />
+
+	<!-- High-level scripts -->
+	<script name="DataCommon" file="scripts/data_common.lua" />
+	<script name="DataLocalization" file="scripts/localization.lua" />
+	<script name="ItemManager2" file="scripts/manager_item2.lua" />
+
+<!-- something 
+	<script name="ActionsManager" file="scripts/manager_actions.lua" />
+ something -->
+	<script name="GameSystem" file="scripts/manager_gamesystem.lua" />
+	<script name="ActorManager2" file="scripts/manager_actor2.lua" />
+	<script name="ActionsManager2" file="scripts/manager_actions2.lua" />
+	
+	<script name="DiceManager" file="scripts/manager_action_dice.lua" />
+	<script name="NodeManager" file="scripts/manager_node.lua" />	
+	<script name="RulesManager" file="scripts/manager_rules.lua" />
+	<script name="ActionAttribute" file="scripts/manager_action_attribute.lua" />
+	<script name="ActionSpecialAttribute" file="scripts/manager_action_specialattribute.lua" />
+	<script name="Resist" file="scripts/manager_resist.lua" />
+	<script name="ActionAttack" file="scripts/manager_action_attack.lua" />
+	<script name="ActionDamage" file="scripts/manager_action_damage.lua" />
+	<script name="ActionHeal" file="scripts/manager_action_heal.lua" />
+	<script name="ActionInit" file="scripts/manager_action_init.lua" />
+	<script name="ActionSkill" file="scripts/manager_action_skill.lua" />
+	<script name="CombatManager" file="scripts/manager_combat.lua" />
+	<script name="CombatManager2" file="scripts/manager_combat2.lua" />
+
+<!--	<script name="ModifierStack" file="scripts/manager_modifierstack.lua" />-->
+
+	  <die name="dr6">
+      <icon>d6ricon</icon>
+    </die>
+    <die name="dhg6">
+      <icon>d6hgicon</icon>
+    </die>
+    <die name="ddg6">
+      <icon>d6dgicon</icon>
+    </die>
+     <die name="dg6">
+      <icon>d6gicon</icon>
+    </die>
+	
+</root>

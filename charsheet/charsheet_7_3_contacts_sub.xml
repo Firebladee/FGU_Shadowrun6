@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+<!-- first subwindow shows all contact items -->
+	<windowclass name="charsheet_7_3_1">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- contacts-->
+			<numberfield name="contactsort" source="contactsort">
+				<bounds>0,0,0,0</bounds>
+				<script>
+					function onValueChanged()
+						window.list_contact_1.applySort();
+					end
+				</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="contactframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_contact_1">
+				<anchored>
+					<to>contactframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.contactlist</datasource>
+				<class>charsheet_contactitem_all</class>
+				<script file="charsheet/scripts/charsheet_list_contact.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Location</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>CR</static>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>LR</static>
+				<tooltip>
+					<text>loyality rating</text>
+				</tooltip>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows contact items in loc 1 -->	
+	<windowclass name="charsheet_7_3_7">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- contacts-->
+			<numberfield name="contactsort" source="contactsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_contact_7.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="contactframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_contact_7">
+				<anchored>
+					<to>contactframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.contactlist</datasource>
+				<class>charsheet_contactitem</class>
+				<script file="charsheet/scripts/charsheet_list_contact.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>CR</static>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>LR</static>
+				<tooltip>
+					<text>loyality rating</text>
+				</tooltip>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows contact items in loc 1 -->	
+	<windowclass name="charsheet_7_3_2">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- contacts-->
+			<numberfield name="contactsort" source="contactsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_contact_2.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="contactframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_contact_2">
+				<anchored>
+					<to>contactframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.contactlist</datasource>
+				<class>charsheet_contactitem</class>
+				<script file="charsheet/scripts/charsheet_list_contact.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>			
+
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>CR</static>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>LR</static>
+				<tooltip>
+					<text>loyalty rating</text>
+				</tooltip>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows contact items in loc 3 -->	
+	<windowclass name="charsheet_7_3_3">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- contacts-->
+			<numberfield name="contactsort" source="contactsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_contact_3.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="contactframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_contact_3">
+				<anchored>
+					<to>contactframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.contactlist</datasource>
+				<class>charsheet_contactitem</class>
+				<script file="charsheet/scripts/charsheet_list_contact.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>			
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>CR</static>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>LR</static>
+				<tooltip>
+					<text>loyality rating</text>
+				</tooltip>
+			</stringcontrol>
+
+		
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows contact items in loc 4 -->	
+	<windowclass name="charsheet_7_3_4">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- contacts-->
+			<numberfield name="contactsort" source="contactsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_contact_4.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="contactframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_contact_4">
+				<anchored>
+					<to>contactframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.contactlist</datasource>
+				<class>charsheet_contactitem</class>
+				<script file="charsheet/scripts/charsheet_list_contact.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>				
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>CR</static>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>LR</static>
+				<tooltip>
+					<text>loyality rating</text>
+				</tooltip>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows contact items in loc 5 -->	
+	<windowclass name="charsheet_7_3_5">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- contacts-->
+			<numberfield name="contactsort" source="contactsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_contact_5.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="contactframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_contact_5">
+				<anchored>
+					<to>contactframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.contactlist</datasource>
+				<class>charsheet_contactitem</class>
+				<script file="charsheet/scripts/charsheet_list_contact.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>				
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>CR</static>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>LR</static>
+				<tooltip>
+					<text>loyality rating</text>
+				</tooltip>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows contact items in loc 6 -->	
+	<windowclass name="charsheet_7_3_6">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- contacts-->
+			<numberfield name="contactsort" source="contactsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_contact_6.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="contactframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_contact_6">
+				<anchored>
+					<to>contactframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.contactlist</datasource>
+				<class>charsheet_contactitem</class>
+				<script file="charsheet/scripts/charsheet_list_contact.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>			
+			</stringcontrol>			
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>CR</static>
+				<tooltip>
+					<text>connection rating</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>contactframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>LR</static>
+				<tooltip>
+					<text>loyality rating</text>
+				</tooltip>
+			</stringcontrol>
+		
+		</sheetdata>		
+	</windowclass>	
+	
+
+</root>

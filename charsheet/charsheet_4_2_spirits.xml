@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+
+
+	<windowclass name="charsheet_4_2_spirits">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="skillframemagic">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframemagic</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == "" then
+							return true;
+						elseif w2.skillsort.getValue() == "" then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Magic" then
+							return true;
+						end
+						return false;
+
+					end
+
+
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+
+	<!-- spiritits-->
+
+			<genericcontrol name="spiritframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_spirits">
+				<anchored>
+					<to>spiritframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.spiritlist</datasource>
+				<class>charsheet_spirititem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.spiritsort.getValue() == "" then
+							return true;
+						elseif w2.spiritsort.getValue() == "" then
+							return false;
+						end
+						return w1.spiritsort.getValue() > w2.spiritsort.getValue();
+					end
+					local bActiveLock = false
+					function onActiveSpiritChanged(sChildNodeName)
+						if not bActiveLock then
+							for k, v in ipairs(getWindows()) do
+								if (v.getDatabaseNode().getName() ~= sChildNodeName) then
+									v.getDatabaseNode().getChild("color").setValue("ffffffff");
+									v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+									v.spiritname.setFrame("dailyframe");
+									v.spiritname.setColor("ffffffff");
+									v.spiritisactive.setState(false);
+								else
+									if v.spiritisactive.getState() == true then
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+										v.spiritname.setFrame("dailyframe");
+										v.spiritname.setColor("ffffffff");
+										v.spiritisactive.setState(false);
+										v.windowlist.window.getDatabaseNode().getChild("node.activespirit").setValue("none");
+									else
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("atwillframe");
+										v.spiritname.setFrame("atwillframe");
+										v.spiritname.setColor("ffffffff");
+										v.spiritisactive.setState(true);
+										local spiritnode = v.getDatabaseNode().getNodeName();
+										v.windowlist.window.getDatabaseNode().getChild("node.activespirit").setValue(spiritnode);
+										local f = v.windowlist.window.getDatabaseNode().getChild("node.activespirit").getValue();
+									end
+								end
+							end
+
+							bActiveLock = false;
+						end
+					end
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- Ammunitionitem-->
+
+	<windowclass name="charsheet_spirititem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_spirititem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatespiritdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<powerstring name="spiritsort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+
+			<powerstring name="spiritname">
+				<anchored>
+					<left>
+						<parent>spiritsort</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-240</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; spirit &#187;</empty>
+				<script>
+					function updateColor()
+						window.spiritname.setColor(window.getDatabaseNode().getChild("color").getValue());
+						window.spiritname.setFrame(window.getDatabaseNode().getChild("frame").getValue(), 8, 0, 8, 1);
+					end
+
+					function onInit()
+						window.updateColorframe();
+						updateColor();
+						local b = window.windowlist.window.getDatabaseNode().getChild("node.activespirit").getValue();
+						if b == "" then
+							window.windowlist.window.getDatabaseNode().getChild("node.activespirit").setValue("none");
+						end
+					end
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveSpiritChanged(a);
+					end
+				</script>
+			</powerstring>
+
+			<stringfield name="color">
+				<anchored>
+					<to>spiritname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("ffffffff");
+						end
+					end
+				</script>
+			</stringfield>
+			<stringfield name="frame">
+				<anchored>
+					<to>spiritname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("dailyframe");
+						end
+					end
+				</script>
+			</stringfield>
+
+			<skillscore name="spiritforce" source="spirit.force">
+				<anchored>
+					<to>spiritname</to>
+					<position>right</position>
+					<offset>20,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Force of the Spirit</text>
+				</tooltip>
+			</skillscore>
+
+			<skillscore name="spiritservices" source="spirit.services">
+				<anchored>
+					<to>spiritforce</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Number of Services owned</text>
+				</tooltip>
+			</skillscore>
+
+			<button_stringcycler name="spiritrelation">
+				<anchored>
+					<to>spiritservices</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>64</width>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>summoned|bound</labels>
+					<values>1|2</values>
+				</parameters>
+				<tooltip>
+					<text>Monitor if the Spirit is summoned or bound</text>
+				</tooltip>
+			</button_stringcycler>
+
+			<checkbox name="spiritisactive" source="spiritisactive">
+				<anchored>
+					<left>
+						<parent>spiritrelation</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<top>
+						<parent>spiritrelation</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveSpiritChanged(a);
+					end
+				</script>
+			</checkbox>
+
+			<checkbox name="spiritsummoning" source="spiritsummoning">
+				<anchored>
+					<left>
+						<parent>spiritname</parent>
+						<anchor>left</anchor>
+						<offset>50</offset>
+					</left>
+					<top>
+						<parent>spiritname</parent>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+						if window.getDatabaseNode().getChild("spiritsummoning") then
+							if window.getDatabaseNode().getChild("spiritsummoning").getValue() == 1 then
+								window.getDatabaseNode().getChild("spiritbinding").setValue(0)
+								window.getDatabaseNode().getChild("spiritinvocation").setValue(0)
+							end
+						end
+					end
+				</script>
+
+			</checkbox>
+
+			<stringcontrol name="label_spiritsummoning">
+				<anchored>
+					<to>spiritsummoning</to>
+					<position>lefthigh</position>
+					<offset>5,-2</offset>
+					<size>
+						<width>70</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Summoning</static>
+			</stringcontrol>
+
+			<checkbox name="spiritbinding" source="spiritbinding">
+				<anchored>
+					<left>
+						<parent>spiritsummoning</parent>
+						<anchor>right</anchor>
+						<offset>80</offset>
+					</left>
+					<top>
+						<parent>spiritsummoning</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+						if window.getDatabaseNode().getChild("spiritbinding") then
+							if window.getDatabaseNode().getChild("spiritbinding").getValue() == 1 then
+								window.getDatabaseNode().getChild("spiritsummoning").setValue(0)
+							end
+						end
+					end
+				</script>
+			</checkbox>
+
+			<stringcontrol name="label_spiritbinding">
+				<anchored>
+					<to>spiritbinding</to>
+					<position>lefthigh</position>
+					<offset>5,-2</offset>
+					<size>
+						<width>50</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Binding</static>
+			</stringcontrol>
+
+			<checkbox name="spiritinvocation" source="spiritinvocation">
+				<anchored>
+					<left>
+						<parent>spiritbinding</parent>
+						<anchor>right</anchor>
+						<offset>90</offset>
+					</left>
+					<top>
+						<parent>spiritbinding</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+						if window.getDatabaseNode().getChild("spiritinvocation") then
+							if window.getDatabaseNode().getChild("spiritinvocation").getValue() == 1 then
+								window.getDatabaseNode().getChild("spiritsummoning").setValue(0)
+							end
+						end
+					end
+
+				</script>
+			</checkbox>
+
+			<stringcontrol name="label_spiritinvocation">
+				<anchored>
+					<to>spiritinvocation</to>
+					<position>lefthigh</position>
+					<offset>5,-2</offset>
+					<size>
+						<width>70</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Invocation</static>
+			</stringcontrol>
+
+
+			<skilldescfieldpc name="spiritdescription">
+				<anchored>
+					<top>
+						<parent>spiritname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>20</offset>
+					</top>
+					<left>
+						<parent>spiritname</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+
+		</sheetdata>
+	</windowclass>
+</root>

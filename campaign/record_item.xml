@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="item" merge="join">
+		<sheetdata>
+			<subwindow_record name="main">
+				<script file="campaign/scripts/item_drop.lua" />
+			</subwindow_record>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="item_main">
+		<margins control="0,0,0,2" />
+		<script file="campaign/scripts/item_main.lua" />
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			
+			<label_column name="nonid_name_label">
+				<static textres="item_label_unidentified" />
+			</label_column>
+			<string_columnh name="nonid_name" />
+			
+			<label_column name="nonidentified_label">
+				<static textres="item_label_unidentifiednotes" />
+			</label_column>
+			<string_columnh name="nonidentified" />
+			
+			<line_column name="divider" />
+			
+			<label_column name="type_label">
+				<static textres="item_label_type" />
+			</label_column>
+			<string_columnh name="type">
+				<nohide />
+				<gmeditonly />
+				<script>
+					function onValueChanged()
+						window.update();
+					end
+				</script>
+			</string_columnh>
+
+			<label_column name="subtype_label">
+				<static textres="item_label_subtype" />
+			</label_column>
+			<string_columnh name="subtype">
+				<gmeditonly />
+			</string_columnh>
+
+			<label_column name="category_label">
+				<static textres="item_label_category" />
+			</label_column>
+			<string_columnh name="category">
+				<gmeditonly />
+			</string_columnh>
+			
+			<line_column name="divider2" />
+
+			<label_column name="cost_label">
+				<static textres="item_label_cost" />
+			</label_column>
+			<number_columnh name="cost">
+				<gmeditonly />
+			</number_columnh>
+
+			<label_column name="availability_label">
+				<static textres="item_label_availability" />
+			</label_column>
+			<number_columnh name="availability">
+				<gmeditonly />
+			</number_columnh>
+
+			<label_column name="restricted_label">
+				<static textres="item_label_restricted" />
+			</label_column>
+			<string_columnh name="restricted">
+				<gmeditonly />
+			</string_columnh>
+			
+			<line_column name="divider3" />
+
+			<label_column name="damage_label">
+				<static textres="item_label_damage" />
+			</label_column>
+			<number_columnh name="damage">
+				<gmeditonly />
+			</number_columnh>
+			
+			<label_column name="damagetype_label">
+				<static textres="item_label_dmgtype" />
+			</label_column>
+			<string_columnh name="damagetype">
+				<gmeditonly />
+			</string_columnh>
+			
+			<label_column name="reach_label">
+				<static textres="item_label_reach" />
+			</label_column>
+			<number_columnh name="reach">
+				<gmeditonly />
+			</number_columnh>
+			
+			<label_column name="damagestrength_label">
+				<static textres="item_label_damagestrength" />
+			</label_column>
+			<number_columnh name="damagestrength">
+				<gmeditonly />
+			</number_columnh>
+			
+			<label_column name="ap_label">
+				<static textres="item_label_ap" />
+			</label_column>
+			<number_columnh name="ap">
+				<displaysign />
+			</number_columnh>
+			
+			<label_column name="recoil_label">
+				<static textres="item_label_recoil" />
+			</label_column>
+			<number_columnh name="recoil">
+				<displaysign />
+			</number_columnh>
+			
+			<label_column name="ammo_label">
+				<static textres="item_label_ammo" />
+			</label_column>
+			<number_columnh name="ammo">
+			</number_columnh>
+			
+			<label_column name="ammotype_label">
+				<static textres="item_label_ammotype" />
+			</label_column>
+			<string_columnh name="ammotype">
+			</string_columnh>
+			
+			<label_column name="mode_label">
+				<static textres="item_label_mode" />
+			</label_column>
+			<string_columnh name="mode">
+			</string_columnh>
+			
+			<label_column name="ballisticrating_label">
+				<static textres="item_label_ballisticrating" />
+			</label_column>
+			<number_columnh name="ballisticrating">
+			</number_columnh>
+			
+			<label_column name="impactrating_label">
+				<static textres="item_label_impactrating" />
+			</label_column>
+			<number_columnh name="impactrating">
+			</number_columnh>
+
+			<label_column name="properties_label">
+				<static textres="item_label_properties" />
+			</label_column>
+			<string_columnh name="properties">
+				<gmeditonly />
+			</string_columnh>
+			
+			<line_column name="divider4" />
+
+			<ft_columnh name="description">
+				<gmeditonly />
+			</ft_columnh>
+		</sheetdata>
+	</windowclass>
+</root>

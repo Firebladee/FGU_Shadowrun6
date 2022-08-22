@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+  <includefile source="charsheet/charsheet_6_1_vehicles.xml" />
+  <includefile source="charsheet/charsheet_6_2_drones.xml" />
+
+<!-- Ammunitionitem-->
+
+	<windowclass name="charsheet_6_pilot">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<script>
+			function onInit()
+				combatinfo.setVisible(true);
+			end
+		</script>
+		<sheetdata>
+
+			<subwindow name="vehicles">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_6_1_vehicles</class>
+			</subwindow>
+			<subwindow name="drones">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_6_2_drones</class>
+			</subwindow>
+			<subwindow name="combatinfo">
+				<bounds>83,523,-1,-22</bounds>
+				<class>combatinfo</class>
+			</subwindow>
+
+		<tabcontrol name="tabs">
+			<bounds>-88,130,25,164</bounds>
+			<tab>
+				<icon>vtab_label_vehicles</icon>
+				<subwindow>vehicles</subwindow>
+			</tab>
+			<tab>
+				<icon>vtab_label_drones</icon>
+				<subwindow>drones</subwindow>
+			</tab>
+			<activate>1</activate>
+		</tabcontrol>
+
+			<genericcontrol name="attributeframe">
+				<bounds>83,53,540,70</bounds>
+					<frame>
+						<name>sheetgroup</name>
+					</frame>
+			</genericcontrol>
+
+			<attributecheckbonus name="bodycheck" source="base.attribute.body.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>15,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Body</text>
+				</description>
+				<target>Body</target>
+				<attributebonusfield>base.attribute.body.bonus</attributebonusfield>
+				<attributescore>base.attribute.body.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>bodycheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>B</static>
+			</attributelabel>
+
+			<attributecheckbonus name="agilitycheck" source="base.attribute.agility.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>60,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Agility</text>
+				</description>
+				<target>Agility</target>
+				<attributebonusfield>base.attribute.agility.bonus</attributebonusfield>
+				<attributescore>base.attribute.agility.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>agilitycheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>A</static>
+			</attributelabel>
+
+			<attributecheckbonus name="reactioncheck" source="base.attribute.reaction.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>105,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Reaction</text>
+				</description>
+				<target>Reaction</target>
+				<attributebonusfield>base.attribute.reaction.bonus</attributebonusfield>
+				<attributescore>base.attribute.reaction.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>reactioncheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>R</static>
+			</attributelabel>
+
+			<attributecheckbonus name="strengthcheck" source="base.attribute.strength.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>150,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Strength</text>
+				</description>
+				<target>Strength</target>
+				<attributebonusfield>base.attribute.strength.bonus</attributebonusfield>
+				<attributescore>base.attribute.strength.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>strengthcheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>S</static>
+			</attributelabel>
+
+			<attributecheckbonus name="willpowercheck" source="base.attribute.willpower.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>195,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Willpower</text>
+				</description>
+				<target>Willpower</target>
+				<attributebonusfield>base.attribute.willpower.bonus</attributebonusfield>
+				<attributescore>base.attribute.willpower.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>willpowercheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>W</static>
+			</attributelabel>
+
+			<attributecheckbonus name="logiccheck" source="base.attribute.logic.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>240,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Logic</text>
+				</description>
+				<target>Logic</target>
+				<attributebonusfield>base.attribute.logic.bonus</attributebonusfield>
+				<attributescore>base.attribute.logic.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>logiccheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>L</static>
+			</attributelabel>
+
+			<attributecheckbonus name="intuitioncheck" source="base.attribute.intuition.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>285,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Intuitution</text>
+				</description>
+				<target>Intuition</target>
+				<attributebonusfield>base.attribute.intuition.bonus</attributebonusfield>
+				<attributescore>base.attribute.intuition.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>intuitioncheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>I</static>
+			</attributelabel>
+
+			<attributecheckbonus name="charismacheck" source="base.attribute.charisma.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>330,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Charisma</text>
+				</description>
+				<target>Charisma</target>
+				<attributebonusfield>base.attribute.charisma.bonus</attributebonusfield>
+				<attributescore>base.attribute.charisma.base</attributescore>
+				</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>charismacheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>C</static>
+			</attributelabel>
+
+			<stringcontrol name="checkmodelabel">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>380,10</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<static></static>
+			</stringcontrol>
+			<buttongroup_radiov name="checkmode">
+				<anchored>
+					<left>
+						<parent>checkmodelabel</parent>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</left>
+					<top>
+						 <parent>checkmodelabel</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<parameters>
+					<optionwidth>0</optionwidth>
+					<optionheight>15</optionheight>
+					<labels>norm.|dflt.|double</labels>
+					<values>normal|default|double</values>
+					<defaultindex>1</defaultindex>
+				</parameters>
+				<script>
+					function onValueChanged()
+					end
+				</script>
+			</buttongroup_radiov>
+			<checkbox name="edgecheckbox" source="damage.box.edge.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>445,47</offset>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+			</checkbox>
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>440,15</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Use</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>438,30</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Edge</static>
+			</stringcontrol>
+
+	<!-- Combat Related Information-->
+			</sheetdata>
+	</windowclass>
+</root>

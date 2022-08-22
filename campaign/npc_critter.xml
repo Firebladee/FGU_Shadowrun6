@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="npc_critter">
+		<margins control="0,0,0,2" />
+		<script>
+			function onInit()
+				update();
+			end
+			
+			function update()
+				local bReadOnly = WindowManager.getReadOnlyState(getDatabaseNode());
+			end
+		</script>
+		<sheetdata>
+			<!-- OVERVIEW-->
+			<genericcontrol name="attributeframe">
+				<bounds>83,10,-35,55</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<npcattributecheckbonus name="bodycheck" source="base.attribute.body.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>13,23</offset>
+				</anchored>
+				<target>Body</target>
+				<attributebonusfield>base.attribute.body.bonus</attributebonusfield>
+				<attributescore>base.attribute.body.base</attributescore>
+				<script>
+					function onValueChanged()
+						calulateArmorPenalty();
+					end
+					function onInit()
+						super.onInit();
+						calulateArmorPenalty();
+					end
+				
+					function calulateArmorPenalty()
+						local node = window.getDatabaseNode().getChild("armor.encumbrance.hiddenballisticvalue");
+						if node then
+							local a = window.getDatabaseNode().getChild("armor.encumbrance.hiddenballisticvalue").getValue();
+							local b = window.getDatabaseNode().getChild("armor.encumbrance.hiddenimpactvalue").getValue();
+							local c = window.getDatabaseNode().getChild("base.attribute.body.check").getValue();
+							local d = math.ceil((math.max(a,b)-(c+c)) /2)
+							local e = -d
+							if d > 0 then
+								window.getDatabaseNode().getChild("armor.hiddenpenalty").setValue(e);
+							else
+								window.getDatabaseNode().getChild("armor.hiddenpenalty").setValue(0);
+							end
+						end
+					end
+				</script>
+			</npcattributecheckbonus>	
+			<attributelabel>
+				<anchored>
+					<to>bodycheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>B</static>
+			</attributelabel>
+			<npcattributecheckbonus name="agilitycheck" source="base.attribute.agility.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>53,23</offset>
+				</anchored>
+				<target>Agility</target>
+				<attributebonusfield>base.attribute.agility.bonus</attributebonusfield>
+				<attributescore>base.attribute.agility.base</attributescore>
+			</npcattributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>agilitycheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>A</static>
+			</attributelabel>
+			<npcattributecheckbonus name="reactioncheck" source="base.attribute.reaction.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>93,23</offset>
+				</anchored>
+				<target>Reaction</target>
+				<attributebonusfield>base.attribute.reaction.bonus</attributebonusfield>
+				<attributescore>base.attribute.reaction.base</attributescore>
+			</npcattributecheckbonus>			
+			<attributelabel>
+				<anchored>
+					<to>reactioncheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>R</static>
+			</attributelabel>
+			<npcattributecheckbonus name="strengthcheck" source="base.attribute.strength.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>133,23</offset>
+				</anchored>
+				<target>Strength</target>
+				<attributebonusfield>base.attribute.strength.bonus</attributebonusfield>
+				<attributescore>base.attribute.strength.base</attributescore>
+			</npcattributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>strengthcheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>S</static>
+			</attributelabel>
+			<npcattributecheckbonus name="charismacheck" source="base.attribute.charisma.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>173,23</offset>
+				</anchored>
+				<target>Charisma</target>
+				<attributebonusfield>base.attribute.charisma.bonus</attributebonusfield>
+				<attributescore>base.attribute.charisma.base</attributescore>
+			</npcattributecheckbonus>			
+			<attributelabel>
+				<anchored>
+					<to>charismacheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>C</static>
+			</attributelabel>
+			<npcattributecheckbonus name="intuitioncheck" source="base.attribute.intuition.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>213,23</offset>
+				</anchored>
+				<target>Intuition</target>
+				<attributebonusfield>base.attribute.intuition.bonus</attributebonusfield>
+				<attributescore>base.attribute.intuition.base</attributescore>
+			</npcattributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>intuitioncheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>I</static>
+			</attributelabel>
+			<npcattributecheckbonus name="logiccheck" source="base.attribute.logic.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>253,23</offset>
+				</anchored>
+				<target>Logic</target>
+				<attributebonusfield>base.attribute.logic.bonus</attributebonusfield>
+				<attributescore>base.attribute.logic.base</attributescore>
+			</npcattributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>logiccheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>L</static>
+			</attributelabel>
+			<npcattributecheckbonus name="willpowercheck" source="base.attribute.willpower.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>293,23</offset>
+				</anchored>
+				<target>Willpower</target>
+				<attributebonusfield>base.attribute.willpower.bonus</attributebonusfield>
+				<attributescore>base.attribute.willpower.base</attributescore>
+			</npcattributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>willpowercheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>W</static>
+			</attributelabel>
+			<genericcontrol name="skillsframe">
+				<bounds>83,70,-35,75</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<string_labeled name="skills">
+ 				<anchored>
+					<to>skillsframe</to>
+					<position>insidetopleft</position>
+					<offset>10,23</offset>
+					<sizelimits>
+						<maximum>
+							<width>310</width>
+							<height>40</height>
+						</maximum>
+					</sizelimits>
+				</anchored>
+ 				<empty text="Skills" />				
+				<height>40</height>
+				<multilinespacing >16</multilinespacing>
+				<label>Skills</label>
+				<tabtarget>
+					<next>metatype</next>
+				</tabtarget>
+				<tooltip>
+					<text>Comma separated list of skills</text>
+				</tooltip>
+				<script file="campaign/scripts/npc_skill.lua" />
+			</string_labeled>
+			<genericcontrol name="powersframe">
+				<bounds>83,150,-35,175</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<string_labeled name="powers">
+ 				<anchored>
+					<to>powersframe</to>
+					<position>insidetopleft</position>
+					<offset>10,23</offset>
+					<sizelimits>
+						<maximum>
+							<width>310</width>
+							<height>160</height>
+						</maximum>
+					</sizelimits>
+				</anchored>
+ 				<empty text="Powers" />
+ 				<height>160</height>
+				<multilinespacing >16</multilinespacing>
+				<label>Powers</label>
+				<tabtarget>
+					<next>metatype</next>
+				</tabtarget>
+				<tooltip>
+					<text>Comma separated list of weapons</text>
+				</tooltip>
+				<script file="campaign/scripts/npc_powers.lua" />
+			</string_labeled>
+
+			<genericcontrol name="weaknessesframe">
+				<bounds>83,335,-35,105</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<string_labeled name="weaknesses">
+ 				<anchored>
+					<to>weaknessesframe</to>
+					<position>insidetopleft</position>
+					<offset>10,23</offset>
+					<sizelimits>
+						<maximum>
+							<width>310</width>
+							<height>160</height>
+						</maximum>
+					</sizelimits>
+				</anchored>
+ 				<empty text="Weaknesses" />
+ 				<height>160</height>
+				<multilinespacing >16</multilinespacing>
+				<label>Weaknesses</label>
+				<tabtarget>
+					<next>metatype</next>
+				</tabtarget>
+				<tooltip>
+					<text>Comma separated list of weaknesses</text>
+				</tooltip>
+				<script file="campaign/scripts/npc_weaknesses.lua" />
+			</string_labeled>
+			
+		</sheetdata>
+	</windowclass>
+</root>

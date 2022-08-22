@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<template name="button_image_folder">
+		<button_text_sm>
+			<anchored position="insidetopleft" offset="54,7" width="50" />
+			<state textres="image_button_folder" />
+			<gmvisibleonly />
+			<script>
+				function onButtonPress()
+					Interface.openCampaignFolder("images");
+				end
+			</script>
+		</button_text_sm>
+	</template>
+	<template name="button_encounter_list">
+		<button_text_sm>
+			<anchored position="insidetopleft" offset="54,7" width="80" />
+			<state textres="npc_button_battle" />
+			<gmvisibleonly />
+			<script>
+				function onButtonPress()
+					Interface.openWindow("battlelist", "battle");
+				end
+			</script>
+		</button_text_sm>
+	</template>
+	<template name="button_parcel_list">
+		<button_text_sm>
+			<anchored position="insidetopleft" offset="54,7" width="50" />
+			<state textres="item_button_parcel" />
+			<script>
+				function onButtonPress()
+					Interface.openWindow("parcellist", "treasureparcels");
+				end
+			</script>
+		</button_text_sm>
+	</template>
+	
+	<template name="button_record_locked">
+		<buttoncontrol name="locked">
+			<anchored to="rightanchor" width="20" height="20">
+				<top anchor="below" relation="relative" offset="-6" />
+				<right anchor="left" relation="relative" offset="-40" />
+			</anchored>
+			<state icon="padlock_open" tooltipres="tooltip_unlock" />
+			<state icon="padlock_closed" tooltipres="tooltip_lock" />
+			<script>
+				local bUpdating = false;
+				local nodeSrc = nil;
+				
+				function onInit()
+					local node = window.getDatabaseNode();
+					if node and not node.isReadOnly() then
+						nodeSrc = node.createChild(getName(), "number");
+						if nodeSrc.getValue() ~= 0 then
+							setValue(1);
+						end
+						nodeSrc.onUpdate = onUpdate;
+					else
+						setVisible(false);
+					end
+				end
+					
+				function onUpdate()
+					if nodeSrc and not bUpdating then
+						bUpdating = true;
+						if nodeSrc.getValue() == 0 then
+							setValue(0);
+						else
+							setValue(1);
+						end
+						bUpdating = false;
+					end
+				end
+				
+				function onValueChanged()
+					if nodeSrc and not bUpdating then
+						bUpdating = true;
+						if getValue() == 0 then
+							nodeSrc.setValue(0);
+						else
+							nodeSrc.setValue(1);
+						end
+						bUpdating = false;
+					end
+					
+					if window.onLockChanged then
+						window.onLockChanged();
+					end
+					if window.parentcontrol and window.parentcontrol.window.onLockChanged then
+						window.parentcontrol.window.onLockChanged();
+					end
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+
+	<template name="list_campaign" merge="merge">
+		<windowlist merge="merge">
+			<bounds>60,40,-30,-75</bounds>
+			<footer>footer_narrow</footer>
+			<allowcreate />
+			<allowdelete />
+			<useallmodules />
+			<sortby><control>name</control></sortby>
+			<filter control="filter" />
+			<filteron control="name" />
+			<script file="campaign/scripts/campaign_list.lua" />
+		</windowlist>
+	</template>
+	<template name="list_campaign_nofilter">
+		<windowlist>
+			<bounds>60,40,-30,-65</bounds>
+			<footer>footer_narrow</footer>
+			<allowcreate />
+			<allowdelete />
+			<useallmodules />
+			<sortby><control>name</control></sortby>
+			<script file="campaign/scripts/campaign_list.lua" />
+		</windowlist>
+	</template>
+
+	
+</root>

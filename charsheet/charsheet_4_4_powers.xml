@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+
+
+	<windowclass name="charsheet_4_4_powers">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="skillframemagic">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframemagic</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == "" then
+							return true;
+						elseif w2.skillsort.getValue() == "" then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Magic" then
+							return true;
+						end
+						return false;
+					end
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+
+	<!-- powerits-->
+
+			<genericcontrol name="powerframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_powers">
+				<anchored>
+					<to>powerframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.powerslist</datasource>
+				<class>charsheet_poweritem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.powerssort.getValue() == "" then
+							return true;
+						elseif w2.powerssort.getValue() == "" then
+							return false;
+						end
+						return w1.powerssort.getValue() > w2.powerssort.getValue();
+					end
+
+					function onInit()
+						addMagicModifier();
+					end
+					function addMagicModifier()
+						local modi = 0
+						for k, v in ipairs(getWindows()) do
+							local poweritem = v.getDatabaseNode().getChild("poweractivebox").getValue();
+							if poweritem == 1 then
+								modi = modi + v.getDatabaseNode().getChild("powerforce").getValue();
+
+							end
+						end
+						modi=-modi
+						window.getDatabaseNode().createChild("base.attribute.magic.use").setValue(modi);
+					end
+
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- Ammunitionitem-->
+
+	<windowclass name="charsheet_poweritem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_poweritem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatepowerdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<powerstring name="powerssort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+
+			<powerstring name="powername">
+				<anchored>
+					<position>insidetopleft</position>
+					<offset>90,0</offset>
+					<size>
+						<width>250</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; Power (Adept oder Initiation Power &#187;</empty>
+				<script>
+					function updateStatus()
+						window.powername.setColor("ffffffff");
+						window.powername.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+
+					function onInit()
+						updateStatus();
+					end
+				</script>
+			</powerstring>
+
+			<essencemodifierscore name="powerforce" source="powerforce">
+				<anchored>
+					<to>powername</to>
+					<position>right</position>
+					<offset>20,0</offset>
+					<size>
+						<width>32</width>
+						<heigth>20</heigth>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Force of the Power (Magic Cost)</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						window.windowlist.addMagicModifier();
+					end
+				</script>
+			</essencemodifierscore>
+			<checkbox name="poweractivebox" source="poweractivebox">
+				<anchored>
+					<left>
+						<parent>powerforce</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>powerforce</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Power is active (Deactivate in Case of magical Background Radiation to match your Magic Power)</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						window.windowlist.addMagicModifier();
+					end
+				</script>
+
+			</checkbox>
+
+			<skilldescfieldpc name="powerdescription">
+				<anchored>
+					<top>
+						<parent>powername</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>powername</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+
+		</sheetdata>
+	</windowclass>
+</root>

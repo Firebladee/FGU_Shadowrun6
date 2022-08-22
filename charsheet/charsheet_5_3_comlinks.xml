@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet_5_3_comlinks">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+
+			<subwindow name="programs">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_5_1_c_programs</class>
+			</subwindow>
+			<subwindow name="agents">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_5_2_c_agents</class>
+			</subwindow>
+			<subwindow name="identifications">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_7_x_c_identification</class>
+			</subwindow>
+
+			<tabcontrol_h name="tabscomlinks">
+				<bounds>386,123,231,25</bounds>
+				<tab>
+					<text>Programs</text>
+					<subwindow>programs</subwindow>
+				</tab>
+				<tab>
+					<text>Agents</text>
+					<subwindow>agents</subwindow>
+				</tab>
+				<tab>
+					<text>IDs</text>
+					<subwindow>identifications</subwindow>
+				</tab>
+				<script file="charsheet/scripts/charsheet_htabs_comlinks.lua" />
+				<activate>1</activate>
+			</tabcontrol_h>
+
+	<!-- comlinks-->
+			<genericcontrol name="comlinkframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_comlinks">
+				<anchored>
+					<to>comlinkframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.comlinks</datasource>
+				<class>charsheet_comlinkitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.comlinkname.getValue() == "" then
+							return true;
+						elseif w2.comlinkname.getValue() == "" then
+							return false;
+						end
+						return w1.comlinkname.getValue() > w2.comlinkname.getValue();
+					end
+
+					local bActiveLock = false
+					function onActiveComlinkChanged(sChildNodeName)
+						if not bActiveLock then
+							for k, v in ipairs(getWindows()) do
+								if (v.getDatabaseNode().getName() ~= sChildNodeName) then
+									v.getDatabaseNode().getChild("color").setValue("ffffffff");
+									v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+									v.comlinkname.setFrame("dailyframe");
+									v.comlinkname.setColor("ffffffff");
+									v.comlinkisactive.setState(false);
+								else
+									if v.comlinkisactive.getState() == true then
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+										v.comlinkname.setFrame("dailyframe");
+										v.comlinkname.setColor("ffffffff");
+										v.comlinkisactive.setState(false);
+										v.windowlist.window.getDatabaseNode().getChild("node.activecomlink").setValue("none");
+									else
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("atwillframe");
+										v.comlinkname.setFrame("atwillframe");
+										v.comlinkname.setColor("ffffffff");
+										v.comlinkisactive.setState(true);
+										local comlinknode = v.getDatabaseNode().getNodeName();
+										v.windowlist.window.getDatabaseNode().getChild("node.activecomlink").setValue(comlinknode);
+										local f = v.windowlist.window.getDatabaseNode().getChild("node.activecomlink").getValue();
+									end
+								end
+							end
+
+							bActiveLock = false;
+						end
+					end
+
+					function onDrop(x, y, draginfo)
+						local sDragType = draginfo.getType();
+						if sDragType ~= "shortcut" then
+							return false;
+						end
+						local sDropClass, sDropNodeName = draginfo.getShortcutData();
+						if not StringManager.contains({ "referenceequipment"}, sDropClass) then
+							return false;
+						end
+						local nodeSource = draginfo.getDatabaseNode();
+						local sCategory = DB.getValue(nodeSource, "category", "");
+						if sCategory ~= "Commlink" then
+							return false;
+						end
+
+						local sSourceName = DB.getValue(nodeSource, "name", "");
+						local nSourceSignal = DB.getValue(nodeSource, "signal", 0);
+						local nSourceResponse = DB.getValue(nodeSource, "response", 0);
+
+						local w = createWindow();
+						w.comlinkname.setValue(sSourceName);
+						w.comlinkresponse.setValue(nSourceResponse);
+						w.comlinksignal.setValue(nSourceSignal);
+						w.comlinkresponse.setReadOnly(true);
+						w.comlinksignal.setReadOnly(true);
+
+						return true;
+					end
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- comlinkmodifieritem-->
+	<windowclass name="charsheet_comlinkmodifieritem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_comlinkmodifieritem.lua" />
+
+		<sheetdata>
+			<numberfield name="order">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</numberfield>
+
+			<powerstring name="comlinkmodifiername">
+				<anchored>
+					<left>
+						<parent>order</parent>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-190</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<script>
+					function onDrop(x,y,draginfo)
+						local vmodifiername = draginfo.getDescription();
+						local vmodifier = draginfo.getNumberData();
+						local vmodifiernode = draginfo.getStringData()
+						local vtype = draginfo.getCustomData();
+						local a = draginfo.getCustomData();
+						if a == "program" then
+							window.windowlist.window.modifierProgramDrop(vmodifiername, vmodifier, vmodifiernode);
+						elseif a == "agent" then
+							window.windowlist.window.modifierAgentDrop(vmodifiername, vmodifier, vmodifiernode);
+						elseif a == "id" then
+
+						end
+					end
+				</script>
+				<empty>&#171; Programs, Agents (Drag and Drop) &#187;</empty>
+			</powerstring>
+
+			<stringfield name="comlinkmodifiernode" source="comlinkmodifiernode">
+			<bounds>0,0,1,1</bounds>
+			<invisible />
+			</stringfield>
+
+
+			<skillscore name="comlinkmodifiercount" source="comlinkmodifiercount">
+				<anchored>
+					<left>
+						<parent>comlinkmodifiername</parent>
+						<anchor>right</anchor>
+						<offset>60</offset>
+					</left>
+					<top>
+						<parent>comlinkmodifiername</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Number of Programs loaded</text>
+				</tooltip>
+			</skillscore>
+			<attributelabel>
+				<anchored>
+					<to>comlinkmodifiercount</to>
+					<offset>-15</offset>
+				</anchored>
+				<static>Count</static>
+				<tooltip>
+					<text>Count Programs loaded</text>
+				</tooltip>
+			</attributelabel>
+
+
+			<checkbox name="comlinkmodifierinusebox">
+				<anchored>
+					<left>
+						<parent>comlinkmodifiername</parent>
+						<anchor>right</anchor>
+						<offset>110</offset>
+					</left>
+					<top>
+						<parent>comlinkmodifiername</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+						window.windowlist.addComlinkProgramCount();
+					end
+				</script>
+				<tooltip>
+					<text>Program or Agent running, counting against System and Response</text>
+				</tooltip>
+			</checkbox>
+
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_comlinkitem">
+		<sizelimits>
+			<minimum>
+				<height>72</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_comlinkitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatecomlinkdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<button_toggle name="activatecomlinkmodifier">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_sword</icon>
+				<script>
+					function onInit()
+						super.onInit();
+
+						local nodeComlinkmModifierList = NodeManager.createChild(window.getDatabaseNode(), "comlinkmodifier");
+
+						if nodeComlinkmModifierList then
+							nodeComlinkmModifierList.onChildAdded = updateVisibility;
+							nodeComlinkmModifierList.onChildUpdate = updateVisibility;
+							updateVisibility(nodeComlinkmModifierList);
+						else
+							setVisible(false);
+						end
+					end
+
+					function updateVisibility(nodeComlinkmModifierList)
+						if nodeComlinkmModifierList.getChildCount() > 0 then
+							if not isVisible() then
+								setValue(true);
+							end
+							setVisible(true);
+						else
+							setVisible(false);
+							if getValue() then
+								setValue(false);
+							end
+						end
+					end
+
+					function onValueChanged()
+						window.toggleComlinkModifier();
+					end
+				</script>
+			</button_toggle>
+
+
+			<powerstring name="comlinkname">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-320</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; Comlink Name &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+					<type>id</type>
+				</droptypes>
+				<script>
+					function updateColor()
+						window.comlinkname.setColor(window.getDatabaseNode().getChild("color").getValue());
+						window.comlinkname.setFrame(window.getDatabaseNode().getChild("frame").getValue(), 8, 0, 8, 1);
+					end
+
+					function onInit()
+						window.updateColorframe();
+						updateColor();
+						local b = window.windowlist.window.getDatabaseNode().getChild("node.activecomlink").getValue();
+						if b == "" then
+							window.windowlist.window.getDatabaseNode().getChild("node.activecomlink").setValue("none");
+						end
+					end
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveComlinkChanged(a);
+					end
+
+					function onDrop(x,y,draginfo)
+						local vmodifiername = draginfo.getDescription();
+						local vmodifier = draginfo.getNumberData();
+						local vmodifiernode = draginfo.getStringData()
+						local vtype = draginfo.getCustomData();
+						local a = draginfo.getCustomData();
+						if a == "program" then
+							window.modifierProgramDrop(vmodifiername, vmodifier, vmodifiernode);
+						elseif a == "agent" then
+							window.modifierAgentDrop(vmodifiername, vmodifier, vmodifiernode);
+						elseif a == "id" then
+							window.modifierIdDrop(vmodifiername, vmodifier, vmodifiernode);
+						end
+					end
+				</script>
+			</powerstring>
+			<stringfield name="color">
+				<anchored>
+					<to>comlinkname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("ffffffff");
+						end
+					end
+				</script>
+			</stringfield>
+			<stringfield name="frame">
+				<anchored>
+					<to>comlinkname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("dailyframe");
+						end
+					end
+				</script>
+			</stringfield>
+
+
+			<skillscore name="comlinkprogramsrunning" source="comlinkprogramsrunning">
+				<anchored>
+					<to>comlinkname</to>
+					<position>right</position>
+					<offset>20,0</offset>
+					<size>
+						<width>28</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Programs running on the Comlink at the Moment</text>
+				</tooltip>
+			</skillscore>
+
+
+			<skillscore name="comlinkresponsepenalty" source="comlinkresponsepenalty">
+				<anchored>
+					<to>comlinkprogramsrunning</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>28</width>
+					</size>
+				</anchored>
+				<readonly />
+				<displaysign />
+				<tooltip>
+					<text>Response penalty through running Programs</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						window.updateResponse();
+					end
+				</script>
+
+			</skillscore>
+
+			<button_iconcycler name="comlinkstatus" source="comlinkstatus">
+				<anchored>
+					<left>
+						<parent>comlinkresponsepenalty</parent>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</left>
+					<top>
+						<parent>comlinkresponsepenalty</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>44</width>
+						<height>24</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_one|button_toggle_single|button_toggle_all|button_toggle_single</icons>
+					<values>Active|Passive|Hidden</values>
+					<tooltips>Active|Passive|Hidden</tooltips>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Off</defaulttooltip>
+					<defaultvalue>Off</defaultvalue>
+				</parameters>
+			</button_iconcycler>
+			<skillscore name="comlinkresponse" source="comlinkresponse">
+				<anchored>
+					<to>comlinkprogramsrunning</to>
+					<position>right</position>
+					<offset>82,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Response Rating of the Comlink</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						window.updateResponse();
+					end
+				</script>
+			</skillscore>
+			<skillscore name="comlinksystem" source="comlinksystem">
+				<anchored>
+					<to>comlinkresponse</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>System Rating of the Comlink</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						window.list_comlinkmodifier.addComlinkProgramCount();
+					end
+				</script>
+			</skillscore>
+			<skillscore name="comlinkfirewall" source="comlinkfirewall">
+				<anchored>
+					<to>comlinksystem</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Firewall Rating installed on the Comlink</text>
+				</tooltip>
+			</skillscore>
+			<skillscore name="comlinksignal" source="comlinksignal">
+				<anchored>
+					<to>comlinkfirewall</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Signal strength of the Comlink</text>
+				</tooltip>
+			</skillscore>
+
+
+			<powerstring name="comlinkid" source="comlinkid">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-160</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>28</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; ID installed on the Comlink (Hardcoded) &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+					<type>id</type>
+				</droptypes>
+				<script>
+					function onDrop(x,y,draginfo)
+						local vmodifiername = draginfo.getDescription();
+						local vmodifier = draginfo.getNumberData();
+						local vmodifiernode = draginfo.getStringData()
+						local vtype = draginfo.getCustomData();
+						local a = draginfo.getCustomData();
+						if a == "program" then
+							window.modifierProgramDrop(vmodifiername, vmodifier, vmodifiernode);
+						elseif a == "agent" then
+							window.modifierAgentDrop(vmodifiername, vmodifier, vmodifiernode);
+						elseif a == "id" then
+							window.modifierIdDrop(vmodifiername, vmodifier, vmodifiernode);
+						end
+					end
+				</script>
+			</powerstring>
+			<skillscore name="comlinkidrating" source="comlinkidrating">
+				<anchored>
+					<left>
+						<parent>comlinkid</parent>
+						<anchor>right</anchor>
+						<offset>27</offset>
+					</left>
+					<top>
+						<parent>comlinkid</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<displaysign />
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Rating of the ID</text>
+				</tooltip>
+			</skillscore>
+
+			<checkbox name="comlinkisactive" source="comlinkisactive">
+				<anchored>
+					<left>
+						<parent>comlinkidrating</parent>
+						<anchor>right</anchor>
+						<offset>30</offset>
+					</left>
+					<top>
+						<parent>comlinkidrating</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveComlinkChanged(a);
+					end
+					function onValueChanged()
+						window.updateResponse();
+					end
+				</script>
+			</checkbox>
+
+			<powerstring name="comlinkfakeid" source="comlinkfakeid">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-160</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>52</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; Fake ID or Spoof (softcoded) &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+					<type>id</type>
+				</droptypes>
+				<script>
+					function onDrop(x,y,draginfo)
+						local vmodifiername = draginfo.getDescription();
+						local vmodifier = draginfo.getNumberData();
+						local vmodifiernode = draginfo.getStringData()
+						local vtype = draginfo.getCustomData();
+						local a = draginfo.getCustomData();
+						if a == "program" then
+							window.modifierProgramDrop(vmodifiername, vmodifier, vmodifiernode);
+						elseif a == "agent" then
+							window.modifierAgentDrop(vmodifiername, vmodifier, vmodifiernode);
+						elseif a == "id" then
+							window.modifierIdDrop(vmodifiername, vmodifier, vmodifiernode);
+						end
+					end
+				</script>
+			</powerstring>
+			<skillscore name="comlinkfakeidsuccesses" source="comlinkfakeidsuccesses">
+				<anchored>
+					<left>
+						<parent>comlinkfakeid</parent>
+						<anchor>right</anchor>
+						<offset>27</offset>
+					</left>
+					<top>
+						<parent>comlinkfakeid</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<displaysign />
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Successes of the Spoof</text>
+				</tooltip>
+			</skillscore>
+
+
+			<windowlist name="list_comlinkmodifier">
+				<anchored>
+					<top>
+						<parent>comlinkfakeid</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>comlinkname</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-80</offset>
+					</right>
+				</anchored>
+				<skipempty />
+				<noscroll />
+				<datasource>.comlinkmodifier</datasource>
+				<class>charsheet_comlinkmodifieritem</class>
+				<menutext>comlinkmodifier</menutext>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.order.getValue() &gt; w2.order.getValue();
+					end
+
+					function reset()
+						for k,v in pairs(getWindows()) do
+							v.getDatabaseNode().delete();
+						end
+					end
+
+					function getOrder(node)
+						if NodeManager.get(node, "order", 0) == 0 then
+							local ordertable = {};
+							for k,v in pairs(getDatabaseNode().getChildren()) do
+								ordertable[NodeManager.get(v, "order", 0)] = true;
+							end
+
+							local i = 1;
+							while ordertable[i] do
+								i = i + 1;
+							end
+
+							NodeManager.set(node, "order", "number", i);
+						end
+					end
+
+					function onInit()
+						addComlinkProgramCount();
+					end
+
+					function addComlinkProgramCount()
+						local programcount = 0
+						for k, v in ipairs(getWindows()) do
+						local programrunning = v.getDatabaseNode().getChild("comlinkmodifierinusebox").getValue();
+							if programrunning == 1 then
+								programcount = programcount + v.getDatabaseNode().getChild("comlinkmodifiercount").getValue();
+							end
+						end
+						window.getDatabaseNode().getChild("comlinkprogramsrunning").setValue(programcount);
+						local response = window.getDatabaseNode().getChild("comlinkresponse").getValue();
+						if programcount >= response then
+							local penalty = -math.floor((programcount+1) / response)
+							window.getDatabaseNode().getChild("comlinkresponsepenalty").setValue(penalty);
+						else
+							window.getDatabaseNode().getChild("comlinkresponsepenalty").setValue(0);
+						end
+
+					end
+
+
+
+				</script>
+			</windowlist>
+
+			<skilldescfieldpc name="comlinkdescription">
+				<anchored>
+					<top>
+						<parent>comlinkfakeid</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>comlinkname</parent>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-180</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+		</sheetdata>
+	</windowclass>
+
+
+	<windowclass name="charsheet_5_1_c_programs">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<genericcontrol name="programframe">
+				<bounds>83,148,515,125</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_programs">
+				<anchored>
+					<to>programframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.programs</datasource>
+				<class>charsheet_programitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.programsort.getValue() == "" then
+							return true;
+						elseif w2.programsort.getValue() == "" then
+							return false;
+						end
+						return w1.programsort.getValue() > w2.programsort.getValue();
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+	<windowclass name="charsheet_5_2_c_agents">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<genericcontrol name="agentframe">
+				<bounds>83,148,515,125</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_agents">
+				<anchored>
+					<to>agentframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.agents</datasource>
+				<class>charsheet_agentitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.agentsort.getValue() == "" then
+							return true;
+						elseif w2.agentsort.getValue() == "" then
+							return false;
+						end
+						return w1.agentsort.getValue() > w2.agentsort.getValue();
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_7_x_c_identification">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<genericcontrol name="idframe">
+				<bounds>83,148,515,125</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_ids">
+				<anchored>
+					<to>idframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.ids</datasource>
+				<class>charsheet_iditem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.idsort.getValue() == "" then
+							return true;
+						elseif w2.idsort.getValue() == "" then
+							return false;
+						end
+						return w1.idsort.getValue() > w2.idsort.getValue();
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+</root>

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet">
+		<placement>
+			<size width="685" height="715" />
+			<position x="410" y="90" />
+		</placement>
+		<sizelimits>
+			<minimum width="90" height="715" />
+			<maximum width="685" height="715" />
+			<dynamic />
+		</sizelimits>
+		<minimize />
+		<nodelete />
+		<playercontrol />
+		<script>
+			function onClose()
+				setSize( 685, 715 );
+				if Session.IsHost then
+					camfield.setValue(0);
+				end
+			end
+			function toggleWindow()
+				if cso.isVisible(true)  then
+					cso.setVisible(false);
+					csc.setVisible(true);
+					setSize( 107, 715 );
+					minimizebutton.setVisible(false);
+					maximizebutton.setVisible(true);
+					closebutton.setIcons("button_closecs_hover", "button_closecs", "button_closecs");
+
+				elseif csc.isVisible(true) then
+					cso.setVisible(true);
+					csc.setVisible(false);
+					setSize( 685, 715 );
+					minimizebutton.setVisible(true);
+					maximizebutton.setVisible(false);
+					closebutton.setIcons("button_closecs", "button_closecs_down", "button_closecs_hover");
+				else
+					cso.setVisible(true);
+					csc.setVisible(false);
+					setSize( 685, 715 );
+					minimizebutton.setVisible(true);
+					maximizebutton.setVisible(false);
+					closebutton.setIcons("button_closecs", "button_closecs_down", "button_closecs_hover");
+				end
+			end
+
+		</script>
+		<sheetdata>
+			<subwindow name="cso">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_open</class>
+				<activate />
+			</subwindow>
+			<subwindow name="csc">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_closed</class>
+			</subwindow>
+
+			<numberfield name="camfield">
+				<bounds>20,75,25,25</bounds>
+				<script>
+					function updateCam()
+						if getValue() == 1 then
+							setValue(0);
+						else
+							setValue(1);
+
+						end
+					end
+					function onValueChanged()
+						if getValue() == 1 then
+							window.cam1.setVisible(true);
+							window.cam2.setVisible(false);
+						else
+							window.cam2.setVisible(true);
+							window.cam1.setVisible(false);
+						end
+					end
+				</script>
+				<invisible />
+			</numberfield>
+			<genericcontrol name="cam1">
+				<bounds>20,28,42,29</bounds>
+				<icon>icon_camera</icon>
+				<script>
+					function onInit()
+						if window.camfield.getValue() == 0 then
+							setVisible(true);
+						end
+					end
+
+					function onDoubleClick(x,y)
+						if Session.IsHost then
+							window.camfield.updateCam();
+						end
+					end
+				</script>
+				<invisible />
+			</genericcontrol>
+			<genericcontrol name="cam2">
+				<bounds>20,28,42,29</bounds>
+				<icon>icon_camera_active</icon>
+				<script>
+					function onInit()
+						if window.camfield.getValue() == 1 then
+							setVisible(true);
+						end
+					end
+
+					function onDoubleClick(x,y)
+						if Session.IsHost then
+							window.camfield.updateCam();
+						end
+					end
+				</script>
+				<invisible />
+			</genericcontrol>
+			<buttoncontrol name="closebutton">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>165</offset>
+					</top>
+					<right>
+						<anchor>left</anchor>
+						<offset>60</offset>
+					</right>
+					<size>
+						<height>50</height>
+						<width>50</width>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_closecs</normal>
+					<pressed>button_closecs_down</pressed>
+					<hover>button_closecs_hover</hover>
+				</icon>
+				<script>
+					function DoubleClick()
+						window.close();
+					end
+
+					function onButtonPress()
+						window.toggleWindow()
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="minimizebutton">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>292</offset>
+					</top>
+					<right>
+						<anchor>left</anchor>
+						<offset>710</offset>
+					</right>
+					<size>
+						<height>100</height>
+						<width>70</width>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_charsheet_minimize</normal>
+					<pressed>button_charsheet_minimize</pressed>
+					<hover>button_charsheet_minimize</hover>
+				</icon>
+				<script>
+					function DoubleClick()
+						window.close();
+					end
+
+					function onButtonPress()
+						window.toggleWindow()
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="maximizebutton">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>292</offset>
+					</top>
+					<right>
+						<anchor>left</anchor>
+						<offset>117</offset>
+					</right>
+					<size>
+						<height>100</height>
+						<width>70</width>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_charsheet_minimize</normal>
+					<pressed>button_charsheet_minimize</pressed>
+					<hover>button_charsheet_minimize</hover>
+				</icon>
+				<script>
+					function onInit()
+						setVisible(false);
+					end
+					function DoubleClick()
+						window.close();
+					end
+
+					function onButtonPress()
+						window.toggleWindow()
+					end
+				</script>
+			</buttoncontrol>
+		</sheetdata>
+	</windowclass>
+
+
+	<windowclass name="charsheet_open">
+		<frame>charsheet</frame>
+		<placement>
+			<size>
+				<width>685</width>
+				<height>715</height>
+			</size>
+			<position>
+				<x>410</x>
+				<y>90</y>
+			</position>
+		</placement>
+		<minimize />
+		<nodelete />
+		<playercontrol />
+		<sheetdata>
+			<subwindow name="main">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_1_main</class>
+			</subwindow>
+			<subwindow name="skills">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_2_skills</class>
+			</subwindow>
+			<subwindow name="combat">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_3_combat</class>
+			</subwindow>
+			<subwindow name="magic">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_4_magic</class>
+			</subwindow>
+			<subwindow name="matrix">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_5_matrix</class>
+			</subwindow>
+			<subwindow name="pilot">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_6_pilot</class>
+			</subwindow>
+			<subwindow name="else">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_7_else</class>
+			</subwindow>
+
+
+			<tabcontrol name="tabs">
+				<bounds>-65,106,25,500</bounds>
+				<tab>
+					<icon>vtab_label_main</icon>
+					<subwindow>main</subwindow>
+				</tab>
+				<tab>
+					<icon>vtab_label_skills</icon>
+					<subwindow>skills</subwindow>
+				</tab>
+				<tab>
+					<icon>vtab_label_combat</icon>
+					<subwindow>combat</subwindow>
+				</tab>
+				<tab>
+					<icon>vtab_label_magic</icon>
+					<subwindow>magic</subwindow>
+				</tab>
+				<tab>
+					<icon>vtab_label_matrix</icon>
+					<subwindow>matrix</subwindow>
+				</tab>
+				<tab>
+					<icon>vtab_label_pilot</icon>
+					<subwindow>pilot</subwindow>
+				</tab>
+				<tab>
+					<icon>vtab_label_other</icon>
+					<subwindow>else</subwindow>
+				</tab>
+				<activate>1</activate>
+			</tabcontrol>
+
+			<tokenfield name="combattoken">
+				<bounds>630,40,60,51</bounds>
+				<empty>token_empty</empty>
+				<tooltip>
+					<text>Choose a Combat Token. Send it to your GM if you cannot choose it</text>
+				</tooltip>
+							<script>
+		function onInit()
+			window.getDatabaseNode().createChild("waretabtext1","string");
+			window.getDatabaseNode().getChild("waretabtext1").setValue("Overview");
+			window.getDatabaseNode().createChild("waretabtext2","string");
+			window.getDatabaseNode().getChild("waretabtext2").setValue("Cyberware");
+			window.getDatabaseNode().createChild("waretabtext3","string");
+			window.getDatabaseNode().getChild("waretabtext3").setValue("Bioware");
+			window.getDatabaseNode().createChild("waretabtext4","string");
+			window.getDatabaseNode().getChild("waretabtext4").setValue("Genetic");
+			window.getDatabaseNode().createChild("waretabtext5","string");
+			window.getDatabaseNode().getChild("waretabtext5").setValue("Adv.");
+			window.getDatabaseNode().createChild("waretabtext6","string");
+			window.getDatabaseNode().getChild("waretabtext6").setValue("Disadv.");
+			window.getDatabaseNode().createChild("waretabtext7","string");
+			window.getDatabaseNode().getChild("waretabtext7").setValue("Other");
+
+			window.getDatabaseNode().createChild("skilltabtext1","string");
+			window.getDatabaseNode().getChild("skilltabtext1").setValue("Overview");
+			window.getDatabaseNode().createChild("skilltabtext2","string");
+			window.getDatabaseNode().getChild("skilltabtext2").setValue("Combat");
+			window.getDatabaseNode().createChild("skilltabtext3","string");
+			window.getDatabaseNode().getChild("skilltabtext3").setValue("Magic");
+			window.getDatabaseNode().createChild("skilltabtext4","string");
+			window.getDatabaseNode().getChild("skilltabtext4").setValue("Matrix");
+			window.getDatabaseNode().createChild("skilltabtext5","string");
+			window.getDatabaseNode().getChild("skilltabtext5").setValue("Pilot");
+			window.getDatabaseNode().createChild("skilltabtext6","string");
+			window.getDatabaseNode().getChild("skilltabtext6").setValue("Active");
+			window.getDatabaseNode().createChild("skilltabtext7","string");
+			window.getDatabaseNode().getChild("skilltabtext7").setValue("Softskill");
+		end
+			</script>
+			</tokenfield>
+
+			<genericcontrol>
+					<bounds>571,49,80,85</bounds>
+					<icon>portrait_frame</icon>
+			</genericcontrol>
+
+			<genericcontrol name="FullPortraitFrame">
+					<bounds>571,48,80,80</bounds>
+					<icon>charlist_base</icon>
+					<script file="charsheet/scripts/charsheet_portrait.lua" />
+			</genericcontrol>
+
+			<!-- ACTIVATE IDENTITY -->
+
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_closed">
+		<frame>charsheet_closed</frame>
+		<placement>
+			<size>
+				<width>80</width>
+				<height>715</height>
+			</size>
+			<position>
+				<x>410</x>
+				<y>90</y>
+			</position>
+		</placement>
+		<minimize />
+		<nodelete />
+		<playercontrol />
+		<sheetdata>
+
+		</sheetdata>
+	</windowclass>
+
+
+</root>

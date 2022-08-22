@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+<root>
+	<!-- Categories -->
+	<icon name="tab_base1" file="graphics/tabs/tab_base1.png" />
+	<icon name="tab_base2" file="graphics/tabs/tab_base2.png" />
+	<icon name="tab_base3" file="graphics/tabs/tab_base3.png" />
+	<icon name="tab_base4" file="graphics/tabs/tab_base4.png" />
+	<icon name="tab_base5" file="graphics/tabs/tab_base5.png" />
+	<icon name="tab_base6" file="graphics/tabs/tab_base6.png" />
+	<icon name="tab_base7" file="graphics/tabs/tab_base7.png" />
+	<icon name="tab_base8" file="graphics/tabs/tab_base8.png" />
+<!--
+
+	<icon name="tab_base9" file="graphics/tabs/tab_base9.png" />
+	<icon name="tab_base10" file="graphics/tabs/tab_base10.png" />
+	<icon name="tab_base11" file="graphics/tabs/tab_base11.png" />
+	<icon name="tab_base12" file="graphics/tabs/tab_base12.png" />
+	<icon name="tab_base1s" file="graphics/tabs/tab_base1s.png" />
+	<icon name="tab_base2s" file="graphics/tabs/tab_base2s.png" />
+	<icon name="tab_base3s" file="graphics/tabs/tab_base3s.png" />
+	<icon name="tab_base4s" file="graphics/tabs/tab_base4s.png" />
+	<icon name="tab_base5s" file="graphics/tabs/tab_base5s.png" />
+	<icon name="tab_base6s" file="graphics/tabs/tab_base6s.png" />
+	<icon name="tab_base7s" file="graphics/tabs/tab_base7s.png" />
+	<icon name="tab_base8s" file="graphics/tabs/tab_base8s.png" />
+	<icon name="tab_base9s" file="graphics/tabs/tab_base9s.png" />
+	<icon name="tab_base10s" file="graphics/tabs/tab_base10s.png" />
+	<icon name="tab_base11s" file="graphics/tabs/tab_base11s.png" />
+	<icon name="tab_base12s" file="graphics/tabs/tab_base12s.png" />
+-->
+	<icon name="tab_icon1" file="graphics/tabs/tab_icon1.png" />
+	<icon name="tab_icon2" file="graphics/tabs/tab_icon2.png" />
+	<icon name="tab_icon3" file="graphics/tabs/tab_icon3.png" />
+	<icon name="tab_icon4" file="graphics/tabs/tab_icon4.png" />
+	<icon name="tab_icon5" file="graphics/tabs/tab_icon5.png" />
+	<icon name="tab_icon6" file="graphics/tabs/tab_icon6.png" />
+	<icon name="tab_icon7" file="graphics/tabs/tab_icon7.png" />
+	<icon name="tab_icon8" file="graphics/tabs/tab_icon8.png" />
+<!--	<icon name="tab_icon9" file="graphics/tabs/tab_icon9.png" />
+	<icon name="tab_icon10" file="graphics/tabs/tab_icon10.png" />
+	<icon name="tab_icon11" file="graphics/tabs/tab_icon11.png" />
+	<icon name="tab_icon12" file="graphics/tabs/tab_icon12.png" />
+	<icon name="tab_icon13" file="graphics/tabs/tab_icon13.png" />
+	<icon name="tab_icon14" file="graphics/tabs/tab_icon14.png" />
+	<icon name="tab_icon15" file="graphics/tabs/tab_icon15.png" />
+-->
+	<!-- Chat window -->
+	<icon name="chat_speak" file="graphics/chatbox/icon_speak.png" />
+	<icon name="chat_story" file="graphics/chatbox/icon_story.png" />
+	<icon name="chat_action" file="graphics/chatbox/icon_action.png" />
+
+</root>

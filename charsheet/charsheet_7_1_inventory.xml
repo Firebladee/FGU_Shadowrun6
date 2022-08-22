@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+
+
+<root version="2.0">
+
+	<!-- List for all Inventory-->			
+	<windowclass name="charsheet_inventoryitem_all">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_inventoryitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activateinventorydetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+	
+			<powerstring name="inventorylocation" source = "inventory.location">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<tabtarget>
+					<next>inventoryname</next>
+				</tabtarget>
+				<nodrag />
+				<empty>&#171; Location &#187;</empty>
+			</powerstring>
+			
+			<powerstring name="inventoryname">
+				<anchored>
+					<left>
+						<parent>inventorylocation</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-147</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>inventoryweight</next>
+					<prev>inventorylocation</prev>
+				</tabtarget>
+				<empty>&#171; inventory item &#187;</empty>
+				<script>
+					function updateStatus()
+						window.inventoryname.setColor("ffffffff");
+						window.inventoryname.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+					
+					function onInit()
+						updateStatus();
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("inventorylocation");
+						draginfo.setCustomData(window.getDatabaseNode().getName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+				</script>
+			</powerstring>
+		
+			<numberfield name="inventoryweight" source="inventory.weight">
+				<anchored>
+					<to>inventoryname</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>inventoryamount</next>
+					<prev>inventoryname</prev>
+				</tabtarget>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</numberfield>
+			
+			<numberfield name="inventoryfilteritem" source="inventory.filteritem">
+				<anchored>
+					<to>inventoryname</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+		
+			<numberfield name="inventoryamount" source="inventory.amount">
+				<anchored>
+					<to>inventoryweight</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>amount</text>
+				</tooltip>
+				<tabtarget>
+					<prev>inventoryweight</prev>
+				</tabtarget>				
+			</numberfield>			
+
+			<skilldescfieldpc name="inventorydescription">
+				<anchored>
+					<top>
+						<parent>inventoryname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<parent>inventoryname</parent>
+						<anchor>left</anchor>
+						<offset>-10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>inventoryamount</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+			<spacer name="spacer">
+				<anchor>inventorydescription</anchor>
+				<height>3</height>
+			</spacer>			
+		</sheetdata>		
+	</windowclass>
+	
+	<!-- List for subwindows Inventory-->			
+	<windowclass name="charsheet_inventoryitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_inventoryitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activateinventorydetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+	
+			<powerstring name="subloc" source = "inventory.subloc">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<tabtarget>
+					<next>inventoryname</next>
+				</tabtarget>
+				<nodrag />
+				<empty>&#171; SubLoc &#187;</empty>
+			</powerstring>
+			
+			<powerstring name="inventoryname">
+				<anchored>
+					<left>
+						<parent>subloc</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-147</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>inventoryweight</next>
+					<prev>inventorylocation</prev>
+				</tabtarget>
+				<empty>&#171; inventory item &#187;</empty>
+				<script>
+					function updateStatus()
+						window.inventoryname.setColor("ffffffff");
+						window.inventoryname.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+					
+					function onInit()
+						updateStatus();
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("inventorylocation");
+						draginfo.setCustomData(window.getDatabaseNode().getName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+				</script>
+			</powerstring>
+		
+			<numberfield name="inventoryweight" source="inventory.weight">
+				<anchored>
+					<to>inventoryname</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>inventoryamount</next>
+					<prev>inventoryname</prev>
+				</tabtarget>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</numberfield>
+			
+			<numberfield name="inventoryfilteritem" source="inventory.filteritem">
+				<anchored>
+					<to>inventoryname</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+		
+			<numberfield name="inventoryamount" source="inventory.amount">
+				<anchored>
+					<to>inventoryweight</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>amount</text>
+				</tooltip>
+				<tabtarget>
+					<prev>inventoryweight</prev>
+				</tabtarget>				
+			</numberfield>			
+
+			<skilldescfieldpc name="inventorydescription">
+				<anchored>
+					<top>
+						<parent>inventoryname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<parent>inventoryname</parent>
+						<anchor>left</anchor>
+						<offset>-10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>inventoryamount</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+			<spacer name="spacer">
+				<anchor>inventorydescription</anchor>
+				<height>3</height>
+			</spacer>			
+		</sheetdata>		
+	</windowclass>	
+
+
+	<windowclass name="charsheet_7_1_inventory">
+		<placement>
+
+		</placement>
+
+		<nodelete />
+		<sheetdata>	
+			<numberfield name="inventorysort" source="inventorysort">
+				<bounds>0,0,0,0</bounds>
+				<script>
+					function onValueChanged()
+						window.inventorylist.applySort();
+					end
+				</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="inventoryframe">
+				<bounds>83,123,515,500</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<list_charinv name="inventorylist">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+			</list_charinv>
+			<scrollbar>
+				<anchored to="inventorylist" />
+				<target>inventorylist</target>
+			</scrollbar>
+
+			<label name="count_label">
+				<anchored to="inventoryframe" position="insidetopleft" offset="15,10" width="20" />
+				<center />
+				<static>#</static>
+			</label>
+			<genericcontrol name="rightanchor">
+				<anchored to="inventoryframe" width="0" height="0">
+					<top offset="10" />
+					<right offset="-8" />
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<genericcontrol name="idelete_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+			<genericcontrol name="shortcut_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-2" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+			<genericcontrol name="carried_header">
+				<anchored to="rightanchor" width="12" height="10">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<icon>char_encumbrance</icon>
+				<tooltip textres="char_tooltip_itemcarried" />
+			</genericcontrol>
+			<label name="weight_label">
+				<anchored to="rightanchor" width="30">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<center />
+				<static textres="char_label_itemweight" />
+				<tooltip textres="char_tooltip_itemweight" />
+			</label>
+			<label name="location_label">
+				<anchored to="rightanchor" width="80">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<center />
+				<static textres="char_label_itemlocation" />
+			</label>
+			<label name="name_label">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="inventoryframe" offset="55" />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<static textres="char_label_itemname" />
+				<center />
+			</label>
+		
+<!--
+			<windowlist name="inventorylist">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.inventorylist</datasource>
+				<class>charsheet_inventoryitem_all</class>
+				<script file="charsheet/scripts/charsheet_list_inventory.lua" />
+			</windowlist>			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>15,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Location</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 1 then 
+							window.labelone.setFont("sheetlabel");
+						else
+ 							window.labelone.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end				
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(1);
+						window.labelone.setFont("sheetlabel");
+						window.labeltwo.setFont("sheetlabelsmall");
+					end
+				</script>				
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>95,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+				<script>
+					function updateStatus()
+						local a = window.inventorysort.getValue();
+						if a == 2 then 
+							window.labeltwo.setFont("sheetlabel");
+						else
+ 							window.labeltwo.setFont("sheetlabelsmall");
+						end
+					end
+
+					function onInit()
+						updateStatus();
+					end					
+					function onDoubleClick(x,y)
+						window.inventorysort.setValue(2);
+						window.labelone.setFont("sheetlabelsmall");
+						window.labeltwo.setFont("sheetlabel");
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="labelthree">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>390,12</offset>
+					<size>
+						<width>10</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<icon>indicator_encumbrance</icon>
+				<tooltip>
+					<text>weight</text>
+				</tooltip>
+			</genericcontrol>
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>inventoryframe</to>
+					<position>insidetopleft</position>
+					<offset>440,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+			<genericcontrol name="rightanchor">
+				<anchored to="inventoryframe" width="0" height="0">
+					<top offset="10" />
+					<right offset="-20" />
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<genericcontrol name="idelete_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+ --> 
+			<button_iedit name="inventorylist_iedit">
+				<anchored to="inventorylist" position="aboveright" offset="5,0" />
+				<target>inventorylist</target>
+			</button_iedit>
+			<button_iadd name="inventorylist_iadd">
+				<anchored to="inventorylist_iedit" position="lefthigh" offset="5,0" />
+				<target>inventorylist</target>
+			</button_iadd>
+			
+	
+		</sheetdata>		
+	</windowclass>
+</root>

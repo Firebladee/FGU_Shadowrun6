@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for
+  attribution and copyright information.
+-->
+
+<root>
+	<!-- SR4 -->
+	<string name="ref_label_skillgroup">Skill Group</string>
+	<string name="ref_label_specializations">Specializations</string>
+
+	<!-- Common -->
+	<string name="base">Base</string>
+	<string name="dash">-</string>
+	<string name="str">Str</string>
+	<string name="dex">Dex</string>
+	<string name="con">Con</string>
+	<string name="int">Int</string>
+	<string name="wis">Wis</string>
+	<string name="cha">Cha</string>
+	<string name="strength">Strength</string>
+	<string name="constitution">Constitution</string>
+	<string name="dexterity">Dexterity</string>
+	<string name="intelligence">Intelligence</string>
+	<string name="wisdom">Wisdom</string>
+	<string name="charisma">Charisma</string>
+	<string name="lvl">Lvl</string>
+	<string name="level">Level</string>
+	<string name="hp">HP</string>
+	<string name="hitpoints">Hit Points</string>
+	<string name="ac">AC</string>
+	<string name="armorclass">Armor Class</string>
+	<string name="acff">FF</string>
+	<string name="armorclassff">Flat-Footed AC</string>
+	<string name="actouch">Tch</string>
+	<string name="armorclasstouch">Touch AC</string>
+	<string name="cmd">CMD</string>
+	<string name="sr">SR</string>
+	<string name="spellresistance">Spell Resistance</string>
+	<string name="fort">Fort</string>
+	<string name="ref">Ref</string>
+	<string name="will">Will</string>
+	<string name="fortitude">Fortitude</string>
+	<string name="reflex">Reflex</string>
+	<string name="will_long">Will</string>
+	<string name="save">Save</string>
+	<string name="savingthrow">Saving Throw</string>
+	<string name="init">Init</string>
+	<string name="initiative">Initiative</string>
+	<string name="bab">BAB</string>
+	<string name="grp">Grp</string>
+	<string name="grapple">Grapple</string>
+	<string name="cmb">CMB</string>
+	<string name="cl">CL</string>
+	<string name="casterlevel">Caster Level</string>
+	<string name="clc">CLC</string>
+	<string name="casterlevelcheck">Caster Level Check</string>
+	<string name="evencl">Even CLs</string>
+	<string name="oddcl">Odd CLs</string>
+	<string name="dc">DC</string>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+
+	<string name="menu_dieclear">Clear Dice</string>
+	<string name="menu_rest">Rest</string>
+	<string name="menu_restshort">Short Rest</string>
+	<string name="menu_restovernight">Overnight Rest</string>
+	<string name="message_restshort">Taking short rest.</string>
+	<string name="message_restovernight">Taking overnight rest.</string>
+	<string name="menu_init">Initiative</string>
+	<string name="menu_initall">Roll All Initiatives</string>
+	<string name="menu_initnpc">Roll NPC Initiatives</string>
+	<string name="menu_initpc">Roll PC Initiatives</string>
+	<string name="menu_initclear">Clear All Initiatives</string>
+
+	<string name="menu_resetspells">Reset Spells</string>
+	<string name="menu_addspellclass">Add Spell Class</string>
+	<string name="menu_deletespellclass">Delete Spell Class</string>
+	<string name="menu_addspell">Add Spell</string>
+	<string name="menu_deletespell">Delete Spell</string>
+	<string name="menu_addweapon">Add Weapon</string>
+	<string name="menu_deleteweapon">Delete Weapon</string>
+	<string name="menu_addspellaction">Add Spell Action</string>
+	<string name="menu_addspellcast">Add Cast</string>
+	<string name="menu_addspelldamage">Add Damage</string>
+	<string name="menu_addspellheal">Add Heal</string>
+	<string name="menu_addspelleffect">Add Effect</string>
+	<string name="menu_reparsespell">Reparse spell actions</string>
+	<string name="menu_deletespellaction">Delete Spell Action</string>
+
+	<string name="message_rollbab">Base Attack</string>
+
+	<!-- Options -->
+	<string name="option_label_RMMT">Target: Remove on miss</string>
+	<string name="option_label_SHRR">Chat: Show results to client</string>
+	<string name="option_label_PSMN">Party: Show characters to clients</string>
+	<string name="option_label_INIT">Add: Auto NPC initiative</string>
+	<string name="option_label_ANPC">Chat: Anonymize NPC attacks</string>
+	<string name="option_label_SHPH">View: Show health to clients</string>
+	<string name="option_label_WNDC">View: Wound Categories</string>
+	<string name="option_label_TNPCE">Token: Show Enemy effects</string>
+	<string name="option_label_TNPCH">Token: Show Enemy health</string>
+	<string name="option_label_TPCE">Token: Show Ally effects</string>
+	<string name="option_label_TPCH">Token: Show Ally health</string>
+	<string name="option_val_all">All</string>
+	<string name="option_val_friendly">Friendly</string>
+	<string name="option_val_multi">Multi</string>
+	<string name="option_val_pc">PC</string>
+	<string name="option_val_npc">NPC</string>
+	<string name="option_val_group">Group</string>
+	<string name="option_val_detailed">Detailed</string>
+	<string name="option_val_simple">Simple</string>
+	<string name="option_val_icons">Icons</string>
+	<string name="option_val_iconshover">Icons Hover</string>
+	<string name="option_val_mark">Mark</string>
+	<string name="option_val_markhover">Mark Hover</string>
+	<string name="option_val_bar">Bar</string>
+	<string name="option_val_barhover">Bar Hover</string>
+	<string name="option_val_dot">Dot</string>
+	<string name="option_val_dothover">Dot Hover</string>
+	<string name="option_val_max">Max</string>
+	<string name="option_val_random">Random</string>
+	<string name="option_val_standard">Standard</string>
+	<string name="option_val_fumbleandcrit">Fumble and Crit</string>
+	<string name="option_val_fumble">Fumble</string>
+	<string name="option_val_crit">Crit</string>
+
+	<string name="option_header_houserule">House Rules (GM)</string>
+	<string name="option_label_HRCC">Attack: Critical confirm</string>
+	<string name="option_label_HRNH">CT: NPC hit points</string>
+	<string name="option_label_HRST">CT: Auto stabilization rolls</string>
+	<string name="option_label_HRFC">Attack: Fumble/Crit Tables</string>
+
+	<!-- Combat Tracker -->
+
+	<string name="ct_label_round_pass">Rd./Pass</string>
+	<string name="ct_label_init">Init</string>
+	<string name="ct_label_inittype">I-Type</string>
+	<string name="ct_label_pass">Pass</string>
+	<string name="ct_label_phys">P-Dam</string>
+	<string name="ct_label_stun">S-Dam</string>
+	<string name="ct_label_delay">D</string>
+	<string name="ct_label_stundamage">Stun Damage</string>
+	<string name="ct_label_stundamagemax">Max Stun Damage</string>
+
+	<string name="combat_tag_pass">PASS</string>
+
+	<!--  Reference -->
+	<string name="ref_label_listname">Name</string>
+	<string name="ref_label_listdamage">Damage</string>
+	<string name="ref_label_listtype">Type</string>
+	<string name="ref_label_listap">AP</string>
+	<string name="ref_label_listmode">Mode</string>
+	<string name="ref_label_listrc">RC</string>
+	<string name="ref_label_listavailability">Availability</string>
+
+	<string name="ref_label_listcost">Cost</string>
+	<string name="ref_label_cost">Cost (¥)</string>
+	<string name="ref_label_availability">Availability</string>
+	<string name="ref_label_armorrating">Rating B/I</string>
+	<string name="ref_label_damagecode">Damage Code</string>
+	<string name="ref_label_reach">Reach</string>
+	<string name="ref_label_ap">AP</string>
+	<string name="ref_label_ammo">Ammo Capacity</string>
+	<string name="ref_label_ammotype">Type</string>
+	<string name="ref_label_recoil">Recoil</string>
+	<string name="ref_label_firemodes">Fire Modes</string>
+	<string name="ref_label_damagemodifier">Damage Modifier</string>
+	<string name="ref_label_apmodifier">AP Modifier</string>
+	<string name="ref_label_armorused">Armor Used</string>
+
+	<string name="ref_label_listarmorname">Name</string>
+	<string name="ref_label_listarmorratings">B/I</string>
+	<string name="ref_label_listavailability">AVAIL</string>
+	<string name="ref_label_listarmorcost">COST</string>
+
+	<string name="ref_label_listammoname">Name</string>
+	<string name="ref_label_listammodamagemodifier">Dam.Mod.</string>
+	<string name="ref_label_listammoapmodifier">AP Mod.</string>
+	<string name="ref_label_listammoarmorused">Arm.Used</string>
+	<string name="ref_label_listammocost">COST</string>
+
+	<string name="ref_label_listresponse">Response</string>
+	<string name="ref_label_listsignal">Signal</string>
+	<string name="ref_label_listfirewall">Firewall</string>
+	<string name="ref_label_listsystem">System</string>
+
+	<string name="ref_label_listcategory">Category</string>
+	<string name="ref_label_listrange">Range</string>
+	<string name="ref_label_listdamagetype">Damage</string>
+	<string name="ref_label_listduration">Duration</string>
+	<string name="ref_label_listdrain">Drain</string>
+	<string name="ref_label_listskill">Skill</string>
+
+	<string name="ref_label_spellgroup">Spell Group</string>
+	<string name="ref_label_spelltype">Spell Type</string>
+	<string name="ref_label_range">Spell Range</string>
+	<string name="ref_label_damagetype">Damage Type</string>
+	<string name="ref_label_duration">Duration</string>
+	<string name="ref_label_drain">Drain Value</string>
+
+	<string name="ref_label_model">Commlink Model</string>
+	<string name="ref_label_rating">Rating</string>
+	<string name="ref_label_response">Response</string>
+	<string name="ref_label_signal">Signal</string>
+	<string name="ref_label_os">Operating System</string>
+	<string name="ref_label_firewall">Firewall</string>
+	<string name="ref_label_system">System</string>
+
+	<string name="category_label">Category</string>
+	<string name="item_label_category">Category</string>
+	<string name="item_label_availability">Availability</string>
+	<string name="item_label_restricted">Restricted</string>
+	<string name="item_label_reach">Reach</string>
+	<string name="item_label_ap">AP</string>
+	<string name="item_label_recoil">Recoil</string>
+	<string name="item_label_type">Type</string>
+	<string name="item_label_subtype">SubType</string>
+	<string name="item_label_damage">Damage</string>
+	<string name="item_label_dmgtype">Damage Type</string>
+	<string name="item_label_properties">Properties</string>
+
+	<string name="item_label_damagestrength">Damage requires strength</string>
+	<string name="item_label_ammo">Ammo Capacity</string>
+	<string name="item_label_ammotype">Ammo Load Type]</string>
+	<string name="item_label_mode">Fire Modes</string>
+	<string name="item_label_ballisticrating">Ballistic Rating</string>
+	<string name="item_label_impactrating">Impact Rating</string>
+
+	<string name="option_header_sr4">Shadowrun</string>
+	<string name="option_label_ADRT">Auto-Rolls</string>
+
+</root>

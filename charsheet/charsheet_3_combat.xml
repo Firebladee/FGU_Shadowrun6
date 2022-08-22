@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+<!-- Ammunitionitem-->
+	<includefile source="charsheet/charsheet_3_1_weapons.xml" />
+	<includefile source="charsheet/charsheet_3_2_armour.xml" />
+
+	<windowclass name="charsheet_3_combat">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<script>
+			function onInit()
+				combatinfo.setVisible(true);
+			end
+		</script>
+		<sheetdata>
+			<subwindow name="sub1">
+				<bounds>0,0,-1,-22</bounds>
+				<class>sub1</class>
+			</subwindow>
+			<subwindow name="weapons">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_3_1_weapons</class>
+			</subwindow>
+			<subwindow name="armour">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_3_2_armour</class>
+			</subwindow>
+			<subwindow name="combatinfo">
+				<bounds>83,523,-1,-22</bounds>
+				<class>combatinfo</class>
+			</subwindow>
+
+			<tabcontrol name="tabs">
+				<bounds>-88,130,25,164</bounds>
+				<tab>
+					<icon>vtab_label_weapons</icon>
+					<subwindow>weapons</subwindow>
+				</tab>
+				<tab>
+					<icon>vtab_label_armour</icon>
+					<subwindow>armour</subwindow>
+				</tab>
+				<activate>1</activate>
+			</tabcontrol>
+
+			<genericcontrol name="attributeframecombat">
+				<bounds>83,53,540,70</bounds>
+					<frame>
+						<name>sheetgroup</name>
+					</frame>
+			</genericcontrol>
+
+			<attributecheckbonus name="bodycheck" source="base.attribute.body.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>15,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Body</text>
+				</description>
+				<target>Body</target>
+				<attributebonusfield>base.attribute.body.bonus</attributebonusfield>
+				<attributescore>base.attribute.body.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>bodycheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>B</static>
+			</attributelabel>
+
+			<attributecheckbonus name="agilitycheck" source="base.attribute.agility.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>60,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Agility</text>
+				</description>
+				<target>Agility</target>
+				<attributebonusfield>base.attribute.agility.bonus</attributebonusfield>
+				<attributescore>base.attribute.agility.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>agilitycheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>A</static>
+			</attributelabel>
+
+			<attributecheckbonus name="reactioncheck" source="base.attribute.reaction.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>105,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Reaction</text>
+				</description>
+				<target>Reaction</target>
+				<attributebonusfield>base.attribute.reaction.bonus</attributebonusfield>
+				<attributescore>base.attribute.reaction.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>reactioncheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>R</static>
+			</attributelabel>
+
+			<attributecheckbonus name="strengthcheck" source="base.attribute.strength.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>150,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Strength</text>
+				</description>
+				<target>Strength</target>
+				<attributebonusfield>base.attribute.strength.bonus</attributebonusfield>
+				<attributescore>base.attribute.strength.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>strengthcheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>S</static>
+			</attributelabel>
+
+			<attributecheckbonus name="willpowercheck" source="base.attribute.willpower.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>195,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Willpower</text>
+				</description>
+				<target>Willpower</target>
+				<attributebonusfield>base.attribute.willpower.bonus</attributebonusfield>
+				<attributescore>base.attribute.willpower.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>willpowercheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>W</static>
+			</attributelabel>
+
+			<attributecheckbonus name="logiccheck" source="base.attribute.logic.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>240,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Logic</text>
+				</description>
+				<target>Logic</target>
+				<attributebonusfield>base.attribute.logic.bonus</attributebonusfield>
+				<attributescore>base.attribute.logic.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>logiccheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>L</static>
+			</attributelabel>
+
+			<attributecheckbonus name="intuitioncheck" source="base.attribute.intuition.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>285,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Intuitution</text>
+				</description>
+				<target>Intuition</target>
+				<attributebonusfield>base.attribute.intuition.bonus</attributebonusfield>
+				<attributescore>base.attribute.intuition.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>intuitioncheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>I</static>
+			</attributelabel>
+
+			<attributecheckbonus name="charismacheck" source="base.attribute.charisma.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>330,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Charisma</text>
+				</description>
+				<target>Charisma</target>
+				<attributebonusfield>base.attribute.charisma.bonus</attributebonusfield>
+				<attributescore>base.attribute.charisma.base</attributescore>
+				</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>charismacheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>C</static>
+			</attributelabel>
+
+			<stringcontrol name="checkmodelabel">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>380,10</offset>
+				</anchored>
+				<font>sheetlabel</font>
+				<static></static>
+			</stringcontrol>
+
+			<buttongroup_radiov name="checkmode">
+				<anchored>
+					<left>
+						<parent>checkmodelabel</parent>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</left>
+					<top>
+						 <parent>checkmodelabel</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<parameters>
+					<optionwidth>0</optionwidth>
+					<optionheight>15</optionheight>
+					<labels>norm.|dflt.|double</labels>
+					<values>1|2|3</values>
+					<defaultindex>1</defaultindex>
+					<defaultvalue>1</defaultvalue>
+				</parameters>
+				<script>
+					function onValueChanged()
+					end
+				</script>
+			</buttongroup_radiov>
+			<checkbox name="edgecheckbox" source="base.attribute.edge.check">
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>445,47</offset>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>Use Edge with following Dice-Roll</tooltips>
+					<defaulttooltip>Check to use Edge for following Dice-Roll</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<stringcontrol>
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>440,15</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Use</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>attributeframecombat</to>
+					<position>insidetopleft</position>
+					<offset>438,30</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Edge</static>
+			</stringcontrol>
+			</sheetdata>
+	</windowclass>
+
+	<windowclass name="combatinfo">
+		<sheetdata>
+	<!-- Combat Related Information-->
+			<genericcontrol name="infoframe">
+				<bounds>0,0,515,100</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>infoframe</to>
+					<position>insidetop</position>
+					<offset>0,11</offset>
+				</anchored>
+				<center />
+				<font>sheetlabel</font>
+				<static>Combat Information</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>infoframe</to>
+					<position>insidetopleft</position>
+					<offset>70,25</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Damage</static>
+			</stringcontrol>
+
+			<numberfield name="physicalcurrent" source="damage.physical.current">
+				<anchored>
+					<to>infoframe</to>
+					<position>insidetopleft</position>
+					<offset>235,40</offset>
+				</anchored>
+				<tabtarget>
+					<next>physicalmod</next>
+					<prev>stunValue</prev>
+				</tabtarget>
+				<script>
+					function onValueChanged()
+						local a = getDatabaseNode().getParent().getChild("max").getValue();
+						local b = getValue();
+						if a == b then
+							window.physicaldamageoverflow.setVisible(true);
+						else
+							window.physicaldamageoverflow.setVisible(false);
+						end
+					end
+				</script>
+				<invisible />
+			</numberfield>
+
+
+			<buttongroup_counter name="physicaldamage">
+				<anchored>
+					<to>infoframe</to>
+					<position>righthigh</position>
+					<offset>-450,45</offset>
+					<size>
+						<height>10</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.physical.current</current>
+					<maximum>damage.physical.max</maximum>
+				</sourcefields>
+			</buttongroup_counter>
+
+			<buttongroup_counterred name="physicaldamageoverflow">
+				<anchored>
+					<to>infoframe</to>
+					<position>righthigh</position>
+					<offset>-450,55</offset>
+					<size>
+						<height>10</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.physical.red</current>
+					<maximum>damage.physical.max</maximum>
+				</sourcefields>
+				<invisible />
+			</buttongroup_counterred>
+
+			<stringcontrol name="physicaldamagelabel">
+				<anchored>
+					<to>physicaldamage</to>
+					<position>lefthigh</position>
+					<offset>0,-2</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Physical</static>
+			</stringcontrol>
+
+
+			<buttongroup_counter name="stundamage">
+				<anchored>
+					<to>infoframe</to>
+					<position>righthigh</position>
+					<offset>-450,65</offset>
+					<size>
+						<height>20</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>damage.stun.current</current>
+					<maximum>damage.stun.max</maximum>
+				</sourcefields>
+			</buttongroup_counter>
+
+			<stringcontrol name="stundamagelabel">
+				<anchored>
+					<to>stundamage</to>
+					<position>lefthigh</position>
+					<offset>0,3</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Stun</static>
+			</stringcontrol>
+
+			<linkednumber name="allmodifier" source="damage.all.modifier">
+				<anchored>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+					<to>infoframe</to>
+					<position>insidetopleft</position>
+					<offset>210,45</offset>
+				</anchored>
+				<font>sheetnumber</font>
+				<source>
+					<name>damage.stun.modifier</name>
+					<op>+</op>
+				</source>
+				<source>
+					<name>damage.physical.modifier</name>
+					<op>+</op>
+				</source>
+
+				<tooltip>
+					<text>Penalty through Wounds (Physical and Stun)</text>
+				</tooltip>
+				<readonly />
+				<nodrag />
+				<nodrop />
+				<displaysign />
+			</linkednumber>
+
+			<attributebonus name="armourpenalty" source="base.special.penalty">
+				<anchored>
+					<to>allmodifier</to>
+					<position>belowright</position>
+					<offset>0,5</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Penalty and Modifier of Penalty (Armour) Penalty applies to Agility and Reaction Rolls</text>
+				</tooltip>
+				<scorefield>armour.hiddenpenalty</scorefield>
+				<modifierfield>armour.penaltymodifier</modifierfield>
+			</attributebonus>
+			<attributehiddenbonus name="armourhiddenpenalty" source="armour.hiddenpenalty">
+				<anchored>
+					<to>armourpenalty</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+
+			<resistcheck name="resistvalue" source="base.special.resistvalue">
+				<anchored>
+					<to>allmodifier</to>
+					<position>insidetopright</position>
+					<offset>-50,-5</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<target>Resist</target>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value for Resistance against incoming attack</text>
+				</tooltip>
+				<scorefield>base.attribute.reaction.check</scorefield>
+
+				<modifierfield>base.special.penalty</modifierfield>
+				<script>
+				function onSourceUpdate()
+					setValue(sources[scorefield[1]].getValue() +  getModifier());
+				end
+
+				function onInit()
+					addSource(scorefield[1]);
+					super.onInit();
+					calulateResistancePenalty();
+				end
+				function onValueChanged()
+					calulateResistancePenalty();
+				end
+
+				function calulateResistancePenalty()
+					local nResistVal = sources[scorefield[1]].getValue() +  getModifier();
+
+					local fulldefense = window.fulldefensecheckbox.getState();
+					if fulldefense  then
+						local rActor = ActorManager2.getActor("pc", window.getDatabaseNode());
+						local sDesc, dodgecheck = ActorManager2.getSkillScoreSearch(rActor, "Dodge", 0, "");
+						local sDesc2, gymcheck = ActorManager2.getSkillScoreSearch(rActor, "Gymnastics", 0, "");
+						if dodgecheck > gymcheck then
+							nResistVal = nResistVal + dodgecheck;
+						else
+							nResistVal = nResistVal + gymcheck;
+						end
+					end
+					setValue(nResistVal);
+				end
+				</script>
+			</resistcheck>
+
+			<checkbox name="fulldefensecheckbox" source="base.special.fulldefense">
+				<anchored>
+					<to>allmodifier</to>
+					<position>insidetopright</position>
+					<offset>-50,30</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>Use Complex action to add Dodge/Athletics to following Dice-Roll</tooltips>
+					<defaulttooltip>Use Complex action to add Dodge/Athletics to following Dice-Roll</defaulttooltip>
+				</parameters>
+				<script>
+					function onValueChanged()
+						local a = self.getState();
+						window.resistvalue.calulateResistancePenalty()
+					end
+				</script>
+			</checkbox>
+
+			<resistcheck name="ballisticarmourvalue" source="base.special.ballisticvalue">
+				<anchored>
+					<to>allmodifier</to>
+					<position>insidetopright</position>
+					<offset>-90,-5</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<target>Ballistic Armour</target>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of activated Balastic Armour and Body (apply other Boni accordingly)</text>
+				</tooltip>
+				<scorefield>armour.hiddenballisticvalue</scorefield>
+				<score2field>base.attribute.body.check</score2field>
+				<modifierfield>armour.ballisticvaluemodifier</modifierfield>
+				<script>
+				function onSourceUpdate()
+					setValue(sources[scorefield[1]].getValue()+ sources[score2field[1]].getValue()  +  getModifier());
+				end
+
+				function onInit()
+					addSource(score2field[1]);
+					addSource(scorefield[1]);
+					super.onInit();
+					calulateArmourPenalty();
+				end
+				function onValueChanged()
+					calulateArmourPenalty();
+				end
+
+					function calulateArmourPenalty()
+						local node = window.getDatabaseNode().getChild("armour.encumbrance.hiddenballisticvalue");
+						if node then
+							local a = window.getDatabaseNode().getChild("armour.encumbrance.hiddenballisticvalue").getValue();
+							local b = window.getDatabaseNode().getChild("armour.encumbrance.hiddenimpactvalue").getValue();
+							local c = window.getDatabaseNode().getChild("base.attribute.body.check").getValue();
+							local d = math.ceil((math.max(a,b)-(c+c)) /2)
+							local e = -d
+							if d > 0 then
+								window.getDatabaseNode().getChild("armour.hiddenpenalty").setValue(e);
+							else
+								window.getDatabaseNode().getChild("armour.hiddenpenalty").setValue(0);
+							end
+						end
+					end
+				</script>
+			</resistcheck>
+			<attributehiddenbonus name="hiddenballisticarmourvalue" source="armour.hiddenballisticvalue">
+				<anchored>
+					<to>ballisticarmourvalue</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+			<attributehiddenbonus name="hiddenballisticarmourforencumbrancevalue" source="armour.encumbrance.hiddenballisticvalue">
+				<anchored>
+					<to>ballisticarmourvalue</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+	</attributehiddenbonus>
+
+			<resistcheck name="impactarmourvalue" source="base.special.impactvalue">
+				<anchored>
+					<to>allmodifier</to>
+					<position>insidetopright</position>
+					<offset>-90,20</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<target>Impact Armour</target>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of activated Impact Armour and Body (apply other Boni accordingly)</text>
+				</tooltip>
+				<scorefield>armour.hiddenimpactvalue</scorefield>
+				<score2field>base.attribute.body.check</score2field>
+				<modifierfield>armour.impactvaluemodifier</modifierfield>
+				<script>
+				function onSourceUpdate()
+					setValue(sources[scorefield[1]].getValue()+ sources[score2field[1]].getValue()  +  getModifier());
+				end
+
+				function onInit()
+					addSource(score2field[1]);
+					addSource(scorefield[1]);
+					super.onInit();
+					calulateArmourPenalty();
+				end
+
+				function onValueChanged()
+						calulateArmourPenalty();
+					end
+
+					function calulateArmourPenalty()
+						local node = window.getDatabaseNode().getChild("armour.encumbrance.hiddenballisticvalue");
+						if node then
+							local a = window.getDatabaseNode().getChild("armour.encumbrance.hiddenballisticvalue").getValue();
+							local b = window.getDatabaseNode().getChild("armour.encumbrance.hiddenimpactvalue").getValue();
+							local c = window.getDatabaseNode().getChild("base.attribute.body.check").getValue();
+							local d = math.ceil((math.max(a,b)-(c+c)) /2)
+							local e = -d
+							if d > 0 then
+								window.getDatabaseNode().getChild("armour.hiddenpenalty").setValue(e);
+							else
+								window.getDatabaseNode().getChild("armour.hiddenpenalty").setValue(0);
+							end
+						end
+					end
+				</script>
+			</resistcheck>
+			<attributehiddenbonus name="hiddenimpactarmourvalue" source="armour.hiddenimpactvalue">
+				<anchored>
+					<to>impactarmourvalue</to>
+				</anchored>
+				<readonly />
+				<invisible />
+			</attributehiddenbonus>
+			<attributehiddenbonus name="hiddenimpactarmourforencumbrancevalue" source="armour.encumbrance.hiddenimpactvalue">
+				<anchored>
+					<to>impactarmourvalue</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+		</attributehiddenbonus>
+			<checkbox name="armourcheckmode">
+				<anchored>
+					<left>
+						<parent>impactarmourvalue</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>impactarmourvalue</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<parameters>
+					<tooltips>Check for half Armour Value (e.g. Electrical Shock)</tooltips>
+					<defaulttooltip>Half Armour Value is being counted for the following Armour Resist Check</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<buttongroup_counter name="sustainedspellscounter">
+				<anchored>
+					<to>infoframe</to>
+					<position>righthigh</position>
+					<offset>-80,65</offset>
+					<size>
+						<height>20</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>base.spellsustained</current>
+					<maximum>base.spellsustainedmax</maximum>
+				</sourcefields>
+				<script>
+					function onValueChanged()
+							local a = window.getDatabaseNode().getChild("base.spellsustained").getValue();
+							if a then
+							local b = -(a+a);
+							window.getDatabaseNode().getChild("base.special.spellsustainedpenalty").setValue(b);
+							end
+						end
+				</script>
+				<tooltip>
+					<text>currently sustained Spells</text>
+				</tooltip>
+			</buttongroup_counter>
+			<attributehiddenbonus name="sustainedspells" source="base.spellsustained">
+				<anchored>
+					<to>sustainedspellscounter</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+		</attributehiddenbonus>
+		<attributehiddenbonus name="sustainedspellsmax" source="base.spellsustainedmax">
+				<anchored>
+					<to>sustainedspellscounter</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+				<static>6</static>
+				<script>
+					function onInit()
+						self.setValue(6);
+					end
+				</script>
+		</attributehiddenbonus>
+		<attributehiddenbonus name="sustainedspellspenalty" source="base.special.spellsustainedpenalty">
+				<anchored>
+					<to>sustainedspellscounter</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+				<script>
+				</script>
+		</attributehiddenbonus>
+
+			<stringcontrol name="sustainedspellscounterlabel">
+				<anchored>
+					<to>sustainedspellscounter</to>
+					<position>lefthigh</position>
+					<offset>5,3</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>sust. Spells</static>
+			</stringcontrol>
+
+			<resistcheck name="drainresistvalue" source="base.special.drainresistvalue">
+				<anchored>
+					<to>sustainedspellscounter</to>
+					<position>insidetopright</position>
+					<offset>28,-25</offset>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<target>Drain Resist</target>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of your Drainresist</text>
+				</tooltip>
+				<scorefield>base.special.drainattribute</scorefield>
+				<score2field>base.special.drainspecialattribute</score2field>
+				<modifierfield>base.special.drainvaluemodifier</modifierfield>
+				<script>
+					function onSourceUpdate()
+					setValue(sources[scorefield[1]].getValue()+ sources[score2field[1]].getValue()  +  getModifier());
+				end
+
+				function onInit()
+					addSource(score2field[1]);
+					addSource(scorefield[1]);
+					super.onInit();
+				end
+				</script>
+			</resistcheck>
+			<stringcontrol name="drainresistvaluelabel">
+				<anchored>
+					<to>drainresistvalue</to>
+					<position>lefthigh</position>
+					<offset>5,3</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Drainres.</static>
+			</stringcontrol>
+		<attributehiddenbonus name="drainattribute" source="base.special.drainattribute">
+				<anchored>
+					<to>drainresistvalue</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+				<script>
+				</script>
+		</attributehiddenbonus>
+		<attributehiddenbonus name="drainspecialattribute" source="base.special.drainspecialattribute">
+				<anchored>
+					<to>drainresistvalue</to>
+					<offset>28</offset>
+				</anchored>
+				<readonly />
+				<invisible />
+		</attributehiddenbonus>
+			</sheetdata>
+	</windowclass>
+</root>

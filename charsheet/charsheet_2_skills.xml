@@ -1,0 +1,1110 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+<!-- Skillitem-->
+	<includefile source="charsheet/charsheet_2_skills_sub.xml" />
+
+	<windowclass name="charsheet_skillmodifieritem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_skillmodifieritem.lua" />
+		<sheetdata>
+			<numberfield name="order" source="skills.order">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</numberfield>
+		<button_iconcycler name="type" source="skills.type">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>2</offset>
+					</left>
+					<size>
+						<height>20</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>6,5,5,5</offset>
+				</frame>
+				<parameters>
+					<icons>indicator_sword|indicator_heal|indicator_effect</icons>
+					<values>Specialization|Ware|Item</values>
+					<tooltips>Specialization|Ware|Item</tooltips>
+					<defaulticon>indicator_question</defaulticon>
+					<defaulttooltip>Choose Type of Modifier (Specialization, Ware, Item) </defaulttooltip>
+				</parameters>
+			</button_iconcycler>
+			<powerstring name="skillmodifiername" source="skills.skillmodifiername">
+				<anchored>
+					<left>
+						<parent>type</parent>
+						<anchor>right</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-140</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>skillmodifier</next>
+					<prev>skillmodifierbox</prev>
+				</tabtarget>
+				<empty>&#171; Modifiername &#187;</empty>
+			</powerstring>
+
+		<skillbonus name="skillmodifier" source="skills.skillmodifier.bonus">
+				<anchored>
+					<to>skillmodifiername</to>
+				</anchored>
+				<scorefield>skillmodifier</scorefield>
+				<modifierfield>skills.skillmodifier.bonus</modifierfield>
+				<script>
+
+					function onValueChanged()
+						window.windowlist.updateSkillhiddenBonus();
+					end
+				</script>
+				<tabtarget>
+					<next>skillmodifierbox</next>
+					<prev>skillmodifiername</prev>
+				</tabtarget>
+
+			</skillbonus>
+
+			<checkbox name="skillmodifierbox" source="skills.skillmodifierbox">
+				<anchored>
+					<left>
+						<parent>skillmodifier</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>skillmodifier</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+						window.windowlist.updateSkillhiddenBonus();
+					end
+				</script>
+				<tooltip>
+					<text>Use Modifier</text>
+				</tooltip>
+				<tabtarget>
+					<next>skillmodifiername</next>
+					<prev>skillmodifier</prev>
+				</tabtarget>
+
+			</checkbox>
+
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_skillitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_skillitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activateskilldetail">
+				<anchored width="20" height="21">
+					<top/>
+					<right anchor="right" relation="relative" offset="-25" />
+				</anchored>
+				<icon>details</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<button_toggle name="activateskillmodifier">
+				<anchored width="20" height="21">
+					<top/>
+					<right anchor="right" relation="relative" offset="-5" />
+				</anchored>
+				<icon>indicator_sword</icon>
+				<script>
+					function onInit()
+
+						local nodeChar = window.getDatabaseNode();
+						if nodeChar then
+							local nodeSkillmodifierList = nodeChar.createChild("skillmodifier");
+							if nodeSkillmodifierList then
+								nodeSkillmodifierList.onChildAdded = updateVisibility;
+								nodeSkillmodifierList.onChildUpdate = updateVisibility;
+								updateVisibility(nodeSkillmodifierList);
+							else
+								setVisible(false);
+							end
+						end
+					end
+
+
+					function updateVisibility(nodeSkillmodifierList)
+						if nodeSkillmodifierList.getChildCount() > 0 then
+							if not isVisible() then
+								setValue(1);
+							end
+							setVisible(true);
+						else
+							setVisible(false);
+							if getValue() then
+								setValue(0);
+							end
+						end
+					end
+
+					function onValueChanged()
+						window.toggleSkillmodifier();
+					end
+				</script>
+			</button_toggle>
+
+			<powerstring name="skillsort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-460</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>skillname</next>
+					<prev>skillbonus</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<linkfield name="shortcut">
+				<anchored width="20" height="20">
+					<top parent="skillsort" anchor="top" offset="0" />
+					<left parent="skillsort" anchor="right" offset="5" />
+				</anchored>
+				<class>referenceactiveskill</class>
+				<readonly />
+			</linkfield>
+
+			<powerstring name="skillname">
+				<anchored>
+					<left>
+						<parent>skillsort</parent>
+						<anchor>right</anchor>
+						<offset>35</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-270</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>skillscore</next>
+					<prev>skillsort</prev>
+				</tabtarget>
+				<empty>&#171; Skill &#187;</empty>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function updateColor()
+						window.skillname.setColor("ffffffff");
+						window.skillname.setFrame("dailyframe", 7, 3, 9, 1)
+					end
+
+					function onInit()
+						updateColor();
+					end
+
+					function onDrop(x,y,draginfo)
+						local vmodifiername = draginfo.getDescription();
+						local vmodifier = draginfo.getNumberData();
+						local vtype = draginfo.getCustomData();
+
+						local a = draginfo.getCustomData();
+						if a == "modifier" then
+							window.modifierDrop(vmodifiername, vmodifier)
+						end
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("skill");
+						draginfo.setCustomData(window.getDatabaseNode().getNodeName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+
+				</script>
+			</powerstring>
+		<button_stringcycler name="skilltype" source="skilltype">
+				<anchored>
+					<left>
+						<parent>skillname</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>skillname</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>45</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<values>Active|Combat|Magic|Matrix|Pilot|Knowldg.|Language|Softskill</values>
+					<labels>Active|Combat|Magic|Matrix|Pilot|Knowldg.|Language|Softskill</labels>
+					<defaultlabel>Type</defaultlabel>
+				</parameters>
+				<script>
+					function onValueChanged()
+						local sValue = self.getValue();
+						if sValue == "Active" then
+							window.getDatabaseNode().getChild("filteritem").setValue(6)
+						elseif sValue == "Combat" then
+							window.getDatabaseNode().getChild("filteritem").setValue(2)
+						elseif sValue == "Magic" then
+							window.getDatabaseNode().getChild("filteritem").setValue(3)
+						elseif sValue == "Matrix" then
+							window.getDatabaseNode().getChild("filteritem").setValue(4)
+						elseif sValue == "Pilot" then
+							window.getDatabaseNode().getChild("filteritem").setValue(5)
+						elseif sValue == "Knowldg." then
+							window.getDatabaseNode().getChild("filteritem").setValue(7)
+						elseif sValue == "Language" then
+							window.getDatabaseNode().getChild("filteritem").setValue(7)
+						elseif sValue == "Softskill" then
+							window.getDatabaseNode().getChild("filteritem").setValue(7)
+						end
+					end
+				</script>
+			</button_stringcycler>
+				<numberfield name="filteritem" source="filteritem">
+				<anchored>
+					<to>skilltype</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+
+
+			<button_stringcycler name="skillattribute" source="skillattribute">
+				<anchored>
+					<left>
+						<parent>skilltype</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>skilltype</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>25</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>Bod|Agi|Rea|Str|Wil|Log|Int|Cha|Mag|Res</labels>
+					<values>body|agility|reaction|strength|willpower|logic|intuition|charisma|magic|resonance</values>
+					<defaultlabel>-</defaultlabel>
+					<defaultvalue>-</defaultvalue>
+				</parameters>
+				<script>
+					function onInit()
+						super.onInit();
+						onValueChanged();
+					end
+
+					function onValueChanged()
+						local nodename = "";
+						nodename = window.getDatabaseNode().getChild("skillattribute").getValue();
+						if nodename ~= "" and nodename ~= "-" then
+						nodename ="base.attribute."..nodename..".check"
+							local a = window.windowlist.window.getDatabaseNode().getChild(nodename).getValue();
+							window.getDatabaseNode().getChild("skillhiddenattribute").setValue(a);
+						else
+							window.getDatabaseNode().getChild("skillhiddenattribute").setValue("0");
+						end
+					end
+				</script>
+			</button_stringcycler>
+			<skillscore name="skillscore" source="skillbase">
+				<anchored>
+					<left>
+						<parent>skillattribute</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-129</offset>
+					</right>
+
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>skillbonus</next>
+					<prev>skillname</prev>
+				</tabtarget>
+			</skillscore>
+
+			<skillhiddenbonus name="skillhiddenbonus" source="skillhiddenbonus">
+				<anchored>
+					<to>skillscore</to>
+				</anchored>
+				<invisible />
+				<readonly />
+			</skillhiddenbonus>
+
+			<skillbonus name="skillbonus" source="skillbonus">
+				<anchored>
+					<to>skillscore</to>
+				</anchored>
+				<scorefield>skillhiddenbonus</scorefield>
+				<modifierfield>skillbonusmodifier</modifierfield>
+				<tabtarget>
+					<next>skillsort</next>
+					<prev>skillscore</prev>
+				</tabtarget>
+			</skillbonus>
+
+			<skillcheck name="skillcheck" source="skillcheck">
+				<anchored>
+					<to>skillscore</to>
+				</anchored>
+				<target>skillscore</target>
+				<skillbonusfield>skillbonus</skillbonusfield>
+				<skillscore>skillbase</skillscore>
+				<skillattribute>skillhiddenattribute</skillattribute>
+			</skillcheck>
+
+			<skillhiddenbonus name="skillhiddenattribute" source="skillhiddenattribute">
+				<anchored>
+					<to>skillscore</to>
+					<offset>20</offset>
+				</anchored>
+				<invisible />
+				<readonly />
+			</skillhiddenbonus>
+
+			<windowlist name="list_skillmodifier">
+				<anchored>
+					<top>
+						<parent>skillname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>skillname</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<skipempty />
+				<noscroll />
+				<datasource>.skillmodifier</datasource>
+				<class>charsheet_skillmodifieritem</class>
+				<menutext>Skillmodifer</menutext>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.order.getValue() &gt; w2.order.getValue();
+					end
+
+					function reset()
+						for k,v in pairs(getWindows()) do
+							v.getDatabaseNode().delete();
+						end
+					end
+
+					function getOrder(node)
+						if NodeManager.get(node, "order", 0) == 0 then
+							local ordertable = {};
+							for k,v in pairs(getDatabaseNode().getChildren()) do
+								ordertable[NodeManager.get(v, "order", 0)] = true;
+							end
+
+							local i = 1;
+							while ordertable[i] do
+								i = i + 1;
+							end
+
+							NodeManager.set(node, "order", "number", i);
+						end
+					end
+
+					function onDrop(x, y, draginfo)
+
+					end
+
+					function updateSkillhiddenBonus()
+						local modifiertotal = 0;
+
+						for k, w in pairs(getWindows()) do
+							if w.skillmodifierbox.getState() then
+								local count = w.skillmodifier.getValue();
+
+								modifiertotal = modifiertotal + count;
+							end
+						end
+
+						if window.skillhiddenbonus then
+							window.skillhiddenbonus.setValue(modifiertotal);
+						end
+
+					end
+
+					function onInit()
+							updateSkillhiddenBonus();
+					end
+
+
+				</script>
+			</windowlist>
+		<button_stringcycler name="skillgroup" source="skillgroup">
+				<anchored>
+					<left>
+						<parent>skillsort</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>skillname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<size>
+						<width>60</width>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>None|Athletics|Biotech|Close_Combat|Conjuring|Sorcery|Cracking|Electronics|Firearms|Influence|Mechanic|Outdoors|Stealth|Tasking</labels>
+					<values>None|Athletics|Biotech|Close_Combat|Conjuring|Sorcery|Cracking|Electronics|Firearms|Influence|Mechanic|Outdoors|Stealth|Tasking</values>
+					<defaulttooltip>Choose Skillgroup if learned as Groupskill</defaulttooltip>
+					<defaultlabel>Skillgroup</defaultlabel>
+				</parameters>
+			</button_stringcycler>
+
+		<skilldescfieldpc name="skilldescription">
+				<anchored>
+					<top>
+						<parent>skillgroup</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<left>
+						<parent>skillgroup</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-100</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+
+		</sheetdata>
+	</windowclass>
+
+
+
+	<windowclass name="charsheet_2_skills">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+
+		<nodelete />
+		<sheetdata>
+			<genericcontrol name="attributeframe">
+				<bounds>83,53,540,70</bounds>
+					<frame>
+						<name>sheetgroup</name>
+					</frame>
+			</genericcontrol>
+
+<!-- Skills-->
+			<subwindow name="charsheetskill_all">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_2_1</class>
+			</subwindow>
+			<subwindow name="charsheetskill_2">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_2_2</class>
+			</subwindow>
+			<subwindow name="charsheetskill_3">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_2_3</class>
+			</subwindow>
+			<subwindow name="charsheetskill_4">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_2_4</class>
+			</subwindow>
+			<subwindow name="charsheetskill_5">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_2_5</class>
+			</subwindow>
+			<subwindow name="charsheetskill_6">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_2_6</class>
+			</subwindow>
+			<subwindow name="charsheetskill_7">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_2_7</class>
+			</subwindow>
+
+			<tabcontrol_h name="tabsskill">
+
+				<bounds>117,123,500,25</bounds>
+				<tab>
+					<text>Overview</text>
+					<target>skilltabtext1</target>
+					<subwindow>charsheetskill_all</subwindow>
+				</tab>
+				<tab>
+					<text>Combat</text>
+					<target>skilltabtext2</target>
+					<subwindow>charsheetskill_2</subwindow>
+				</tab>
+				<tab>
+					<text>Magic</text>
+					<target>skilltabtext3</target>
+					<subwindow>charsheetskill_3</subwindow>
+				</tab>
+				<tab>
+					<text>Matrix</text>
+					<target>skilltabtext4</target>
+					<subwindow>charsheetskill_4</subwindow>
+				</tab>
+				<tab>
+					<text>Pilot</text>
+					<target>skilltabtext5</target>
+					<subwindow>charsheetskill_5</subwindow>
+				</tab>
+				<tab>
+					<text>Active</text>
+					<target>skilltabtext6</target>
+					<subwindow>charsheetskill_6</subwindow>
+				</tab>
+				<tab>
+					<text>Softskill</text>
+					<target>skilltabtext7</target>
+					<subwindow>charsheetskill_7</subwindow>
+				</tab>
+				<script file="charsheet/scripts/charsheet_htabs_skill.lua" />
+				<activate>1</activate>
+			</tabcontrol_h>
+
+
+			<stringfield name="skilltabtext1" source="skilltabtext1">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="skilltabtext2" source="skilltabtext2">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="skilltabtext3" source="skilltabtext3">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="skilltabtext4" source="skilltabtext4">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="skilltabtext5" source="skilltabtext5">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="skilltabtext6" source="skilltabtext6">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="skilltabtext7" source="skilltabtext7">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+
+
+			<windowlist name="list_skills">
+				<invisible />
+				<anchored>
+					<to>attributeframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<allowcreate />
+				<allowdelete />
+				<script>
+					function onDrop(x, y, draginfo)
+						Debug.console("onDrop: ", draginfo);
+						local sDragType = draginfo.getType();
+						if sDragType ~= "shortcut" then
+							return false;
+						end
+						local sDropClass, sDropNodeName = draginfo.getShortcutData();
+						if not StringManager.contains({ "referenceactiveskill"}, sDropClass) then
+							return false;
+						end
+						local nodeSource = draginfo.getDatabaseNode();
+
+						local sSourceName = DB.getValue(nodeSource, "name", "");
+						local sSourceCategory = DB.getValue(nodeSource, "category", "");
+						local sSourceAbility = DB.getValue(nodeSource, "ability", "");
+
+						Debug.console("onDrop: ", nodeSource, sSourceType, sSourceName);
+						local w = createEntry(true);
+						w.skillname.setValue(sSourceName);
+						w.skilltype.setStringValue(sSourceCategory);
+						w.skillattribute.setStringValue(sSourceAbility);
+
+						w.shortcut.setValue(draginfo.getShortcutData());
+
+						return true;
+					end
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+			<attributecheckbonus name="bodycheck" source="base.attribute.body.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>15,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Body</text>
+				</description>
+				<target>Body</target>
+				<attributebonusfield>base.attribute.body.bonus</attributebonusfield>
+				<attributescore>base.attribute.body.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>bodycheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>B</static>
+			</attributelabel>
+
+			<attributecheckbonus name="agilitycheck" source="base.attribute.agility.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>60,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Agility</text>
+				</description>
+				<target>Agility</target>
+				<attributebonusfield>base.attribute.agility.bonus</attributebonusfield>
+				<attributescore>base.attribute.agility.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>agilitycheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>A</static>
+			</attributelabel>
+
+			<attributecheckbonus name="reactioncheck" source="base.attribute.reaction.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>105,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Reaction</text>
+				</description>
+				<target>Reaction</target>
+				<attributebonusfield>base.attribute.reaction.bonus</attributebonusfield>
+				<attributescore>base.attribute.reaction.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>reactioncheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>R</static>
+			</attributelabel>
+
+			<attributecheckbonus name="strengthcheck" source="base.attribute.strength.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>150,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Strength</text>
+				</description>
+				<target>Strength</target>
+				<attributebonusfield>base.attribute.strength.bonus</attributebonusfield>
+				<attributescore>base.attribute.strength.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>strengthcheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>S</static>
+			</attributelabel>
+
+			<attributecheckbonus name="charismacheck" source="base.attribute.charisma.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>195,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>charismadamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Charisma</text>
+				</description>
+				<target>Charisma</target>
+				<attributebonusfield>base.attribute.charisma.bonus</attributebonusfield>
+				<attributescore>base.attribute.charisma.base</attributescore>
+				</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>charismacheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>C</static>
+			</attributelabel>
+
+			<attributecheckbonus name="intuitioncheck" source="base.attribute.intuition.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>240,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Intuitution</text>
+				</description>
+				<target>Intuition</target>
+				<attributebonusfield>base.attribute.intuition.bonus</attributebonusfield>
+				<attributescore>base.attribute.intuition.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>intuitioncheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>I</static>
+			</attributelabel>
+
+			<attributecheckbonus name="logiccheck" source="base.attribute.logic.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>285,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Logic</text>
+				</description>
+				<target>Logic</target>
+				<attributebonusfield>base.attribute.logic.bonus</attributebonusfield>
+				<attributescore>base.attribute.logic.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>logiccheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>L</static>
+			</attributelabel>
+
+			<attributecheckbonus name="willpowercheck" source="base.attribute.willpower.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>330,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>Willpower</text>
+				</description>
+				<target>Willpower</target>
+				<attributebonusfield>base.attribute.willpower.bonus</attributebonusfield>
+				<attributescore>base.attribute.willpower.base</attributescore>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>willpowercheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>W</static>
+			</attributelabel>
+
+
+			<attributecheckbonus name="magiccheck" source="base.attribute.magic.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>375,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>magic</text>
+				</description>
+				<target>magic</target>
+				<attributebonusfield>base.attribute.magic.bonus</attributebonusfield>
+				<attributescore>base.attribute.magicbase</attributescore>
+				<script>
+					function onInit()
+						if window.getDatabaseNode().getChild("magical").getValue() == "1" or window.getDatabaseNode().getChild("magical").getValue() == "2" then
+							setVisible(true);
+						else
+							setVisible(false);
+						end
+					end
+				</script>
+			</attributecheckbonus>
+			<attributelabel>
+				<anchored>
+					<to>magiccheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>M</static>
+				<script>
+					function onInit()
+						if window.getDatabaseNode().getChild("magical").getValue() == "1" or window.getDatabaseNode().getChild("magical").getValue() == "2" then
+							setVisible(true);
+						else
+							setVisible(false);
+						end
+					end
+				</script>
+			</attributelabel>
+
+			<attributecheckbonus name="resonancecheck" source="base.attribute.resonance.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>375,33</offset>
+				</anchored>
+				<tabtarget>
+					<next>strengthdamage</next>
+					<prev>size</prev>
+				</tabtarget>
+				<description>
+					<text>resonance</text>
+				</description>
+				<target>resonance</target>
+				<attributebonusfield>base.attribute.resonance.bonus</attributebonusfield>
+				<attributescore>base.attribute.resonancebase</attributescore>
+					<script>
+						function onInit()
+						local a = window.getDatabaseNode().getChild("magical").getValue();
+							if a == "3" then
+								setVisible(true);
+							else
+								setVisible(false);
+							end
+						end
+					</script>
+				</attributecheckbonus>
+				<attributelabel>
+				<anchored>
+					<to>resonancecheck</to>
+					<position>aboveleft</position>
+					<offset>10,0</offset>
+				</anchored>
+				<static>R</static>
+				<script>
+					function onInit()
+						if window.getDatabaseNode().getChild("magical").getValue() == "3" then
+							setVisible(true);
+						else
+							setVisible(false);
+						end
+					end
+				</script>
+			</attributelabel>
+
+			<checkbox name="edgecheckbox" source="damage.box.edge.check">
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>445,47</offset>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+			</checkbox>
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>440,15</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Use</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>attributeframe</to>
+					<position>insidetopleft</position>
+					<offset>438,30</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Edge</static>
+			</stringcontrol>
+
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for
+  attribution and copyright information.
+-->
+
+<root>
+	<template name="linkednumber">
+		<number>
+			<source mergerule="resetandadd" />
+			<script file="common/scripts/number_linked.lua" />
+		</number>
+	</template>
+
+	<template name="modifiernumber">
+		<linkednumber>
+			<script file="common/scripts/number_modifier.lua" />
+			<noreset />
+		</linkednumber>
+	</template>
+
+	<template name="sheetbonus">
+		<modifiernumber>
+			<frame>
+				<name>sheetbonus</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,4,2,4</offset>
+			</keyeditframe>
+			<font>sheetnumber</font>
+			<displaysign />
+			<modifiersize>mini</modifiersize>
+		</modifiernumber>
+	</template>
+
+	<template name="sheetnumber">
+		<linkednumber>
+			<frame>
+				<name>bonus</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,4,2,4</offset>
+			</keyeditframe>
+			<stateframe>
+				<drophilight>
+					<name>sheetfocus</name>
+					<offset>2,4,2,4</offset>
+				</drophilight>
+			</stateframe>
+			<droptypes>
+				<type>number</type>
+			</droptypes>
+			<font>sheetnumber</font>
+		</linkednumber>
+	</template>
+
+	<template name="sheetmodifier">
+		<linkednumber>
+			<frame>
+				<name>bonus</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,4,2,4</offset>
+			</keyeditframe>
+			<stateframe>
+				<drophilight>
+					<name>sheetfocus</name>
+					<offset>2,4,2,4</offset>
+				</drophilight>
+			</stateframe>
+			<droptypes>
+				<type>number</type>
+			</droptypes>
+			<font>sheetnumber</font>
+			<displaysign />
+		</linkednumber>
+	</template>
+
+	<template name="sheetreadonlymodifier">
+		<linkednumber>
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<font>sheetnumber</font>
+			<readonly />
+			<displaysign />
+		</linkednumber>
+	</template>
+
+	<template name="attributescore">
+		<number>
+			<noreset />
+			<anchored>
+				<position>belowleft</position>
+				<offset>0,9</offset>
+				<size>
+					<width>32</width>
+					<height>20</height>
+				</size>
+			</anchored>
+			<frame>
+				<name>bonus</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,4,2,4</offset>
+			</keyeditframe>
+			<font>sheetnumber</font>
+			<script>
+				function onInit()
+					if super.onInit then
+						super.onInit();
+					end
+
+					if getValue() &lt; 0 then
+						setValue(0);
+					end
+				end
+			</script>
+		</number>
+	</template>
+
+	<template name="skillscore">
+		<number>
+			<noreset />
+			<frame>
+				<name>bonus</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,4,2,4</offset>
+			</keyeditframe>
+			<font>sheetnumber</font>
+			<script>
+				function onInit()
+					if super.onInit then
+						super.onInit();
+					end
+				end
+			</script>
+		</number>
+	</template>
+
+
+	<template name="essencescore">
+		<number>
+			<noreset />
+			<anchored>
+				<position>belowleft</position>
+				<offset>0,9</offset>
+				<size>
+					<width>28</width>
+					<height>20</height>
+				</size>
+			</anchored>
+			<frame>
+				<name>bonus</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,4,2,4</offset>
+			</keyeditframe>
+			<font>sheetnumber</font>
+		</number>
+	</template>
+
+
+	<template name="attributelabel">
+		<stringcontrol>
+			<anchored>
+				<position>lefthigh</position>
+				<offset>0,4</offset>
+				<size>
+					<width>55</width>
+					<height>20</height>
+				</size>
+			</anchored>
+			<static />
+			<font>sheetlabel</font>
+		</stringcontrol>
+	</template>
+	<template name="attributeshortlabel">
+		<stringcontrol>
+			<anchored>
+				<position>lefthigh</position>
+				<offset>0,4</offset>
+				<size>
+					<height>19</height>
+				</size>
+			</anchored>
+			<static />
+			<font>sheetlabel</font>
+		</stringcontrol>
+	</template>
+
+	<template name="attributecheckbonus">
+		<linkednumber>
+			<noreset />
+			<anchored>
+				<position>right</position>
+				<offset>50,0</offset>
+				<size>
+					<width>32</width>
+				</size>
+			</anchored>
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<readonly />
+			<font>sheetnumber</font>
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function onSourceUpdate()
+					setValue(sources[attributebonusfield[1]].getValue() + sources[attributescore[1]].getValue());
+				end
+
+				function onInit()
+					addSource(attributebonusfield[1]);
+					addSource(attributescore[1]);
+
+					super.onInit();
+				end
+
+				function action(draginfo)
+					local rActor = ActorManager2.getActor("pc", window.getDatabaseNode());
+					ActionAttribute.performRoll(draginfo, rActor, self.target[1]);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+
+				function onDrop(x,y,draginfo)
+					if draginfo.isType("skill") then
+						local a = getDatabaseNode().getParent().getName();
+						local b = draginfo.getCustomData();
+						DB.findNode(b).getChild("skillattribute").setValue(a);
+					end
+					return true;
+				end
+
+			</script>
+		</linkednumber>
+	</template>
+
+	<template name="resistcheck">
+		<sheetbonus>
+			<noreset />
+			<anchored>
+				<position>right</position>
+				<offset>0,0</offset>
+				<size>
+					<width>32</width>
+					<height>20</height>
+				</size>
+			</anchored>
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<readonly />
+			<font>sheetnumber</font>
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function action(draginfo)
+					local rActor = ActorManager2.getActor("pc", window.getDatabaseNode());
+					Resist.performRoll(draginfo, rActor, self.target[1]);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+			</script>
+		</sheetbonus>
+	</template>
+
+
+	<template name="inicheck">
+		<linkednumber>
+			<noreset />
+			<anchored>
+				<position>right</position>
+				<offset>50,0</offset>
+				<size>
+					<width>32</width>
+				</size>
+			</anchored>
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<readonly />
+			<font>sheetnumber</font>
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function onInit()
+					super.onInit();
+				end
+
+				function action(draginfo)
+					local rActor = ActorManager2.getActor("pc", window.getDatabaseNode());
+					ActionInit.performRoll(draginfo, rActor, self.target[1]);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+			</script>
+		</linkednumber>
+	</template>
+
+	<template name="edgecheck">
+		<linkednumber>
+			<noreset />
+			<anchored>
+				<position>belowleft</position>
+				<offset>0,9</offset>
+				<size>
+					<width>32</width>
+					<height>20</height>
+				</size>
+			</anchored>
+			<frame>
+				<name>bonus</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,4,2,4</offset>
+			</keyeditframe>
+			<font>sheetnumber</font>
+			<readonly />
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function onInit()
+					super.onInit();
+				end
+
+				function action(draginfo)
+					local rActor = ActorManager2.getActor("pc", window.getDatabaseNode());
+					ActionAttribute.performRoll(draginfo, rActor, self.target[1]);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+			</script>
+		</linkednumber>
+	</template>
+
+
+	<template name="skillcheck">
+		<linkednumber>
+			<noreset />
+			<anchored>
+				<position>right</position>
+				<offset>50,0</offset>
+				<size>
+					<width>32</width>
+				</size>
+			</anchored>
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<readonly />
+			<font>sheetnumber</font>
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function onSourceUpdate()
+					setValue(sources[skillbonusfield[1]].getValue() + sources[skillscore[1]].getValue() + sources[skillattribute[1]].getValue());
+				end
+
+				function onInit()
+					addSource(skillbonusfield[1]);
+					addSource(skillscore[1]);
+					addSource(skillattribute[1]);
+					super.onInit();
+				end
+
+				function action(draginfo)
+					local rActor = ActorManager2.getActor("pc", window.windowlist.window.getDatabaseNode());
+					rActor.sWindowClass = window.windowlist.window.getClass();
+					rActor.sSkillAttribute = window.getDatabaseNode().getChild("skillattribute").getValue();
+					rActor.nodeSkill = window.getDatabaseNode();
+					local sSkillName = rActor.nodeSkill.getChild("skillname").getValue();
+					ActionSkill.performRoll(draginfo, rActor, sSkillName);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+
+			</script>
+		</linkednumber>
+	</template>
+
+	<template name="weaponskillcheck">
+		<linkednumber>
+			<noreset />
+			<anchored>
+				<right>
+					<anchor>left</anchor>
+					<offset>-10</offset>
+				</right>
+				<top>
+					<anchor>top</anchor>
+					<offset>0</offset>
+				</top>
+				<size>
+					<width>32</width>
+					<height>16</height>
+				</size>
+			</anchored>
+
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<readonly />
+			<font>sheetnumber</font>
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function onInit()
+					super.onInit();
+					addSource(weaponsubtype[1]);
+					onSourceUpdate();
+				end
+
+				function onSourceUpdate()
+					local sWeaponSubType = window.getDatabaseNode().getChild("weaponsubtype").getValue();
+					local rWeaponData = DataCommon.weapondata[sWeaponSubType];
+					if rWeaponData then
+						local sSkillName = rWeaponData.skill;
+						local rSkillData = DataCommon.skilldata[sSkillName];
+						local sStatName = rSkillData.stat;
+						local rActor = ActorManager2.getActor("pc", window.windowlist.window.getDatabaseNode());
+						rActor.nodeSkill = ActorManager2.getSkillNodeSearch(rActor, sSkillName);
+						rActor.sSkillAttribute = rSkillData.stat;
+						local sDesc, nCheckValue = ActorManager2.getSkillScore(rActor, sSkillName, 0, "")
+						self.setValue(nCheckValue);
+					end
+				end
+
+				function action(draginfo)
+					local rActor = ActorManager2.getActor("pc", window.windowlist.window.getDatabaseNode());
+					local sWeaponSubType = window.getDatabaseNode().getChild("weaponsubtype").getValue();
+					local rWeaponData = DataCommon.weapondata[sWeaponSubType];
+					local rSkillData = DataCommon.skilldata[rWeaponData.skill];
+					rActor.sWindowClass = window.windowlist.window.getClass();
+					rActor.nodeSkill = ActorManager2.ActorManager2.getSkillNodeSearch(rActor, rWeaponData.skill);
+					rActor.sSkillAttribute = rSkillData.stat;
+					local sSkillName = rWeaponData.skill;
+					ActionSkill.performRoll(draginfo, rActor, rWeaponData.skill);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+
+			</script>
+		</linkednumber>
+	</template>
+
+	<template name="spellskillcheck">
+		<linkednumber>
+			<noreset />
+			<anchored>
+				<right>
+					<anchor>left</anchor>
+					<offset>-25</offset>
+				</right>
+				<top>
+					<anchor>top</anchor>
+					<offset>0</offset>
+				</top>
+				<size>
+					<width>32</width>
+					<height>16</height>
+				</size>
+			</anchored>
+
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<readonly />
+			<font>sheetnumber</font>
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function onInit()
+					super.onInit();
+					onSourceUpdate();
+				end
+
+				function onSourceUpdate()
+					local sSkillName = "Spellcasting";
+					local rSkillData = DataCommon.skilldata[sSkillName];
+					local sStatName = rSkillData.stat;
+					local rActor = ActorManager2.getActor("pc", window.windowlist.window.getDatabaseNode());
+					rActor.nodeSkill = ActorManager2.getSkillNodeSearch(rActor, sSkillName);
+					rActor.sSkillAttribute = rSkillData.stat;
+					local sDesc, nCheckValue = ActorManager2.getSkillScore(rActor, sSkillName, 0, "")
+					self.setValue(nCheckValue);
+				end
+
+				function action(draginfo)
+					local sSkillName = "Spellcasting";
+					local rSkillData = DataCommon.skilldata[sSkillName];
+					local rActor = ActorManager2.getActor("pc", window.windowlist.window.getDatabaseNode());
+					rActor.sWindowClass = window.windowlist.window.getClass();
+					rActor.nodeSkill = ActorManager2.ActorManager2.getSkillNodeSearch(rActor, sSkillName);
+					ActionSkill.performRoll(draginfo, rActor, sSkillName);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+
+			</script>
+		</linkednumber>
+	</template>
+
+
+	<template name="specialattributecheck">
+		<linkednumber>
+			<noreset />
+			<anchored>
+				<position>below</position>
+				<offset>0,10</offset>
+			</anchored>
+			<frame>
+				<name>modifier</name>
+				<offset>2,4,2,4</offset>
+			</frame>
+			<readonly />
+			<font>sheetnumber</font>
+			<hideonvalue value="0" />
+			<rollable />
+			<script>
+				function onInit()
+					super.onInit();
+				end
+
+				function action(draginfo)
+					local rActor = ActorManager2.getActor("pc", window.getDatabaseNode());
+					ActionSpecialAttribute.performRoll(draginfo, rActor, self.target[1]);
+					return true;
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+
+				function onDoubleClick(x,y)
+					return action();
+				end
+			</script>
+		</linkednumber>
+	</template>
+
+
+	<template name="attributebonus">
+		<sheetbonus>
+			<anchored>
+				<position>right</position>
+				<offset>5,0</offset>
+				<size>
+					<width>36</width>
+				</size>
+			</anchored>
+			<hideonvalue value="0" />
+			<script>
+				function onSourceUpdate()
+					setValue(sources[scorefield[1]].getValue() + getModifier());
+				end
+
+				function onInit()
+					addSource(scorefield[1]);
+					super.onInit();
+				end
+			</script>
+		</sheetbonus>
+	</template>
+	<template name="magresbonus">
+		<sheetbonus>
+			<anchored>
+				<position>right</position>
+				<offset>5,0</offset>
+				<size>
+					<width>36</width>
+				</size>
+			</anchored>
+			<hideonvalue value="0" />
+			<script>
+				function onSourceUpdate()
+						setValue(math.floor((sources[scorefield[1]].getValue()+ sources[score2field[1]].getValue()  +  getModifier())+0.49));
+					end
+
+					function onInit()
+						addSource(score2field[1]);
+						addSource(scorefield[1]);
+
+						super.onInit();
+					end
+			</script>
+		</sheetbonus>
+	</template>
+
+	<template name="inibonus">
+		<sheetbonus>
+			<anchored>
+				<position>right</position>
+				<offset>5,0</offset>
+				<size>
+					<width>30</width>
+				</size>
+			</anchored>
+			<hideonvalue value="0" />
+		</sheetbonus>
+	</template>
+
+	<template name="skillbonus">
+		<sheetbonus>
+			<anchored>
+				<position>right</position>
+				<offset>5,0</offset>
+				<size>
+					<width>36</width>
+				</size>
+			</anchored>
+			<hideonvalue value="0" />
+			<script>
+				function onSourceUpdate()
+					setValue(sources[scorefield[1]].getValue() + getModifier());
+				end
+
+				function onInit()
+					addSource(scorefield[1]);
+
+					super.onInit();
+				end
+			</script>
+		</sheetbonus>
+	</template>
+
+	<template name="skillmodifier">
+		<number>
+			<anchored>
+				<position>right</position>
+				<offset>5,0</offset>
+				<size>
+					<width>36</width>
+				</size>
+			</anchored>
+			<hideonvalue value="0" />
+		</number>
+	</template>
+
+	<template name="attributehiddenbonus">
+		<linkednumber>
+			<anchored>
+				<position>right</position>
+				<offset>85,0</offset>
+				<size>
+					<width>36</width>
+				</size>
+			</anchored>
+		</linkednumber>
+	</template>
+
+	<template name="skillhiddenbonus">
+		<linkednumber>
+			<anchored>
+				<position>right</position>
+				<offset>85,0</offset>
+				<size>
+					<width>36</width>
+				</size>
+			</anchored>
+		</linkednumber>
+	</template>
+
+	<template name="essencemodifierscore">
+		<numberfield>
+			<noreset />
+			<frame>
+				<name>bonus</name>
+				<offset>5,5,5,5</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>5,5,5,5</offset>
+			</keyeditframe>
+			<font>sheetnumber</font>
+			<script file = "charsheet/scripts/template_essencemodifierscore.lua" />
+		</numberfield>
+	</template>
+	<template name="button_toggle">
+		<genericcontrol>
+			<script file="common/scripts/button_toggle.lua" />
+		</genericcontrol>
+	</template>
+
+
+</root>

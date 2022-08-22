@@ -1,0 +1,1003 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet_6_1_vehicles">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="skillframe">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == "" then
+							return true;
+						elseif w2.skillsort.getValue() == "" then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Pilot" then
+							return true;
+						end
+						return false;
+
+					end
+
+
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+
+	<!-- vehicles-->
+			<genericcontrol name="vehicleframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_vehicles">
+				<anchored>
+					<to>vehicleframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.vehicles</datasource>
+				<class>charsheet_vehicleitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.vehiclesort.getValue() == "" then
+							return true;
+						elseif w2.vehiclesort.getValue() == "" then
+							return false;
+						end
+						return w1.vehiclesort.getValue() > w2.vehiclesort.getValue();
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- vehiclemodifieritem-->
+	<windowclass name="charsheet_vehiclemodifieritem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_vehiclemodifieritem.lua" />
+
+		<sheetdata>
+			<numberfield name="order">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</numberfield>
+
+			<skilldescfieldpc name="vehiclemodifiername">
+				<anchored>
+					<left>
+						<parent>order</parent>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-190</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Name of Modifier/Autosoft &#187;</empty>
+			</skilldescfieldpc>
+
+			<skillscore name="vehiclemodifiervalue" source="vehiclemodifiervalue">
+				<anchored>
+					<left>
+						<parent>vehiclemodifiername</parent>
+						<anchor>right</anchor>
+						<offset>60</offset>
+					</left>
+					<top>
+						<parent>vehiclemodifiername</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value</text>
+				</tooltip>
+			</skillscore>
+
+			<attributelabel>
+				<anchored>
+					<to>vehiclemodifiervalue</to>
+					<offset>-15</offset>
+				</anchored>
+				<static>Value</static>
+				<tooltip>
+					<text>Value</text>
+				</tooltip>
+			</attributelabel>
+
+
+			<checkbox name="vehiclemodifierinusebox">
+				<anchored>
+					<left>
+						<parent>vehiclemodifiername</parent>
+						<anchor>right</anchor>
+						<offset>110</offset>
+					</left>
+					<top>
+						<parent>vehiclemodifiername</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+					end
+				</script>
+				<tooltip>
+					<text>Autsosoft loaded</text>
+				</tooltip>
+			</checkbox>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_vehicleitem">
+		<sizelimits>
+			<minimum>
+				<height>124</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_vehicleitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatevehicledetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<button_toggle name="activatevehiclemodifier">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_sword</icon>
+				<script>
+					function onInit()
+						super.onInit();
+
+						local nodeVehiclemModifierList = NodeManager.createChild(window.getDatabaseNode(), "vehiclemodifier");
+
+						if nodeVehiclemModifierList then
+							nodeVehiclemModifierList.onChildAdded = updateVisibility;
+							nodeVehiclemModifierList.onChildUpdate = updateVisibility;
+							updateVisibility(nodeVehiclemModifierList);
+						else
+							setVisible(false);
+						end
+					end
+
+					function updateVisibility(nodeVehiclemModifierList)
+						if nodeVehiclemModifierList.getChildCount() > 0 then
+							if not isVisible() then
+								setValue(true);
+							end
+							setVisible(true);
+						else
+							setVisible(false);
+							if getValue() then
+								setValue(false);
+							end
+						end
+					end
+
+					function onValueChanged()
+						window.toggleVehicleModifier();
+					end
+				</script>
+			</button_toggle>
+
+
+			<powerstring name="vehiclesort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<powerstring name="vehiclename">
+				<anchored>
+					<left>
+						<parent>vehiclesort</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-180</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; vehicle &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+				</droptypes>
+				<script>
+					function updateColor()
+						window.vehiclename.setColor("ffffffff");
+						window.vehiclename.setFrame("dailyframe", 7, 3, 9, 1)
+					end
+
+					function onInit()
+						updateColor();
+					end
+				</script>
+			</powerstring>
+
+			<button_iconcycler name="vehicletype">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_one|button_toggle_single|button_toggle_all|button_toggle_single</icons>
+					<values>Groundcraft|Watercraft|Aircraft</values>
+					<tooltips>Groundcraft|Watercraft|Aircraft</tooltips>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Choose Type of Vehicle</defaulttooltip>
+				</parameters>
+			</button_iconcycler>
+
+
+			<skillscore name="vehiclepilotvalue" source="vehiclepilotvalue">
+				<anchored>
+					<to>vehicletype</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the Vehicles Autopilot</text>
+				</tooltip>
+			</skillscore>
+
+
+			<skillscore name="vehiclesensors" source="vehiclesensors">
+				<anchored>
+					<to>vehiclepilotvalue</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Strength of the Vehicles Sensors</text>
+				</tooltip>
+			</skillscore>
+
+			<skillscore name="vehiclesystem" source="vehiclesystem">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the System integrated into the Vehicle</text>
+				</tooltip>
+			</skillscore>
+
+			<attributeshortlabel name="labelvehiclesystem">
+				<anchored>
+					<to>vehiclesystem</to>
+					<offset>15</offset>
+				</anchored>
+				<static>System</static>
+				<tooltip>
+					<text>Value of the Vehicles System</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="vehicleresponse" source="vehicleresponse">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>115</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the Vehicles Response</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labelvehicleresponse">
+				<anchored>
+					<to>vehicleresponse</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Response</static>
+				<tooltip>
+					<text>Value of the Vehicles Response</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="vehiclefirewall" source="vehiclefirewall">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>215</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the Vehicles Response</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labelvehiclefirewall">
+				<anchored>
+					<to>vehiclefirewall</to>
+					<offset>15</offset>
+				</anchored>
+				<static>FIrewall</static>
+				<tooltip>
+					<text>Value of the Vehicles Response</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="vehiclesignal" source="vehiclesignal">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>315</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the Vehicles Signal</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labelvehiclesignal">
+				<anchored>
+					<to>vehiclesignal</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Signal</static>
+				<tooltip>
+					<text>Value of the Vehicles Signal</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="vehiclebody" source="vehiclebody">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the Vehicles Body</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						local a = math.ceil(8 + (self.getValue()/2))
+						window.vehicleconditionmax.setValue(a);
+					end
+
+				</script>
+			</skillscore>
+			<attributeshortlabel name="labelvehiclebody">
+				<anchored>
+					<to>vehiclebody</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Body</static>
+				<tooltip>
+					<text>Value of the Vehicles Body</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skillscore name="vehiclearmour" source="vehiclearmour">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>115</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the Vehicles Armour</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labelvehiclearmour">
+				<anchored>
+					<to>vehiclearmour</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Armour</static>
+				<tooltip>
+					<text>Value of the Vehicles Armour</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skillscore name="vehicleaccel" source="vehicleaccel">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>215</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Normal Acceleration</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labelvehicleaccel">
+				<anchored>
+					<to>vehicleaccel</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Accel.</static>
+				<tooltip>
+					<text>Acceleration (Normal/Fast)</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skillscore name="vehicleaccelfast" source="vehicleaccelfast">
+				<anchored>
+					<left>
+						<parent>vehicleaccel</parent>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Fast Acceleration</text>
+				</tooltip>
+			</skillscore>
+			<skillscore name="vehiclespeed" source="vehiclespeed">
+				<anchored>
+					<left>
+						<parent>vehicleaccel</parent>
+						<anchor>right</anchor>
+						<offset>95</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Speed</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labelvehiclespeed">
+				<anchored>
+					<to>vehiclespeed</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Speed</static>
+				<tooltip>
+					<text>Max. Speed of the Vehicle</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<checkbox name="vehicleriggeradaption">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>56</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+					end
+				</script>
+				<tooltip>
+					<text>Vehicle has Rigger Adapption</text>
+				</tooltip>
+			</checkbox>
+			<attributeshortlabel name="labelvehicleriggeradaption">
+				<anchored>
+					<to>vehicleriggeradaption</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Rig.-Ad.</static>
+				<tooltip>
+					<text>Rigger Adaption installed in Vehicle</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skilldescfieldpc name="vehiclecurrentlocation">
+				<anchored>
+					<top>
+						<parent>vehicleriggeradaption</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>45</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-160</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Current Location of Vehicle &#187;</empty>
+			</skilldescfieldpc>
+			<checkbox name="vehicleinuse">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>350</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>56</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+					end
+				</script>
+				<tooltip>
+					<text>Vehicle is in Use</text>
+				</tooltip>
+			</checkbox>
+			<attributeshortlabel name="labelvehicleinuse">
+				<anchored>
+					<to>vehicleinuse</to>
+					<offset>15</offset>
+				</anchored>
+				<static>In Use</static>
+				<tooltip>
+					<text>Vehicle is currently in Use</text>
+				</tooltip>
+			</attributeshortlabel>
+
+
+			<attributescore name="vehicleconditioncurrent" source="vehicleconditioncurrent">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>80</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>stunValue</next>
+					<prev>stunValue</prev>
+				</tabtarget>
+				<invisible />
+			</attributescore>
+
+			<linkednumber name="vehicleconditionmax" source="vehicleconditionmax">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>80</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetnumber</font>
+				<script>
+					function onInit()
+						if window.vehiclebody then
+							local a = math.ceil(8 + (window.vehiclebody.getValue()/2))
+							self.setValue(a);
+						else
+							self.setValue(8);
+						end
+					end
+				</script>
+				<tooltip>
+					<text>Condition Monitor Maximum</text>
+				</tooltip>
+				<invisible />
+			</linkednumber>
+
+			<checkcounter name="vehicleconditionmonitor">
+				<anchored>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>30</offset>
+					</left>
+					<top>
+						<parent>vehiclename</parent>
+						<anchor>bottom</anchor>
+						<offset>80</offset>
+					</top>
+					<size>
+						<height>20</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>vehicleconditioncurrent</current>
+					<maximum>vehicleconditionmax</maximum>
+				</sourcefields>
+			</checkcounter>
+
+			<stringcontrol name="labelvehicleconditionmonitor">
+				<anchored>
+					<to>vehicleconditionmonitor</to>
+					<position>lefthigh</position>
+					<offset>0,3</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Condition</static>
+			</stringcontrol>
+
+
+
+			<windowlist name="list_vehiclemodifier">
+				<anchored>
+					<top>
+						<parent>vehicleconditionmonitor</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<skipempty />
+				<noscroll />
+				<datasource>.vehiclemodifier</datasource>
+				<class>charsheet_vehiclemodifieritem</class>
+				<menutext>vehiclemodifier</menutext>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.order.getValue() &gt; w2.order.getValue();
+					end
+
+					function reset()
+						for k,v in pairs(getWindows()) do
+							v.getDatabaseNode().delete();
+						end
+					end
+
+					function getOrder(node)
+						if NodeManager.get(node, "order", 0) == 0 then
+							local ordertable = {};
+							for k,v in pairs(getDatabaseNode().getChildren()) do
+								ordertable[NodeManager.get(v, "order", 0)] = true;
+							end
+
+							local i = 1;
+							while ordertable[i] do
+								i = i + 1;
+							end
+
+							NodeManager.set(node, "order", "number", i);
+						end
+					end
+				</script>
+			</windowlist>
+
+			<skilldescfieldpc name="vehicledescription">
+				<anchored>
+					<top>
+						<parent>vehicleconditionmonitor</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>vehiclename</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+		</sheetdata>
+	</windowclass>
+</root>

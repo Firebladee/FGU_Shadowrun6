@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="combattracker_client">
+		<frame>ctbox</frame>
+		<placement>
+			<size width="500" height="500" />
+		</placement>
+		<sizelimits>
+			<minimum width="350" height="350" />
+			<dynamic />
+		</sizelimits>
+		<softclose />
+		<nodelete />
+		<script>
+			function onInit()
+				OptionsManager.registerCallback("CTSI", updateShowOrder);
+				updateShowOrder();
+			end
+			
+			function onClose()
+				OptionsManager.unregisterCallback("CTSI", updateShowOrder);
+			end
+			
+			function updateShowOrder()
+				local bShowInit = not OptionsManager.isOption("CTSI", "off");
+				label_init.setVisible(bShowInit);
+			end
+		</script>
+		<sheetdata>
+			<windowtitlebar name="title">
+				<resource>ct_window_title</resource>
+			</windowtitlebar>
+			<anchor_title_ctbox name="contentanchor" />
+
+			<anchor_ctbox_client_header />
+			<label_ct name="label_name">
+				<anchored to="headeranchor" position="insidetopleft" offset="33,0">
+					<right offset="-65" />
+				</anchored>
+				<static textres="ct_label_name" />
+				<center />
+			</label_ct>
+			<label_ct name="label_init">
+				<anchored to="headeranchor" position="insidetopright" offset="222,0" width="40" />
+				<static textres="ct_label_init" />
+				<center />
+			</label_ct>
+
+			<label_ct name="label_inittype">
+				<anchored to="headeranchor" position="insidetopright" offset="185,0" width="40" />
+				<static textres="ct_label_inittype" />
+				<center />
+			</label_ct>
+			<label_ct name="label_pass">
+				<anchored to="headeranchor" position="insidetopright" offset="152,0" width="40" />
+				<static textres="ct_label_pass" />
+				<center />
+			</label_ct>
+			<label_ct name="label_phys">
+				<anchored to="headeranchor" position="insidetopright" offset="105,0" width="40" />
+				<static textres="ct_label_phys" />
+				<center />
+			</label_ct>
+			<label_ct name="label_stun">
+				<anchored to="headeranchor" position="insidetopright" offset="65,0" width="40" />
+				<static textres="ct_label_stun" />
+				<center />
+			</label_ct>
+			<label_ct name="label_delay">
+				<anchored to="headeranchor" position="insidetopright" offset="25,0" width="40" />
+				<static textres="ct_label_delay" />
+				<center />
+			</label_ct>
+
+			<list_ctbox_client />
+			<scrollbar_list />
+			
+			<button_ct_endturn name="turn_complete" />
+			
+			<label_ct_client_rounds_pass />
+			<number_ct_host_passes />
+			<number_ct_client_rounds merge="join">
+				<anchored width="40" height="25">
+					<bottom offset="-20" />
+					<right parent="contentanchor" offset="-75" />
+				</anchored>
+			</number_ct_client_rounds>
+
+			<resize_ctbox />
+			<close_ctbox />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="client_ct_entry">
+		<margins control="0,0,0,2" />
+		<frame>ctentrybox</frame>
+		<script file="ct/scripts/clientct_entry.lua" />
+		<sheetdata>
+			<hidden_record_isidentified name="isidentified" />
+			<hlink_clientct name="link" />
+			<hs name="tokenrefid" />
+			<hs name="tokenrefnode" />
+			<hn name="tokenvis" />
+
+			<spacer_ctentry_active_top name="active_spacer_top">
+				<anchored width="0" height="5">
+					<top />
+					<left />
+				</anchored>
+				<invisible />
+			</spacer_ctentry_active_top>
+			
+			<button_clientct_active name="active" >
+				<anchored width="33" height="40">
+					<top parent="active_spacer_top" anchor="bottom" />
+					<left />
+				</anchored>
+			</button_clientct_active>
+			<token_clientct name="token" >
+				<anchored width="25" height="25">
+					<top parent="active_spacer_top" anchor="bottom" offset="7" />
+					<left offset="33" />
+				</anchored>
+			</token_clientct>
+
+			<anchor_ctentry_right name="rightanchor" >
+				<anchored width="0" height="0">
+					<top parent="active_spacer_top" anchor="bottom" offset="10" />
+					<right />
+				</anchored>
+				<invisible />
+			</anchor_ctentry_right>
+			<button_ctentry_friendfoe name="friendfoe" >
+				<anchored to="rightanchor">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+			</button_ctentry_friendfoe>
+
+			<checkbox name="ctdelaycheckbox">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<parameters>
+					<tooltips>Delay</tooltips>
+					<defaulttooltip>Activate for active Delay</defaulttooltip>
+				</parameters>
+			</checkbox>
+
+			<number_ct_crosslink name="ctstundamage">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="ctphysicaldamage" next="init" />
+				<script>
+				</script>
+			</number_ct_crosslink>
+			<number_ct_crosslink name="ctstundamagemax">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="nonlethal" next="init" />
+				<script>
+				</script>
+				<invisible />
+			</number_ct_crosslink>
+			<number_ct_crosslink name="ctphysicaldamage">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="ctpassleft" next="ctstundamage" />
+				<script>
+				</script>
+			</number_ct_crosslink>
+			<number_ct_crosslink name="ctphysicaldamagemax">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue value="0" />
+				<tabtarget prev="nonlethal" next="init" />
+				<script>
+				</script>
+				<invisible />
+			</number_ct_crosslink>
+			<number_ct_crosslink name="ctpassleft">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-15" />
+				</anchored>
+				<color>#FF0000AA</color>
+				<hideonvalue>0</hideonvalue>
+				<tabtarget prev="name" next="ctphysicaldamage" />
+				<script>
+				</script>
+			</number_ct_crosslink>
+
+
+			<button_iconcycler name="ctinitype">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<font>sheetlabel</font>
+				<center />
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>6,7,7,5</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<icons>indicator_sword|indicator_heal|indicator_effect</icons>
+					<labels>Astral|Matrix|Mtx.Hot|</labels>
+					<values>1|2|3</values>
+					<defaulticon>indicator_question</defaulticon>
+					<defaultlabel>Normal</defaultlabel>
+					<defaultvalue>0</defaultvalue>
+				</parameters>
+			</button_iconcycler>
+
+
+			<string_ct name="ctinitypelink" source="ctinitype">
+					<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-15" />
+				</anchored>
+
+				<invisible />
+			</string_ct>
+
+			<number_ct name="initresult" source="ctinitresult">
+				<anchored to="rightanchor" width="30" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<hideonvalue>0</hideonvalue>
+				<tabtarget prev="name" />
+		</number_ct>
+
+			<string_clientct_name name="name" >
+				<anchored height="20">
+					<top parent="active_spacer_top" anchor="bottom" offset="10" />
+					<left parent="token" anchor="right" offset="5" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<readonly />
+			</string_clientct_name>
+			<string_clientct_name name="nonid_name">
+				<anchored height="20">
+					<top parent="active_spacer_top" anchor="bottom" offset="10" />
+					<left parent="token" anchor="right" offset="5" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<empty textres="library_recordtype_empty_nonid_npc" />
+				<invisible />
+				<readonly />
+			</string_clientct_name>
+
+			<!-- Quick labels -->
+			<string_ctentry_targets name="target_summary" />
+			<string_ctentry_effects name="effect_summary" />
+
+			<genericcontrol name="spacer">
+				<anchored width="0" height="7">
+					<top parent="name" anchor="bottom" relation="relative" />
+					<left />
+				</anchored>
+			</genericcontrol>
+
+			<genericcontrol name="active_spacer_bottom">
+				<anchored width="0" height="5">
+					<top parent="name" anchor="bottom" relation="relative" />
+					<left />
+				</anchored>
+				<invisible />
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+</root>

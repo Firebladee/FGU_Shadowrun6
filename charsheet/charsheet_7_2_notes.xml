@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+
+
+<root version="2.0">
+
+	<includefile source="charsheet/charsheet_7_2_notes_sub.xml" />
+	<!-- List for all note-->			
+	<windowclass name="charsheet_noteitem_all">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_noteitem.lua" />
+		<sheetdata>
+
+		<button_toggle name="activatenotedetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<powerstring name="notelocation" source = "note.location">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<tabtarget>
+					<next>notename</next>
+				</tabtarget>
+				<nodrag />
+				<empty>&#171; Folder &#187;</empty>
+			</powerstring>
+			
+			<powerstring name="subloc" source = "note.subloc">
+				<anchored>
+					<left>
+						<parent>notelocation</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<tabtarget>
+					<prev>notelocation</prev>
+					<next>notename</next>
+				</tabtarget>
+				<nodrag />
+				<empty>&#171; Date &#187;</empty>
+			</powerstring>			
+			
+			<powerstring name="notename">
+				<anchored>
+					<left>
+						<parent>subloc</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-55</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<prev>subloc</prev>
+				</tabtarget>
+				<empty>&#171; note item &#187;</empty>
+				<script>
+					function updateStatus()
+						window.notename.setColor("ffffffff");
+						window.notename.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+					
+					function onInit()
+						updateStatus();
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("notelocation");
+						draginfo.setCustomData(window.getDatabaseNode().getName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+				</script>
+			</powerstring>
+		
+			<numberfield name="notefilteritem" source="note.filteritem">
+				<anchored>
+					<to>notename</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+			<skilldescfieldpc name="notedescription">
+				<anchored>
+					<top>
+						<parent>notename</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<parent>notename</parent>
+						<anchor>left</anchor>
+						<offset>-10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev></prev>
+				</tabtarget>
+				<empty>&#171; Text &#187;</empty>
+			</skilldescfieldpc>
+
+			<spacer name="spacer">
+				<anchor>notedescription</anchor>
+				<height>3</height>
+			</spacer>			
+
+		</sheetdata>		
+	</windowclass>
+	
+	<!-- List for subwindows note-->			
+	<windowclass name="charsheet_noteitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_noteitem.lua" />
+		<sheetdata>
+					<button_toggle name="activatenotedetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+	
+			<powerstring name="subloc" source = "note.subloc">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<tabtarget>
+					<next>notename</next>
+				</tabtarget>
+				<nodrag />
+				<empty>&#171; Date &#187;</empty>
+			</powerstring>
+			
+			<powerstring name="notename">
+				<anchored>
+					<left>
+						<parent>subloc</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-55</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<prev>subloc</prev>
+				</tabtarget>
+				<empty>&#171; note item &#187;</empty>
+				<script>
+					function updateStatus()
+						window.notename.setColor("ffffffff");
+						window.notename.setFrame("dailyframe", 7, 3, 9, 1);
+					end
+					
+					function onInit()
+						updateStatus();
+					end
+
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("notelocation");
+						draginfo.setCustomData(window.getDatabaseNode().getName());
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+				</script>
+			</powerstring>
+		
+			<numberfield name="notefilteritem" source="note.filteritem">
+				<anchored>
+					<to>notename</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+			<skilldescfieldpc name="notedescription">
+				<anchored>
+					<top>
+						<parent>notename</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<parent>notename</parent>
+						<anchor>left</anchor>
+						<offset>-10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev></prev>
+				</tabtarget>
+				<empty>&#171; Text &#187;</empty>
+			</skilldescfieldpc>
+
+			<spacer name="spacer">
+				<anchor>notedescription</anchor>
+				<height>3</height>
+			</spacer>			
+
+			<numberfield name="notefilteritem" source="note.filteritem">
+				<anchored>
+					<to>notename</to>
+					<position>right</position>
+					<offset>10,0</offset>
+					<size>
+						<width>55</width>
+					</size>
+				</anchored>
+				<invisible />
+			</numberfield>
+		
+		</sheetdata>		
+	</windowclass>	
+
+
+	<windowclass name="charsheet_7_2_notes">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>	
+			<subwindow name="charsheetnote_all">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_2_1</class>
+			</subwindow>
+			<subwindow name="charsheetnote_2">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_2_2</class>
+			</subwindow>
+			<subwindow name="charsheetnote_3">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_2_3</class>
+			</subwindow>
+			<subwindow name="charsheetnote_4">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_2_4</class>
+			</subwindow>
+			<subwindow name="charsheetnote_5">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_2_5</class>
+			</subwindow>
+			<subwindow name="charsheetnote_6">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_2_6</class>
+			</subwindow>
+			<subwindow name="charsheetnote_7">
+				<bounds>0,0,-1,-1</bounds>
+				<class>charsheet_7_2_7</class>
+			</subwindow>
+
+			<tabcontrol_h name="tabsnote">
+				<bounds>117,123,500,25</bounds>
+				<tab>
+					<text>all notes</text>
+					<target>notetabtext1</target>
+					<subwindow>charsheetnote_all</subwindow>
+				</tab>
+				<tab>
+					<text>Folder 1</text>
+					<target>notetabtext2</target>
+					<subwindow>charsheetnote_2</subwindow>
+				</tab>
+				<tab>
+					<text>Folder 2</text>
+					<target>notetabtext3</target>
+					<subwindow>charsheetnote_3</subwindow>
+				</tab>
+				<tab>
+					<text>Folder 3</text>
+					<target>notetabtext4</target>
+					<subwindow>charsheetnote_4</subwindow>
+				</tab>
+				<tab>
+					<text>Folder 4</text>
+					<target>notetabtext5</target>
+					<subwindow>charsheetnote_5</subwindow>
+				</tab>
+				<tab>
+					<text>Folder 5</text>
+					<target>notetabtext6</target>
+					<subwindow>charsheetnote_6</subwindow>
+				</tab>
+				<tab>
+					<text>Folder 6</text>
+					<target>notetabtext7</target>
+					<subwindow>charsheetnote_7</subwindow>
+				</tab>
+				<script file="charsheet/scripts/charsheet_htabs_notes.lua" />
+				<activate>1</activate>
+			</tabcontrol_h>
+			
+			<stringfield name="notetabtext1" source="notetabtext1">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="notetabtext2" source="notetabtext2">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.notelist_all.changeLocationName(a,b);
+					end				
+				</script>
+			</stringfield>
+			<stringfield name="notetabtext3" source="notetabtext3">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.notelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>
+			<stringfield name="notetabtext4" source="notetabtext4">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.notelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>		
+			<stringfield name="notetabtext5" source="notetabtext5">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.notelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>		
+			<stringfield name="notetabtext6" source="notetabtext6">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.notelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>	
+			<stringfield name="notetabtext7" source="notetabtext7">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						local a = self.getValue();
+						local b = self.getName();
+						window.notelist_all.changeLocationName(a,b);
+					end
+				</script>
+			</stringfield>	
+		
+	<!-- notes notelist-->
+
+			<windowlist name="notelist_all">
+				<bounds>0,0,0,0</bounds>
+				<invisible />				
+				<datasource>.notelist</datasource>
+				<class>charsheet_noteitem</class>
+				<script file="charsheet/scripts/charsheet_list_notes_all.lua" />
+			</windowlist>	
+
+		</sheetdata>		
+	</windowclass>
+</root>

@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet_5_1_programs">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="skillframe">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == "" then
+							return true;
+						elseif w2.skillsort.getValue() == "" then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Matrix" then
+							return true;
+						end
+						return false;
+
+					end
+
+
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+
+	<!-- programs-->
+			<genericcontrol name="programframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_programs">
+				<anchored>
+					<to>programframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.programs</datasource>
+				<class>charsheet_programitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.programsort.getValue() == "" then
+							return true;
+						elseif w2.programsort.getValue() == "" then
+							return false;
+						end
+						return w1.programsort.getValue() > w2.programsort.getValue();
+					end
+
+					local bActiveLock = false
+					function onActiveProgramChanged(sChildNodeName)
+						if not bActiveLock then
+							for k, v in ipairs(getWindows()) do
+								if (v.getDatabaseNode().getName() ~= sChildNodeName) then
+									v.getDatabaseNode().getChild("color").setValue("ffffffff");
+									v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+									v.programname.setFrame("dailyframe");
+									v.programname.setColor("ffffffff");
+									v.programisactive.setState(false);
+								else
+									if v.programisactive.getState() == true then
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("dailyframe");
+										v.programname.setFrame("dailyframe");
+										v.programname.setColor("ffffffff");
+										v.programisactive.setState(false);
+										v.windowlist.window.getDatabaseNode().getChild("node.activeprogram").setValue("none");
+									else
+										v.getDatabaseNode().getChild("color").setValue("ffffffff");
+										v.getDatabaseNode().getChild("frame").setValue("atwillframe");
+										v.programname.setFrame("atwillframe");
+										v.programname.setColor("ffffffff");
+										v.programisactive.setState(true);
+										local programnode = v.getDatabaseNode().getNodeName();
+										v.windowlist.window.getDatabaseNode().getChild("node.activeprogram").setValue(programnode);
+										local f = v.windowlist.window.getDatabaseNode().getChild("node.activeprogram").getValue();
+									end
+								end
+							end
+
+							bActiveLock = false;
+						end
+					end
+
+					function onDrop(x, y, draginfo)
+Debug.console("Program onDrop: ", draginfo)
+						local sDragType = draginfo.getType();
+						if sDragType ~= "shortcut" then
+							return false;
+						end
+						local sDropClass, sDropNodeName = draginfo.getShortcutData();
+						if not StringManager.contains({ "referenceprogram"}, sDropClass) then
+							return true;
+						end
+						local nodeSource = draginfo.getDatabaseNode();
+
+						local sSourceName = DB.getValue(nodeSource, "name", "");
+
+						local w = createWindow();
+						w.programname.setValue(sSourceName);
+
+						w.shortcut.setValue(draginfo.getShortcutData());
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- programmodifieritem-->
+
+	<windowclass name="charsheet_programitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_programitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activateprogramdetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<powerstring name="programsort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<linkfield name="shortcut">
+				<anchored width="20" height="20">
+					<top parent="programsort" anchor="top" offset="0" />
+					<left parent="programsort" anchor="right" offset="5" />
+				</anchored>
+				<class>referenceprogram</class>
+				<readonly />
+			</linkfield>
+
+			<powerstring name="programname">
+				<anchored>
+					<left>
+						<parent>programsort</parent>
+						<anchor>right</anchor>
+						<offset>35</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-180</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; program &#187;</empty>
+				<script>
+					function updateColor()
+						window.programname.setColor(window.getDatabaseNode().getChild("color").getValue());
+						window.programname.setFrame(window.getDatabaseNode().getChild("frame").getValue(), 8, 0, 8, 1);
+						end
+
+					function onInit()
+						updateColor();
+						window.updateColorframe();
+						local b = " "
+						if not window.windowlist.window.getDatabaseNode().getChild("node.activeprogram") then
+							window.windowlist.window.getDatabaseNode().createChild("node.activeprogram", "string").setValue("none");
+						end
+					end
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveProgramChanged(a);
+					end
+
+			function onDrag(button, x, y, draginfo)
+					draginfo.setType("program");
+					draginfo.setDescription(self.getValue());
+					draginfo.setStringData(window.getDatabaseNode().getNodeName());
+					draginfo.setNumberData(window.programrating.getValue());
+					draginfo.setCustomData("program");
+					draginfo.setIcon("indicator_targeting");
+					return true;
+				end
+				</script>
+			</powerstring>
+
+			<stringfield name="color">
+				<anchored>
+					<to>programname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("ffffffff");
+						end
+					end
+				</script>
+			</stringfield>
+
+			<stringfield name="frame">
+				<anchored>
+					<to>programname</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onInit()
+						local a = self.getValue();
+						if not a or a == "" then
+							self.setValue("dailyframe");
+						end
+					end
+				</script>
+			</stringfield>
+
+
+			<skillscore name="programrating" source="programrating">
+				<anchored>
+					<to>programname</to>
+					<position>right</position>
+					<offset>15,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Rating of the Program</text>
+				</tooltip>
+			</skillscore>
+
+			<checkbox name="programisactive" source="programisactive">
+				<anchored>
+					<left>
+						<parent>programrating</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<top>
+						<parent>programrating</parent>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onDoubleClick()
+						local a = window.getDatabaseNode().getName();
+						window.windowlist.onActiveProgramChanged(a);
+					end
+				</script>
+			</checkbox>
+
+			<skilldescfieldpc name="programdescription">
+				<anchored>
+					<top>
+						<parent>programname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>programname</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description of the Program including Modifications &#187;</empty>
+			</skilldescfieldpc>
+
+		</sheetdata>
+	</windowclass>
+</root>

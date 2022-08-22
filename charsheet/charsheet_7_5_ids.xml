@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+<!-- Iditem-->
+	<windowclass name="charsheet_licenceitem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_licenceitem.lua" />
+		<sheetdata>
+			<numberfield name="order">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</numberfield>
+
+			<button_iconcycler name="type">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>2</offset>
+					</left>
+					<size>
+						<height>20</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>6,5,5,5</offset>
+				</frame>
+				<parameters>
+
+					<icons>indicator_sword|indicator_heal|indicator_effect|indicator_question</icons>
+					<values>Weapon|Armour|Ware|Pilot</values>
+					<tooltips>Weapon|Armour|Ware|Pilot</tooltips>
+					<defaulticon>indicator_question</defaulticon>
+					<defaulttooltip>Choose Type of Licence (Weapon, Armour, Ware, Pilot) </defaulttooltip>
+				</parameters>
+			</button_iconcycler>
+			<powerstring name="licencename">
+				<anchored>
+					<left>
+						<parent>type</parent>
+						<anchor>right</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Licence &#187;</empty>
+				<multilinespacing>15</multilinespacing>
+			</powerstring>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_iditem">
+		<sizelimits>
+			<minimum>
+				<height>25</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_iditem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activateiddetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<button_toggle name="activatelicence">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_sword</icon>
+				<script>
+					function onInit()
+						super.onInit();
+
+						local nodeLicenceList = NodeManager.createChild(window.getDatabaseNode(), "licence");
+						if nodeLicenceList then
+							nodeLicenceList.onChildAdded = updateVisibility;
+							nodeLicenceList.onChildUpdate = updateVisibility;
+							updateVisibility(nodeLicenceList);
+						else
+							setVisible(false);
+						end
+					end
+
+					function updateVisibility(nodeLicenceList)
+						if nodeLicenceList.getChildCount() > 0 then
+							if not isVisible() then
+								setValue(true);
+							end
+							setVisible(true);
+						else
+							setVisible(false);
+							if getValue() then
+								setValue(false);
+							end
+						end
+					end
+
+					function onValueChanged()
+						window.toggleLicence();
+					end
+				</script>
+			</button_toggle>
+
+			<powerstring name="idsort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<powerstring name="idname">
+				<anchored>
+					<left>
+						<parent>idsort</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-100</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; Id &#187;</empty>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<script>
+					function updateColor()
+						window.idname.setColor("ffffffff");
+						window.idname.setFrame("dailyframe", 7, 3, 9, 1)
+					end
+
+					function onInit()
+						updateColor();
+					end
+					function onDrag(button, x, y, draginfo)
+						draginfo.setType("id");
+						draginfo.setDescription(self.getValue());
+						draginfo.setStringData(window.getDatabaseNode().getNodeName());
+						draginfo.setNumberData(window.idrating.getValue());
+						draginfo.setCustomData("id");
+						draginfo.setIcon("indicator_targeting");
+						return true;
+					end
+			</script>
+			</powerstring>
+
+			<numberfield name="idrating" source="idrating">
+				<anchored>
+					<left>
+						<parent>idname</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-60</offset>
+					</right>
+
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+			</numberfield>
+
+			<windowlist name="list_licence">
+				<anchored>
+					<top>
+						<parent>idname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>idname</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<skipempty />
+				<noscroll />
+				<datasource>.licence</datasource>
+				<class>charsheet_licenceitem</class>
+				<menutext>Licence</menutext>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.order.getValue() &gt; w2.order.getValue();
+					end
+
+					function reset()
+						for k,v in pairs(getWindows()) do
+							v.getDatabaseNode().delete();
+						end
+					end
+
+					function getOrder(node)
+						if NodeManager.get(node, "order", 0) == 0 then
+							local ordertable = {};
+							for k,v in pairs(getDatabaseNode().getChildren()) do
+								ordertable[NodeManager.get(v, "order", 0)] = true;
+							end
+
+							local i = 1;
+							while ordertable[i] do
+								i = i + 1;
+							end
+
+							NodeManager.set(node, "order", "number", i);
+						end
+					end
+				</script>
+			</windowlist>
+
+		<skilldescfieldpc name="iddescription">
+				<anchored>
+					<top>
+						<parent>idname</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>4</offset>
+					</top>
+					<left>
+						<parent>idname</parent>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+			<spacer name="spacer">
+				<anchor>iddescription</anchor>
+				<height>3</height>
+			</spacer>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_7_5_ids">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+
+		<nodelete />
+		<sheetdata>
+
+<!-- Ids-->
+			<genericcontrol name="idframe">
+				<bounds>83,123,515,500</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_ids">
+				<anchored>
+					<to>idframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<datasource>.ids</datasource>
+				<class>charsheet_iditem</class>
+				<allowcreate />
+				<allowdelete />
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.idsort.getValue() == "" then
+							return true;
+						elseif w2.idsort.getValue() == "" then
+							return false;
+						end
+						return w1.idsort.getValue() > w2.idsort.getValue();
+					end
+				</script>
+			</windowlist>
+
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>idframe</to>
+					<position>insidetopleft</position>
+					<offset>17,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sort</static>
+			</stringcontrol>
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>idframe</to>
+					<position>insidetopleft</position>
+					<offset>80,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>idframe</to>
+					<position>insidetopleft</position>
+					<offset>427,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>IDR</static>
+				<tooltip>
+					<text>identity rating</text>
+				</tooltip>
+			</stringcontrol>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_ids</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_ids</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+
+		</sheetdata>
+	</windowclass>
+
+</root>

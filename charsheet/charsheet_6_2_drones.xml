@@ -1,0 +1,1004 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ ! Please see the readme.txt file included with this distribution for
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+	<windowclass name="charsheet_6_2_drones">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+<!-- Skills-->
+			<genericcontrol name="skillframe">
+				<bounds>83,123,515,150</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+
+			<windowlist name="list_skills">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.skillsort.getValue() == "" then
+							return true;
+						elseif w2.skillsort.getValue() == "" then
+							return false;
+						end
+						return w1.skillsort.getValue() > w2.skillsort.getValue();
+					end
+
+					function onFilter(w)
+						local node = w.getDatabaseNode().getChild("skilltype");
+						if node and node.getValue() == "Pilot" then
+							return true;
+						end
+						return false;
+
+					end
+
+
+				</script>
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list_skills</to>
+					<position>insidebottomright</position>
+					<offset>-2,-35</offset>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list_skills</target>
+				<button normal="button_scrollerpan" pressed="button_scrollerpan_down" zoom="button_zoomer" zoompressed="button_zoomer_down" />
+			</scrollercontrol>
+
+	<!-- drones-->
+			<genericcontrol name="droneframe">
+				<bounds>83,273,515,250</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="list_drones">
+				<anchored>
+					<to>droneframe</to>
+					<position>over</position>
+					<offset>-8,-10</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.drones</datasource>
+				<class>charsheet_droneitem</class>
+				<script>
+					function onSortCompare(w1, w2)
+						if w1.dronesort.getValue() == "" then
+							return true;
+						elseif w2.dronesort.getValue() == "" then
+							return false;
+						end
+						return w1.dronesort.getValue() > w2.dronesort.getValue();
+					end
+
+				</script>
+			</windowlist>
+			</sheetdata>
+	</windowclass>
+
+<!-- dronemodifieritem-->
+	<windowclass name="charsheet_dronemodifieritem">
+		<sizelimits>
+			<minimum>
+				<height>24</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_dronemodifieritem.lua" />
+
+		<sheetdata>
+			<numberfield name="order">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</numberfield>
+
+			<skilldescfieldpc name="dronemodifiername">
+				<anchored>
+					<left>
+						<parent>order</parent>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-190</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Name of Modifier/Autosoft &#187;</empty>
+			</skilldescfieldpc>
+
+			<skillscore name="dronemodifiervalue" source="dronemodifiervalue">
+				<anchored>
+					<left>
+						<parent>dronemodifiername</parent>
+						<anchor>right</anchor>
+						<offset>60</offset>
+					</left>
+					<top>
+						<parent>dronemodifiername</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value</text>
+				</tooltip>
+			</skillscore>
+
+			<attributelabel>
+				<anchored>
+					<to>dronemodifiervalue</to>
+					<offset>-15</offset>
+				</anchored>
+				<static>Value</static>
+				<tooltip>
+					<text>Value</text>
+				</tooltip>
+			</attributelabel>
+
+
+			<checkbox name="dronemodifierinusebox">
+				<anchored>
+					<left>
+						<parent>dronemodifiername</parent>
+						<anchor>right</anchor>
+						<offset>110</offset>
+					</left>
+					<top>
+						<parent>dronemodifiername</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+					end
+				</script>
+				<tooltip>
+					<text>Autsosoft loaded</text>
+				</tooltip>
+			</checkbox>
+
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_droneitem">
+		<sizelimits>
+			<minimum>
+				<height>124</height>
+			</minimum>
+		</sizelimits>
+		<script file="charsheet/scripts/charsheet_list_droneitem.lua" />
+		<sheetdata>
+
+			<button_toggle name="activatedronedetail">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-25</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_zoom</icon>
+				<script>
+					function onValueChanged()
+						window.toggleDetail();
+					end
+				</script>
+			</button_toggle>
+
+			<button_toggle name="activatedronemodifier">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_sword</icon>
+				<script>
+					function onInit()
+						super.onInit();
+
+						local nodedronemModifierList = NodeManager.createChild(window.getDatabaseNode(), "dronemodifier");
+
+						if nodedronemModifierList then
+							nodedronemModifierList.onChildAdded = updateVisibility;
+							nodedronemModifierList.onChildUpdate = updateVisibility;
+							updateVisibility(nodedronemModifierList);
+						else
+							setVisible(false);
+						end
+					end
+
+					function updateVisibility(nodedronemModifierList)
+						if nodedronemModifierList.getChildCount() > 0 then
+							if not isVisible() then
+								setValue(true);
+							end
+							setVisible(true);
+						else
+							setVisible(false);
+							if getValue() then
+								setValue(false);
+							end
+						end
+					end
+
+					function onValueChanged()
+						window.toggledroneModifier();
+					end
+				</script>
+			</button_toggle>
+
+
+			<powerstring name="dronesort">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-440</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>action</next>
+					<prev>name</prev>
+				</tabtarget>
+				<empty>&#171; Sort &#187;</empty>
+			</powerstring>
+
+			<powerstring name="dronename">
+				<anchored>
+					<left>
+						<parent>dronesort</parent>
+						<anchor>right</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-180</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+				</anchored>
+				<font>statblock-r-large</font>
+				<frame>
+					<name>tempmodsmall</name>
+					<offset>8,3,8,3</offset>
+				</frame>
+				<tabtarget>
+					<next>source</next>
+					<prev>shortdescription</prev>
+				</tabtarget>
+				<empty>&#171; drone &#187;</empty>
+				<droptypes>
+					<type>number</type>
+					<type>skill</type>
+				</droptypes>
+				<script>
+					function updateColor()
+						window.dronename.setColor("ffffffff");
+						window.dronename.setFrame("dailyframe", 7, 3, 9, 1)
+					end
+
+					function onInit()
+						updateColor();
+					end
+				</script>
+			</powerstring>
+
+			<button_iconcycler name="dronetype">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_one|button_toggle_single|button_toggle_all|button_toggle_single</icons>
+					<values>Groundcraft|Watercraft|Aircraft</values>
+					<tooltips>Groundcraft|Watercraft|Aircraft</tooltips>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Choose Type of drone</defaulttooltip>
+				</parameters>
+			</button_iconcycler>
+
+
+			<skillscore name="dronepilotvalue" source="dronepilotvalue">
+				<anchored>
+					<to>dronetype</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the drones Autopilot</text>
+				</tooltip>
+			</skillscore>
+
+
+			<skillscore name="dronesensors" source="dronesensors">
+				<anchored>
+					<to>dronepilotvalue</to>
+					<position>right</position>
+					<offset>5,0</offset>
+					<size>
+						<width>32</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Strength of the drones Sensors</text>
+				</tooltip>
+			</skillscore>
+
+			<skillscore name="dronesystem" source="dronesystem">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the System integrated into the drone</text>
+				</tooltip>
+			</skillscore>
+
+			<attributeshortlabel name="labeldronesystem">
+				<anchored>
+					<to>dronesystem</to>
+					<offset>15</offset>
+				</anchored>
+				<static>System</static>
+				<tooltip>
+					<text>Value of the drones System</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="droneresponse" source="droneresponse">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>115</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the drones Response</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labeldroneresponse">
+				<anchored>
+					<to>droneresponse</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Response</static>
+				<tooltip>
+					<text>Value of the drones Response</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="dronefirewall" source="dronefirewall">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>215</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the drones Response</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labeldronefirewall">
+				<anchored>
+					<to>dronefirewall</to>
+					<offset>15</offset>
+				</anchored>
+				<static>FIrewall</static>
+				<tooltip>
+					<text>Value of the drones Response</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="dronesignal" source="dronesignal">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>315</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the drones Signal</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labeldronesignal">
+				<anchored>
+					<to>dronesignal</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Signal</static>
+				<tooltip>
+					<text>Value of the drones Signal</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<skillscore name="dronebody" source="dronebody">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the drones Body</text>
+				</tooltip>
+				<script>
+					function onValueChanged()
+						local a = math.ceil(8 + (self.getValue()/2))
+						window.droneconditionmax.setValue(a);
+					end
+
+				</script>
+			</skillscore>
+			<attributeshortlabel name="labeldronebody">
+				<anchored>
+					<to>dronebody</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Body</static>
+				<tooltip>
+					<text>Value of the drones Body</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skillscore name="dronearmour" source="dronearmour">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>115</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Value of the drones Armour</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labeldronearmour">
+				<anchored>
+					<to>dronearmour</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Armour</static>
+				<tooltip>
+					<text>Value of the drones Armour</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skillscore name="droneaccel" source="droneaccel">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>215</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Normal Acceleration</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labeldroneaccel">
+				<anchored>
+					<to>droneaccel</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Accel.</static>
+				<tooltip>
+					<text>Acceleration (Normal/Fast)</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skillscore name="droneaccelfast" source="droneaccelfast">
+				<anchored>
+					<left>
+						<parent>droneaccel</parent>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Fast Acceleration</text>
+				</tooltip>
+			</skillscore>
+			<skillscore name="dronespeed" source="dronespeed">
+				<anchored>
+					<left>
+						<parent>droneaccel</parent>
+						<anchor>right</anchor>
+						<offset>95</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>32</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<tabtarget>
+					<next>constitution</next>
+					<prev>actionpoints</prev>
+				</tabtarget>
+				<tooltip>
+					<text>Speed</text>
+				</tooltip>
+			</skillscore>
+			<attributeshortlabel name="labeldronespeed">
+				<anchored>
+					<to>dronespeed</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Speed</static>
+				<tooltip>
+					<text>Max. Speed of the drone</text>
+				</tooltip>
+			</attributeshortlabel>
+
+			<checkbox name="droneriggeradaption">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>56</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+					end
+				</script>
+				<tooltip>
+					<text>drone has Rigger Adapption</text>
+				</tooltip>
+			</checkbox>
+			<attributeshortlabel name="labeldroneriggeradaption">
+				<anchored>
+					<to>droneriggeradaption</to>
+					<offset>15</offset>
+				</anchored>
+				<static>Rig.-Ad.</static>
+				<tooltip>
+					<text>Rigger Adaption installed in drone</text>
+				</tooltip>
+			</attributeshortlabel>
+			<skilldescfieldpc name="dronecurrentlocation">
+				<anchored>
+					<top>
+						<parent>droneriggeradaption</parent>
+						<anchor>top</anchor>
+						<offset>0</offset>
+					</top>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>45</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-160</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Current Location of drone &#187;</empty>
+			</skilldescfieldpc>
+			<checkbox name="droneinuse">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>350</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>56</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>12</height>
+					</size>
+				</anchored>
+				<script>
+					function onValueChanged()
+					end
+				</script>
+				<tooltip>
+					<text>drone is in Use</text>
+				</tooltip>
+			</checkbox>
+			<attributeshortlabel name="labeldroneinuse">
+				<anchored>
+					<to>droneinuse</to>
+					<offset>15</offset>
+				</anchored>
+				<static>In Use</static>
+				<tooltip>
+					<text>drone is currently in Use</text>
+				</tooltip>
+			</attributeshortlabel>
+
+
+			<attributescore name="droneconditioncurrent" source="droneconditioncurrent">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>0</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>80</offset>
+					</top>
+				</anchored>
+				<tabtarget>
+					<next>stunValue</next>
+					<prev>stunValue</prev>
+				</tabtarget>
+				<invisible />
+			</attributescore>
+
+			<linkednumber name="droneconditionmax" source="droneconditionmax">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>10</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>80</offset>
+					</top>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetnumber</font>
+				<script>
+					function onInit()
+						if window.dronebody then
+							local a = math.ceil(8 + (window.dronebody.getValue()/2))
+							self.setValue(a);
+						else
+							self.setValue(8);
+						end
+					end
+				</script>
+				<tooltip>
+					<text>Condition Monitor Maximum</text>
+				</tooltip>
+				<invisible />
+			</linkednumber>
+
+			<checkcounter name="droneconditionmonitor">
+				<anchored>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>30</offset>
+					</left>
+					<top>
+						<parent>dronename</parent>
+						<anchor>bottom</anchor>
+						<offset>80</offset>
+					</top>
+					<size>
+						<height>20</height>
+						<width>20</width>
+					</size>
+				</anchored>
+				<sourcefields>
+					<current>droneconditioncurrent</current>
+					<maximum>droneconditionmax</maximum>
+				</sourcefields>
+			</checkcounter>
+
+			<stringcontrol name="labeldroneconditionmonitor">
+				<anchored>
+					<to>droneconditionmonitor</to>
+					<position>lefthigh</position>
+					<offset>0,3</offset>
+					<size>
+						<width>55</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<static>Condition</static>
+			</stringcontrol>
+
+
+
+			<windowlist name="list_dronemodifier">
+				<anchored>
+					<top>
+						<parent>droneconditionmonitor</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+				</anchored>
+				<skipempty />
+				<noscroll />
+				<datasource>.dronemodifier</datasource>
+				<class>charsheet_dronemodifieritem</class>
+				<menutext>dronemodifier</menutext>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.order.getValue() &gt; w2.order.getValue();
+					end
+
+					function reset()
+						for k,v in pairs(getWindows()) do
+							v.getDatabaseNode().delete();
+						end
+					end
+
+					function getOrder(node)
+						if NodeManager.get(node, "order", 0) == 0 then
+							local ordertable = {};
+							for k,v in pairs(getDatabaseNode().getChildren()) do
+								ordertable[NodeManager.get(v, "order", 0)] = true;
+							end
+
+							local i = 1;
+							while ordertable[i] do
+								i = i + 1;
+							end
+
+							NodeManager.set(node, "order", "number", i);
+						end
+					end
+				</script>
+			</windowlist>
+
+			<skilldescfieldpc name="dronedescription">
+				<anchored>
+					<top>
+						<parent>droneconditionmonitor</parent>
+						<relation>relative</relation>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<parent>dronename</parent>
+						<anchor>left</anchor>
+						<offset>-20</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+				</anchored>
+				<tabtarget>
+					<next>name</next>
+					<prev>range</prev>
+				</tabtarget>
+				<empty>&#171; Description &#187;</empty>
+			</skilldescfieldpc>
+		</sheetdata>
+	</windowclass>
+</root>

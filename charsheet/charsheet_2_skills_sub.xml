@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+ ! Please see the readme.txt file included with this distribution for 
+ ! attribution and copyright information.
+ !-->
+
+<root version="2.0">
+
+<!-- first subwindow shows all skill items -->
+	<windowclass name="charsheet_2_1">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- skills-->
+			<numberfield name="skillsort" source="skillsort">
+				<bounds>0,0,0,0</bounds>
+				<script>
+					function onValueChanged()
+						window.list_skill_1.applySort();
+					end
+				</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="skillframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_skill_1">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script file="charsheet/scripts/charsheet_list_skill.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>20,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sort</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>55,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>255,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Type</static>
+				<tooltip>
+					<text>Type</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>305,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Attr.</static>
+				<tooltip>
+					<text>Attr.</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfive">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>345,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Score</static>
+				<tooltip>
+					<text>Score</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelsix">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>385,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bonus</static>
+				<tooltip>
+					<text>Bonus</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelseven">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>430,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Total</static>
+				<tooltip>
+					<text>Total</text>
+				</tooltip>
+			</stringcontrol>			
+			</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows skill items in loc 1 -->	
+	<windowclass name="charsheet_2_7">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- skills-->
+			<numberfield name="skillsort" source="skillsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_skill_7.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="skillframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_skill_7">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script file="charsheet/scripts/charsheet_list_skill.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>20,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sort</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>55,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>255,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Type</static>
+				<tooltip>
+					<text>Type</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>305,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Attr.</static>
+				<tooltip>
+					<text>Attr.</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfive">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>345,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Score</static>
+				<tooltip>
+					<text>Score</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelsix">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>385,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bonus</static>
+				<tooltip>
+					<text>Bonus</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelseven">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>430,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Total</static>
+				<tooltip>
+					<text>Total</text>
+				</tooltip>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>
+	
+<!-- first subwindow shows skill items in loc 1 -->	
+	<windowclass name="charsheet_2_2">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- skills-->
+			<numberfield name="skillsort" source="skillsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_skill_2.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="skillframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_skill_2">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script file="charsheet/scripts/charsheet_list_skill.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>20,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sort</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>55,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>255,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Type</static>
+				<tooltip>
+					<text>Type</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>305,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Attr.</static>
+				<tooltip>
+					<text>Attr.</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfive">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>345,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Score</static>
+				<tooltip>
+					<text>Score</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelsix">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>385,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bonus</static>
+				<tooltip>
+					<text>Bonus</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelseven">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>430,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Total</static>
+				<tooltip>
+					<text>Total</text>
+				</tooltip>
+			</stringcontrol>			
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows skill items in loc 3 -->	
+	<windowclass name="charsheet_2_3">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- skills-->
+			<numberfield name="skillsort" source="skillsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_skill_3.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="skillframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_skill_3">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script file="charsheet/scripts/charsheet_list_skill.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>20,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sort</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>55,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>255,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Type</static>
+				<tooltip>
+					<text>Type</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>305,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Attr.</static>
+				<tooltip>
+					<text>Attr.</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfive">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>345,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Score</static>
+				<tooltip>
+					<text>Score</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelsix">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>385,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bonus</static>
+				<tooltip>
+					<text>Bonus</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelseven">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>430,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Total</static>
+				<tooltip>
+					<text>Total</text>
+				</tooltip>
+			</stringcontrol>		
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows skill items in loc 4 -->	
+	<windowclass name="charsheet_2_4">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- skills-->
+			<numberfield name="skillsort" source="skillsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_skill_4.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="skillframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_skill_4">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script file="charsheet/scripts/charsheet_list_skill.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>20,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sort</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>55,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>255,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Type</static>
+				<tooltip>
+					<text>Type</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>305,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Attr.</static>
+				<tooltip>
+					<text>Attr.</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfive">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>345,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Score</static>
+				<tooltip>
+					<text>Score</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelsix">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>385,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bonus</static>
+				<tooltip>
+					<text>Bonus</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelseven">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>430,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Total</static>
+				<tooltip>
+					<text>Total</text>
+				</tooltip>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>
+<!--  subwindow shows skill items in loc 5 -->	
+	<windowclass name="charsheet_2_5">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- skills-->
+			<numberfield name="skillsort" source="skillsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_skill_5.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="skillframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_skill_5">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script file="charsheet/scripts/charsheet_list_skill.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>20,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sort</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>55,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>255,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Type</static>
+				<tooltip>
+					<text>Type</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>305,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Attr.</static>
+				<tooltip>
+					<text>Attr.</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfive">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>345,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Score</static>
+				<tooltip>
+					<text>Score</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelsix">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>385,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bonus</static>
+				<tooltip>
+					<text>Bonus</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelseven">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>430,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Total</static>
+				<tooltip>
+					<text>Total</text>
+				</tooltip>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>
+<!-- subwindow shows skill items in loc 6 -->	
+	<windowclass name="charsheet_2_6">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<maximum>
+				<height>100000</height>
+			</maximum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>					
+		
+	<!-- skills-->
+			<numberfield name="skillsort" source="skillsort">
+				<bounds>0,0,0,0</bounds>
+					<script>
+						function onValueChanged()
+							window.list_skill_6.applySort();
+						end
+					</script>
+				<invisible />
+			</numberfield>			
+			
+			<genericcontrol name="skillframe">
+				<bounds>83,148,515,474</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowlist name="list_skill_6">
+				<anchored>
+					<to>skillframe</to>
+					<position>over</position>
+					<offset>-8,-28</offset>
+				</anchored>
+				<allowcreate />
+				<allowdelete />
+				<datasource>.skills</datasource>
+				<class>charsheet_skillitem</class>
+				<script file="charsheet/scripts/charsheet_list_skill.lua" />
+			</windowlist>			
+			
+			<stringcontrol name="labelone">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>20,12</offset>
+					<size>
+						<width>65</width>
+					</size>					
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Sort</static>
+			</stringcontrol>			
+			<stringcontrol name="labeltwo">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>55,12</offset>
+					<size>
+						<width>65</width>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+
+			<stringcontrol name="labelthree">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>255,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Type</static>
+				<tooltip>
+					<text>Type</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfour">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>305,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Attr.</static>
+				<tooltip>
+					<text>Attr.</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelfive">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>345,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Score</static>
+				<tooltip>
+					<text>Score</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelsix">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>385,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Bonus</static>
+				<tooltip>
+					<text>Bonus</text>
+				</tooltip>
+			</stringcontrol>			
+			<stringcontrol name="labelseven">
+				<anchored>
+					<to>skillframe</to>
+					<position>insidetopleft</position>
+					<offset>430,12</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Total</static>
+				<tooltip>
+					<text>Total</text>
+				</tooltip>
+			</stringcontrol>
+		</sheetdata>		
+	</windowclass>	
+</root>
